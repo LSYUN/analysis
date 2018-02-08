@@ -1,0 +1,26 @@
+/*file-input 预加载*/
+
+.file-wrapper {
+  text-align: center;
+}
+
+.btn-size {
+  box-sizing: border-box;
+  color: #3595CC;
+  font-size: 1.2em;
+  font-weight: bolder;
+  border: 1px #3595CC solid;
+  border-radius: 5px;
+  background: transparent;
+  width: 100%;
+  min-width: 50px;
+  max-width: 180px;
+  height: 100%;
+  padding: 6px 12px;
+  margin: 20px auto;
+}
+
+.btn-size:hover {
+  color: #ffffff;
+  background: #3595CC;
+}

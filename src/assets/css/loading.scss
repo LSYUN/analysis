@@ -1,0 +1,78 @@
+/***
+为了预制样式的写在此文件,按需导入,并非全局
+如:import '../pre-loading.scss'
+ */
+.radioContain {
+  display: grid;
+}
+
+.radioWrapper {
+  margin: 2px auto;
+}
+
+input[class^=radio] {
+  display: none;
+  margin: 10px;
+}
+
+input[class^=radio] + label {
+  font-size: 1.2em;
+  display: inline-block;
+  margin: -2px;
+  padding: 8px 12px;
+  color: rgb(254, 243, 255);
+  background-color: #3399ee;
+  border-color: #ddd;
+  border-radius: 4px;
+}
+
+input[class^=radio]:checked + label {
+  color: #e7e7e7;
+  font-size: 1.2em;
+  background: none #00a65a;
+  /*background-color:;*/
+}
+
+.radioContain .radioWrapper input[class^=radio] + label {
+  margin: 0;
+  min-width: 88px;
+}
+
+/*提示框*/
+.tooltips {
+  position: relative;
+  display: inline;
+}
+
+.tooltipsText {
+  visibility: hidden;
+  min-width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  margin-left: -60px;
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  z-index: 1000000;
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+.tooltipsText::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltips:hover .tooltipsText {
+  visibility: visible;
+  opacity: 1;
+}
