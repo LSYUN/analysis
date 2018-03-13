@@ -5,14 +5,21 @@ const state = {
   info: {}
 };
 const mutations = {
-  updateInfo(state, obj){
+  update(state, obj){
     window.session.setObj(window.sessionKeys.TEMPINFO, obj);
     state.info = {};
     state.info = obj;
   }
 };
-const actions = {};
-const getters = {};
+const actions = {
+};
+const getters = {
+  info: function (state) {
+    if (!state.info || !state.info.id) {
+      state.info = window.session.getObj(window.sessionKeys.TEMPINFO);
+    }
+    return state.info;
+  }};
 
 export default {
   state,

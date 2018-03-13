@@ -1,11 +1,11 @@
 <template>
   <section class="content content-overflow">
-    <button id="test" type="button">list</button>
+    <button id="test" type="button">test</button>
     <div class="box">
       <div class="box-header">
         <h3 class="box-title">工程信息</h3>
         <span class="table-title-span">
-            <button type="button" @click="addInfo()" class="btn table-title-button" title="添加工程">
+            <button type="button" @click="add()" class="btn table-title-button" title="添加工程">
               <i class="iconfont icon-add"></i>
             </button>
           </span>
@@ -40,7 +40,6 @@
   import GlobalEnum from '../../../managers/enum/global-enum';
   import * as tableConfig from "../../../managers/configs/dataTable.js"
   export default {
-    props: ['info'],
     data () {
       return {
         pathKey: 'projectList',
@@ -52,18 +51,13 @@
       };
     },
     mounted () {
-      const _this = this;
-      $('#test').click(function () {
-        console.log('you clicked');
-        _this.info.lsy = _this.info.lsy === 'lushiyun' ? 'lsy' : 'lushiyun';
-      });
-      let ACCOUNT = window.session.getObj(window.sessionKeys.ACCOUNT);
-      if (ACCOUNT) {
-        this.account = ACCOUNT.id;
+      let account = window.session.getObj(window.sessionKeys.ACCOUNT);
+      if (account) {
+        this.account = account.id;
         this.initTable(this.account);
-        this.modifyInfo();
-        this.deleteInfo();
-        this.editInfo();
+        this.modify();
+        this.delete();
+        this.edit();
         this.organizationList = window.session.getObj(window.sessionKeys.ORGANIZATIONS);
         if (this.organizationList === null || !this.organizationList) {
           this.$router.push({path: '/login'});
@@ -101,6 +95,13 @@
             $('td', row).addClass('text-center');
           },
           columnDefs: [
+            {
+              render: function (data, type, row) {
+                console.log(data);
+                return `<span style="font-size:0.75em" >${data}</span>`
+              }.bind(this),
+              targets: 1
+            },
             {
               render: function (data, type, row) {
                 const view = _.find(this.projectTypes, function (type) {
@@ -189,51 +190,31 @@
           ]
         });
       },
-      addInfo () {
-        this.info = {};
-        this.address = {};
-        let info = {
-          id: '',
-          name: '',
-          address: '',
-          lat: '',
-          lng: '',
-          cityCode: '',
-          cityList: '',
-          createDate: window.globalTool.formatDate(new Date(), 1),
-          startDate: window.globalTool.formatDate(new Date(), 1),
-          endDate: window.globalTool.formatDate(new Date(), 1),
-          organizationId: '',
-          superOrganization: 'null',
-          workState: 0,
-          type: 0,
-          enabled: '',
-          remark: '',
-        };
-        this.$store.commit('updateInfo', info);
-        this.$router.push({path: '/project/test'});
+      add () {
+        let info = {};
+        this.$store.commit('update', info);
+        this.$router.push({path: '/project/info/add'});
       },
-      modifyInfo(){
-        this.renderAble = false;
+      modify(){
         const _this = this;
         $('#example tbody').on('click', 'td:nth-child(7)', function (p) {
-          _this.$store.commit('updateInfo', _this.table.row(this).data());
+          _this.$store.commit('update', _this.table.row(this).data());
           _this.$router.push({path: '/project/info/modify'});
         });
       },
-      editInfo(){
-        const component = this;
+      edit(){
+        const _this = this;
         $('#example tbody').on('click', 'td:nth-child(8)', function (p) {
-          component.info = component.table.row(this).data();
-          window.session.setObj(window.sessionKeys.PROJECT, component.info);
-          component.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
-          component.$router.push({path: '/project/edit/itemList'});
+          let info = _this.table.row(this).data();
+          window.session.setObj(window.sessionKeys.PROJECT, info);
+          _this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
+          _this.$router.push({path: '/project/edit/itemList'});
         });
       },
-      deleteInfo () {
-        const component = this;
+      delete () {
+        const _this = this;
         $('#example tbody').on('click', 'td:nth-child(9)', function (p) {
-          const oneId = _.map(component.table.rows(this).data(), (p) => p.id);
+          const oneId = _.map(_this.table.rows(this).data(), (p) => p.id);
           layer.open({
             icon: 3,
             title: '<h4 style="color: #4898d5;font-weight: bold">删除项目</h4>',
@@ -241,7 +222,7 @@
             btn: ['确定', '取消'],
             yes: function (index, layero) {
               window.mainConfig.http.projectDelete(JSON.stringify(oneId)).then((response) => {
-                component.table.ajax.reload();
+                _this.table.ajax.reload();
                 toastr.success('已删除');
               }, (response) => {
                 toastr.error('通信失败');

@@ -32,8 +32,7 @@ const router = new Router({
             {path: 'test', component: resolve => require(['../components/main/project/test.vue'], resolve)},
             {path: 'list', component: resolve => require(['../components/main/project/list.vue'], resolve)},
             {
-              path: 'info',
-              // path: 'info/:operation',
+              path: 'info/:operation',
               component: resolve => require(['../components/main/project/info.vue'], resolve),
               // beforeEnter: (to, from, next) => {
               //   // if (from.fullPath = '/')

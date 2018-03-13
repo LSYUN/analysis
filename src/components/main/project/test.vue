@@ -211,14 +211,14 @@
           enabled: '',
           remark: '',
         };
-        this.$store.commit('updateInfo', info);
-        this.$router.push({path: '/project/test'});
+        this.$store.commit('update', info);
+        this.$router.push({path: '/project/info/add'});
       },
       modifyInfo(){
         this.renderAble = false;
         const _this = this;
         $('#example tbody').on('click', 'td:nth-child(7)', function (p) {
-          _this.$store.commit('updateInfo', _this.table.row(this).data());
+          _this.$store.commit('update', _this.table.row(this).data());
           _this.$router.push({path: '/project/info/modify'});
         });
       },
