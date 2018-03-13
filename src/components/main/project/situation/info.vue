@@ -1,33 +1,38 @@
 <template>
   <div style="min-width:300px;">
-    <section class="content-header">
-      <navigation-path :path-key="pathKey"></navigation-path>
-    </section>
-    <div class="content content-overflow">
-      <div class="">
-        <nav class="navbar navbar-inverse" role="navigation">
-          <div class="container-fluid">
-            <div class="navbar-header">
-              <div class="navbar-brand" @click="backToList()"><b>{{projectName}}</b></div>
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-            </div>
-            <div class="collapse navbar-collapse" id="nav-collapse">
-              <ul class="nav navbar-nav">
-                <li v-link-active><a v-link="{path:'/project/situationInfo/diagram'}">工程简图</a></li>
-                <li v-link-active><a v-link="{path:'/project/situationInfo/history'}">历史数据</a></li>
-                <li v-link-active><a v-link="{path:'/project/situationInfo/analysis'}">数据分析(趋势)</a></li>
-                <li v-link-active><a v-link="{path:'/project/situationInfo/relAnalysis'}">关联分析(趋势)</a></li>
-                <li v-link-active><a v-link="{path:'/project/situationInfo/realTime'}">实时数据</a></li>
-              </ul>
-            </div><!-- /.navbar-collapse -->
-          </div><!-- /.container-fluid -->
-        </nav>
-      </div>
+    <div class="content content-overflow topper">
+      <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <div class="navbar-brand" @click="backToList()"><b>{{projectName}}</b></div>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="collapse navbar-collapse" id="nav-collapse">
+            <ul class="nav navbar-nav">
+              <li>
+                <router-link :to="{path:'/project/situationInfo/diagram'}">工程简图</router-link>
+              </li>
+              <li>
+                <router-link :to="{path:'/project/situationInfo/history'}">历史数据</router-link>
+              </li>
+              <li>
+                <router-link :to="{path:'/project/situationInfo/analysis'}">数据分析(趋势)</router-link>
+              </li>
+              <li>
+                <router-link :to="{path:'/project/situationInfo/relAnalysis'}">关联分析(趋势)</router-link>
+              </li>
+              <li class="active">
+                <router-link :to="{path:'/project/situationInfo/realTime'}">实时数据</router-link>
+              </li>
+            </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
       <div>
         <router-view :info.sync="info"></router-view>
       </div>
@@ -35,11 +40,8 @@
   </div>
 </template>
 <script>
+  import {bus} from '../../../../managers/utils/bus';
   export default {
-    components: {
-      'navigation-path': require('../utility/navigation-path.vue'),
-      'vue-select2': require('../utility/vue-select2.vue'),
-    },
     data () {
       return {
         info: {},
@@ -48,40 +50,34 @@
         projectName: null,
       }
     },
-    events: {
-      'monitorItem': function (msg) {
-        this.getFirstPointGroupOfFirstItem(msg.id);
-      },
-      'monitorGroupItem': function (msg) {
-        this.getFirstPointOfFirstPointGroup(msg.id);
-      },
-      'monitorItem2': function (msg, autoReq) {
-        this.getFirstPointOfSecondItem(msg.id, autoReq);
-      },
-    },
-    attached(){
+    mounted(){
       if (!this.info) {
-        this.$route.router.go({path: '/project/situationList'});
+        this.$router.push({path: '/project/situationList'});
         return;
       }
-      let project = window.sessionUtility.getObj(window.sessionKeys.PROJECT);
+      let project = window.session.getObj(window.sessionKeys.PROJECT);
       this.projectId = project.id;
       this.projectName = project.name;
       this.getFirstMonitorItem(this.projectId);// 用来获取第一个监测项
-
+      bus.$on('filterTable', function (data) {
+        console.log('grand');
+      });
     },
     methods: {
       getFirstMonitorItem(projectId){
-        window.appContext.http.getMonitorItemPage_R(projectId).then((response) => {
-          let firstOption = response.body[0];
-          let secondOption = response.body[1] || firstOption;
-          if (firstOption) {
-            this.info.itemObj = firstOption;
-            this.info.itemObj2 = secondOption;
-            this.$broadcast('updateItem', this.info.itemObj);
-            this.$broadcast('updateItem2', this.info.itemObj2);
-            this.getFirstPointGroupOfFirstItem(firstOption.id);// 用来加载第一个点组
-            this.getFirstPointOfSecondItem(secondOption.id, true);  //第二个参数控制关联分析是否自动画图
+        window.mainConfig.http.getMonitorItemPage_R(projectId).then((response) => {
+          let oneOption = response.data[0];
+          let twoOption = response.data[1] || oneOption;
+          if (oneOption && oneOption.id) {
+//            this.info.itemObj = firstOption;
+//            this.info.itemObj2 = secondOption;
+            this.$store.state.situation.itemObj1 = oneOption;
+            this.$store.state.situation.itemObj2 = twoOption;
+            bus.$emit('updateItem1', oneOption);
+//            bus.$emit('updateItem2', twoOption);
+//            this.$broadcast('updateItem2', this.info.itemObj2);
+            this.getFirstPointGroupOfFirstItem(oneOption.id);// 用来加载第一个点组
+//            this.getFirstPointOfSecondItem(secondOption.id, true);  //第二个参数控制关联分析是否自动画图
           } else {
             toastr.info('项目下没有监测项');
           }
@@ -90,75 +86,101 @@
         });
       },
       getFirstPointGroupOfFirstItem(itemId){
-        window.appContext.http.getFirstPointGroupOfItem(itemId).then((response) => {
-          let firstGroupOption = response.body;
-//          console.log(firstGroupOption);
-          if (firstGroupOption && firstGroupOption.length > 0) {
-            this.info.pointGroupObj = firstGroupOption;
-            this.getFirstPointOfFirstPointGroup(firstGroupOption.id);// 用来加载第一个点组数据
+        window.mainConfig.http.getFirstPointGroupOfItem(itemId).then((response) => {
+          let option = response.data;
+          if (option && option.length > 0) {
+//            this.info.pointGroupObj = firstGroupOption;
+            this.$store.state.situation.groupObj = option;
+            bus.$emit('updateGroup', option);
+            this.getFirstPointOfFirstPointGroup(option.id);// 用来加载第一个点组数据
           } else {
 //            toastr.info('项目下没有点组');
             this.getFirstPointOfFirstItem(itemId);// 用来加载第一个测点数据(之前的)
           }
-          this.$broadcast('updatePointGroup', this.info.pointGroupObj);
+//          this.$broadcast('updatePointGroup', this.info.pointGroupObj);
         }, (response) => {
           toastr.error('通信失败');
         });
       },
       getFirstPointOfFirstPointGroup(groupId){
-        window.appContext.http.getFirstPointOfGroup(groupId).then((response) => {
-          let option = response.body;
-//          console.log(option);
+        window.mainConfig.http.getFirstPointOfGroup(groupId).then((response) => {
+          let option = response.data;
+          console.log(option);
           if (option && option.length > 0) {
-            this.info.pointObj = option;
+//            this.info.pointObj = option;
+            this.$store.state.situation.pointObj1 = option;
+            bus.$emit('updatePoint1', option);
 //            console.log(this.info.pointObj);
           } else {
             this.info.pointObj = [];
             toastr.info('该点组下没有关联测点');
           }
-          this.$broadcast('updatePoint', this.info.pointObj);
+//          this.$broadcast('updatePoint', this.info.pointObj);
         }, (response) => {
           console.log(response);
           toastr.error('通信失败');
         });
       },
       getFirstPointOfFirstItem(itemId){
-        window.appContext.http.getFirstPointOfItem(itemId).then((response) => {
-          let option = response.body;
+        window.mainConfig.http.getFirstPointOfItem(itemId).then((response) => {
+          let option = response.data;
           if (option && option.length > 0) {
-            this.info.pointObj = option;
+//            this.info.pointObj = option;
+            this.$store.state.situation.pointObj1 = option;
           } else {
-            this.info.pointObj = [];
+//            this.info.pointObj = [];
           }
-          this.$broadcast('updatePoint', this.info.pointObj);
+          bus.$emit('updatePoint1', option)
         }, (response) => {
           toastr.error('通信失败');
         });
       },
       getFirstPointOfSecondItem(itemId, autoReq){
-        window.appContext.http.getFirstPointOfItem(itemId).then((response) => {
-          let option = response.body[0];
+        window.mainConfig.http.getFirstPointOfItem(itemId).then((response) => {
+          let option = response.data[0];
           if (option && option.id) {
             this.info.pointObj2 = option;
-            this.$broadcast('updatePoint2', this.info.pointObj2, autoReq);
+//            this.$broadcast('updatePoint2', this.info.pointObj2, autoReq);
           } else {
             this.info.pointObj2 = {};
-            this.$broadcast('updatePoint2', this.info.pointObj2, autoReq);
+//            this.$broadcast('updatePoint2', this.info.pointObj2, autoReq);
           }
         }, (response) => {
           toastr.error('通信失败');
         });
       },
       backToList(){
-        this.$route.router.go({path: '/project/situationList'});
+        this.$router.push({path: '/project/situationList'});
       }
     }
   };
 </script>
 
 <style lang="scss" scoped>
+  .topper {
+    padding: 0;
+  }
+
   .navbar {
     margin-bottom: 2px;
+  }
+
+  .navbar-inverse {
+    background-color: #f45b2a;
+    border-color: #f44336;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+  }
+
+  .navbar-inverse .navbar-toggle {
+    margin-top: 3px;
+    margin-right: 3px;
+  }
+
+  .navbar-inverse .navbar-toggle:focus, .navbar-inverse .navbar-toggle:hover {
+    background-color: #f44336;
+    border-color: #f45b2a;
   }
 
   .navbar-brand {
@@ -181,38 +203,85 @@
     float: right;
   }
 
-  .nav > li {
-    position: relative;
-    display: table-cell;
+  .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+    border-top-color: #f44336;
   }
 
-  .v-link-active > a {
-    font-size: 20px;
-    color: #3c8dbc !important;
+  ul.nav {
+    background-color: #f45b2a;
+    margin: 0 auto;
+    display: table;
+    height: 100%;
+  }
+
+  ul.nav > li {
+    border: 0;
+    position: relative;
+    display: table-cell;
+    cursor: default;
+    height: 100%;
+  }
+
+  ul.nav > li a {
+    color: #ffffff;
+    border: 0;
+    font-size: 1.2em;
     font-weight: bolder;
+    letter-spacing: 2px;
+    font-family: "Microsoft Sans Serif";
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+  }
+
+  ul.nav > li.active a {
+    background-color: #f44336;
+  }
+
+  ul.nav > li.active a:hover {
+    background-color: #f44336;
+  }
+
+  ul.nav > li a:hover {
+    background-color: #f44336;
+  }
+
+  @media (max-width: 1024px) {
+    ul.nav {
+      border-top: 1px solid #f44336;
+    }
+
+    ul.nav > li a {
+      font-size: 1em;
+    }
+  }
+
+  @media (max-width: 850px) {
+    ul.nav > li a {
+      font-size: 0.90em;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
   }
 
   @media (max-width: 768px) {
-    .navbar-brand {
-      width: 60vw;
-    }
-
     .navbar-collapse {
       float: none;
     }
 
-    .nav {
-      width: 100%;
-      display: table;
+    ul.nav {
+      height: 100%;
+      border: 0;
     }
 
-    .nav li {
-      display: table-cell;
-      text-align: center;
+    ul.nav > li {
+      height: 100%;
+      vertical-align: middle;
     }
 
-    .nav > li > a {
-      padding: 5px 10px;
+    ul.nav > li a {
+      /*padding: 0 15px;*/
+      height: 100%;
     }
   }
 </style>

@@ -63,12 +63,9 @@
         ]
       };
     },
-    components: {
-      'navigation-path': require('../../utility/navigation-path.vue')
-    },
     mounted () {
-      this.projectId = window.sessionUtility.getObj(window.sessionKeys.PROJECT).id;
-      this.imcId = window.sessionUtility.getObj(window.sessionKeys.IMC).id;
+      this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
+      this.imcId = window.session.getObj(window.sessionKeys.IMC).id;
       this.initTable();
     },
     methods: {
@@ -86,7 +83,7 @@
           order: [[1, 'asc']],
           deferRender: true,
           ajax: {
-            url: window.appContext.urls.getSensorCollectState(window.sessionUtility.getObj(window.sessionKeys.IMC).id, window.sessionUtility.getObj(window.sessionKeys.PROJECT).id),
+            url: window.mainConfig.url.getSensorCollectState(window.session.getObj(window.sessionKeys.IMC).id, window.session.getObj(window.sessionKeys.PROJECT).id),
             type: 'GET',
             contentType: 'application/json',
             dataType: 'json',

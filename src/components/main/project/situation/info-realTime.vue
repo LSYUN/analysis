@@ -1,39 +1,39 @@
 <template>
-  <div class="box box-info box-solid">
-    <div class="box-body">
-      <table cellpadding="0" cellspacing="0" border="0" class="display nowrap table" width="100%" id="realTime"
-             style="max-height: 25vh">
-        <thead>
-        <tr>
-          <!--<th class="text-center" style="width:15px"></th>-->
-          <th class="text-center">名称</th>
-          <th class="text-center">时间</th>
-          <th class="text-center">详细信息</th>
-          <th class="text-center">备注</th>
-        </tr>
-        </thead>
-      </table>
+  <div>
+    <div class="box box-info box-solid">
+      <div class="box-body">
+        <table cellpadding="0" cellspacing="0" border="0" class="display nowrap table" width="100%" id="realTime"
+               style="max-height: 25vh">
+          <thead>
+          <tr>
+            <!--<th class="text-center" style="width:15px"></th>-->
+            <th class="text-center">名称</th>
+            <th class="text-center">时间</th>
+            <th class="text-center">详细信息</th>
+            <th class="text-center">备注</th>
+          </tr>
+          </thead>
+        </table>
+      </div>
     </div>
-  </div>
-  <div class="box box-info box-solid">
-    <div class="box-body">
-      <label class="chat-msg-addon">消息提醒：</label>
-      <div class="chat-msg" id="chat">
+    <div class="box box-info box-solid">
+      <div class="box-body">
+        <label class="chat-msg-addon">消息提醒：</label>
+        <div class="chat-msg" id="chat">
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+  import * as tableConfig from "../../../../managers/configs/dataTable.js"
   export default {
-    components: {
-      'vue-select2': require('../utility/vue-select2.vue'),
-    },
-    props: {
-      info: {
-        type: Object,
-        required: true
-      }
-    },
+//    props: {
+//      info: {
+//        type: Object,
+//        required: true
+//      }
+//    },
     data () {
       return {
         realTimeTable: {},
@@ -62,7 +62,7 @@
       }
     },
     mounted () {
-      this.projectId = window.sessionUtility.getObj(window.sessionKeys.PROJECT).id;
+      this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
       this.initRealTimeTable(this.projectId);
       this.webSocket();
     },
@@ -80,7 +80,7 @@
           paging: false,
           info: false,
           ajax: {
-            url: window.appContext.urls.getRealTimePageByProject(Id),
+            url: window.mainConfig.url.getRealTimePageByProject(Id),
             type: 'GET',
             contentType: 'application/json',
             dataType: 'json',
@@ -92,7 +92,7 @@
               });
             }
           },
-          language: this.$store.state.dataTable.language,
+          language: tableConfig.LANGUAGE,
           createdRow: function (row, data, index) {
             $('td', row).addClass('text-center');
             let monitorItemIdMonitorName = data.projectId + '_' + data.pointName;
@@ -118,7 +118,7 @@
       webSocket(){
         if (window.WebSocket) {
           //更改WebSocket的projectId
-          let encodeURIStr = window.appContext.wsUrls.getRealDataWebSockPage(this.projectId);
+          let encodeURIStr = window.mainConfig.wsUrl.getRealDataWebSockPage(this.projectId);
           let webSocket = new WebSocket(encodeURI(encodeURIStr));
           webSocket.onopen = function (evt) {
             //链接建立

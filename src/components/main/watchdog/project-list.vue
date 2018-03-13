@@ -14,7 +14,7 @@
           </span>-->
         </div>
         <div class="box-body">
-          <table cellpadding="0" cellspacing="0" border="0" class="display muchColumn table pointer max-width"
+          <table cellpadding="0" cellspacing="0" border="0" class="display much-column table pointer max-width"
                  id="example" width="100%">
             <thead>
             <tr>
@@ -41,7 +41,7 @@
   </div>
 </template>
 <script>
-  import GlobalEnum from '../../../manager/enum/global-enum';
+  import GlobalEnum from '../../../managers/enum/global-enum';
   export default{
 //    props: {
 //      info: {
@@ -63,19 +63,19 @@
       'navigation-path' :require('../../utility/navigation-path.vue'),
     },
     mounted () {
-      let ACCOUNT = window.sessionUtility.getObj(window.sessionKeys.ACCOUNT);
+      let ACCOUNT = window.session.getObj(window.sessionKeys.ACCOUNT);
       if (ACCOUNT) {
         this.account = ACCOUNT.id;
         this.initTable();
         this.modifyInfo();
         this.deleteInfo();
         this.editInfo();
-        this.organizationList = window.sessionUtility.getObj(window.sessionKeys.ORGANIZATIONS);
+        this.organizationList = window.session.getObj(window.sessionKeys.ORGANIZATIONS);
         if (this.organizationList === null || !this.organizationList) {
-          this.$route.router.go({path: '/login'});
+          this.$router.push({path: '/login'});
         }
       } else {
-        this.$route.router.go({path: '/login'});
+        this.$router.push({path: '/login'});
       }
     },
     methods: {
@@ -90,7 +90,7 @@
           iDisplayLength: 10,
           lengthMenu: [[10, 15, 25, 50], [10, 15, 25, 50]],
           ajax: {
-            url: window.appContext.urls.getProjectPage_U(this.account),
+            url: window.mainConfig.url.getProjectPage_U(this.account),
             type: 'GET',
             contentType: 'application/json',
             dataType: 'json',
@@ -129,24 +129,24 @@
       addInfo () {
         this.info = {};
         this.address = {};
-        this.$route.router.go({path: '/watchdog/info/add'});
+        this.$router.push({path: '/watchdog/info/add'});
       },
       modifyInfo(){
         this.renderAble = false;
         const components = this;
         $('#example tbody').on('click', 'td:nth-child(8)', function (p) {
           components.info = components.table.row(this).data();
-          components.$route.router.go({path: '/watchdog/info/modify'});
+          components.$router.push({path: '/watchdog/info/modify'});
         });
       },
       editInfo(){
         const component = this;
         $('#example tbody').on('click', 'td:nth-child(2)', function (p) {
           component.info = component.table.row(this).data();
-          window.sessionUtility.setObj(window.sessionKeys.PROJECT, component.info);
-          component.projectId = window.sessionUtility.getObj(window.sessionKeys.PROJECT).id;
-//          window.sessionUtility.setObj(window.sessionKeys.IMC, component.info);
-          component.$route.router.go({path: '/watchdog/imcList'});
+          window.session.setObj(window.sessionKeys.PROJECT, component.info);
+          component.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
+//          window.session.setObj(window.sessionKeys.IMC, component.info);
+          component.$router.push({path: '/watchdog/imcList'});
         });
       },
       deleteInfo () {
@@ -159,7 +159,7 @@
             content: '<div style="color: #c39e00;font-size: 1.1em;">您确定删除此项目吗?</div>',
             btn: ['确定', '取消'],
             yes: function (index, layero) {
-              window.appContext.http.projectDelete(JSON.stringify(oneId)).then((response) => {
+              window.mainConfig.http.projectDelete(JSON.stringify(oneId)).then((response) => {
                 component.table.ajax.reload();
                 toastr.success('已删除');
               }, (response) => {

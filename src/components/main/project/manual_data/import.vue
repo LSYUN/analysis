@@ -1,9 +1,4 @@
 <template>
-  <div class="background section-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <navigation-path :path-key="pathKey"></navigation-path>
-    </section>
     <section class="content content-overflow">
       <div class="box box-solid">
         <div class="box-header">
@@ -92,11 +87,11 @@
           evtSelected: function (evt, data) {
             if (data && data.length > 0) {
               this.projectId = data[0].id;
-              this.$refs.itemSlt.$emit('clear', true);      //清空监测项
+              this.$refs.itemSlt.clear(true);      //清空监测项
             }
           }.bind(this),
           ajaxUrl: function () {
-            return window.appContext.urls.getProjectPage_U(this.accountId);
+            return window.mainConfig.url.getProjectPage_U(this.accountId);
           }.bind(this)
         },
         monitorItems: {
@@ -109,18 +104,14 @@
             }
           }.bind(this),
           ajaxUrl: function () {
-//            return window.appContext.urls.getMonitorItemPage(this.projectId);
-            return window.appContext.urls.uploadDataByHand(this.projectId);
+//            return window.mainConfig.url.getMonitorItemPage(this.projectId);
+            return window.mainConfig.url.uploadDataByHand(this.projectId);
           }.bind(this)
         },
       };
     },
-    components: {
-      'navigation-path': require('../utility/navigation-path.vue'),
-      'vue-select2': require('../utility/vue-select2.vue'),
-    },
     mounted () {
-      this.accountId = window.sessionUtility.getObj(window.sessionKeys.ACCOUNT).id;
+      this.accountId = window.session.getObj(window.sessionKeys.ACCOUNT).id;
       this.initFileInput();
       const self = this;
       window.checkFile = function (obj) {
@@ -173,12 +164,12 @@
           '<div style="width: inherit;height: inherit;z-index: 10;opacity: 0.7;background-color: #787878;position: absolute;top: 0;"></div>' +
           '<img src="../../../static/image/ellipsis2.gif" style="z-index: 11;position: absolute;top:50%;left: 50%;margin-top: -100px ;"/></div>';
         $('.section-wrapper').append(opacity);
-          window.appContext.http.uploadByHand(this.formDataInfo,this.projectId,this.monitorItemId).then((response) => {
+          window.mainConfig.http.uploadByHand(this.formDataInfo,this.projectId,this.monitorItemId).then((response) => {
                 $('.opacity-wrapper').remove();
-                if (response.body.MESSAGE==='success') {
+                if (response.data.MESSAGE==='success') {
                   toastr.success('上传成功!');
                 }else{
-                  toastr.warning(response.body.MESSAGE);
+                  toastr.warning(response.data.MESSAGE);
                 }
               },
               (response) => {

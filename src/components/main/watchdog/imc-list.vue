@@ -1,8 +1,5 @@
 <template>
   <div>
-    <section class="content-header">
-      <navigation-path :path-key="pathKey"></navigation-path>
-    </section>
     <section class="content content-overflow">
       <div class="box box-solid">
         <div class="box-header">
@@ -10,7 +7,7 @@
           <h3 class="box-title">IMC(服务器)管理</h3>
         </div>
         <div class="box-body">
-          <table id="example" cellpadding="0" cellspacing="0" border="0" class="display table pointer muchColumn"
+          <table id="example" cellpadding="0" cellspacing="0" border="0" class="display table pointer much-column"
                  width="100%">
             <thead>
             <tr>
@@ -77,18 +74,17 @@
       };
     },
     components: {
-      'navigation-path': require('../../utility/navigation-path.vue'),
     },
     mounted () {
-      this.account = window.sessionUtility.getObj(window.sessionKeys.ACCOUNT);
-      this.project = window.sessionUtility.getObj(window.sessionKeys.PROJECT);
+      this.account = window.session.getObj(window.sessionKeys.ACCOUNT);
+      this.project = window.session.getObj(window.sessionKeys.PROJECT);
       this.projectName = this.project.name;
       this.organizationId = this.account.organizationId;
       this.initTable();
       this.IMCSelected();
       this.trClick();
-      window.appContext.http.getConcurrentIMCList().then((response) => {
-        this.concurrentIMCList = response.body;
+      window.mainConfig.http.getConcurrentIMCList().then((response) => {
+        this.concurrentIMCList = response.data;
       }, (response) => {
         toastr.error('通信失败');
       });
@@ -106,7 +102,7 @@
           ordering: false,
           deferRender: true,
           ajax: {
-            url: window.appContext.urls.getIMCListByProject(this.project.id),
+            url: window.mainConfig.url.getIMCListByProject(this.project.id),
             type: 'GET',
             contentType: 'application/json',
             dataType: 'json',
@@ -210,8 +206,8 @@
         $('#example tbody').on('click', 'tr', function (p) {
           var data = component.table.row(this).data();
           if (p.target.textContent === '查看') {
-            window.sessionUtility.setObj(window.sessionKeys.IMC, data);
-            component.$route.router.go({path: '/watchdog/imcEdit/sctList'});
+            window.session.setObj(window.sessionKeys.IMC, data);
+            component.$router.push({path: '/watchdog/imcEdit/sctList'});
           }
           if (p.target.textContent === '重启') {
             if (data.type === 0) {
@@ -224,7 +220,7 @@
               buttons: [{
                 label: '确定重启',
                 action: function (dialog) {
-                  window.appContext.http.restartIMC(data.imcno).then((respond) => {
+                  window.mainConfig.http.restartIMC(data.imcno).then((respond) => {
                     if (respond.body.ERRORCODE === '0') {
                       toastr.success("重启指令发送成功");
                       window.location.reload();

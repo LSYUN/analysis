@@ -101,9 +101,6 @@
 </template>
 <script>
   export default {
-    components: {
-      'vue-select2': require("../utility/vue-select2.vue")
-    },
     props: {
       info: {
         type: Object,
@@ -143,7 +140,7 @@
             }
           }.bind(this),
           ajaxUrl: function () {
-            return window.appContext.urls.getMonitorItemPage_U(this.projectId);
+            return window.mainConfig.url.getMonitorItemPage_U(this.projectId);
           }.bind(this)
         },
         monitorPoints: {
@@ -157,7 +154,7 @@
             }
           }.bind(this),
           ajaxUrl: function () {
-            return window.appContext.urls.getRelPointOfItems(this.monitorItemId);
+            return window.mainConfig.url.getRelPointOfItems(this.monitorItemId);
           }.bind(this)
         },
       };
@@ -171,7 +168,7 @@
       }
     },
     mounted () {
-      this.projectId = window.sessionUtility.getObj(window.sessionKeys.PROJECT).id;
+      this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
       this.initMap();
 
       var monitorItemId='ok';
@@ -195,8 +192,8 @@
           },
           'features': []
         };
-        window.appContext.http.getItemPointParams(this.projectId).then((response) => {
-          let responseData = response.body;
+        window.mainConfig.http.getItemPointParams(this.projectId).then((response) => {
+          let responseData = response.data;
           for (let i = 0, len = responseData.length; i < len; i++) {
             let coordinates = JSON.parse(responseData[i].pointParam).coordinate;
             let geoObj = {
@@ -328,7 +325,7 @@
               new ol.layer.Image({
                 source: new ol.source.ImageStatic({
 //                url: './static/image/sidebar-5.jpg',//这里添加静态图片的地址
-                  url: window.appContext.urls.getProjectMap(self.projectId),
+                  url: window.mainConfig.url.getProjectMap(self.projectId),
                   projection: projection,
                   imageExtent: extent
                 })
@@ -389,8 +386,8 @@
                 let monitorItemId = ids[1];
                 let monitorPointName = ids[2];
                 self.canRequest = false;
-                window.appContext.http.getDetailsInfo(self.projectId, monitorPointName, monitorItemId).then((response) => {
-                  var info = response.bodyText;
+                window.mainConfig.http.getDetailsInfo(self.projectId, monitorPointName, monitorItemId).then((response) => {
+                  var info = response.dataText;
 //                  console.log(info);
                   $('.ol-popup').show();
                   popup.setPosition(e.coordinate);
@@ -436,15 +433,15 @@
         this.markerSource.refresh();
         this.formData = new FormData($("#dataForm")[0]);
 
-        window.appContext.http.setItemPointParams(this.formData, this.monitorItemId, this.monitorPointId).then((response) => {
+        window.mainConfig.http.setItemPointParams(this.formData, this.monitorItemId, this.monitorPointId).then((response) => {
           $('#modal').modal('hide');
 //          $("#operation").hide();
           this.initMap();
-          if (response.body && response.body.errcode) {
-            if (response.body.errcode !== 0) {
-              toastr.error(response.body.meesage);
+          if (response.data && response.data.errcode) {
+            if (response.data.errcode !== 0) {
+              toastr.error(response.data.meesage);
             } else {
-              toastr.success(response.body.meesage);
+              toastr.success(response.data.meesage);
             }
           }
         }, (response) => {
@@ -470,7 +467,7 @@
         $('#loading').show();
         this.formDataInfo = new FormData($("#uploadForm")[0]);
 //          formData.append("projectId", this.projectId);
-        window.appContext.http.uploadProjectMap(this.formDataInfo, this.projectId).then((response) => {
+        window.mainConfig.http.uploadProjectMap(this.formDataInfo, this.projectId).then((response) => {
               $('#loading').hide();
               $('#message').hide();
               document.getElementById("map").innerHTML = "";
@@ -489,7 +486,7 @@
           content: '<div style="color: #c39e00;font-size: 1.1em;">您确定删除此项目地图吗?</div>',
           btn: ['确定', '取消'],
           yes: function (index, layero) {
-            window.appContext.http.deleteProjectMap(self.projectId).then((response) => {
+            window.mainConfig.http.deleteProjectMap(self.projectId).then((response) => {
               document.getElementById("map").innerHTML = "";
               toastr.success('已删除');
             }, (response) => {

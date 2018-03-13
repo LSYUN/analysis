@@ -1,8 +1,5 @@
 <template>
   <div>
-    <section class="content-header">
-      <navigation-path :path-key="pathKey"></navigation-path>
-    </section>
     <section class="content content-overflow">
       <div class="box box-solid">
         <div class="box-header">
@@ -13,7 +10,7 @@
           </span>
         </div>
         <div class="box-body">
-          <table cellpadding="0" cellspacing="0" border="0" class="display muchColumn table" id="system" width="100%">
+          <table cellpadding="0" cellspacing="0" border="0" class="display much-column table" id="system" width="100%">
             <thead>
             <tr>
               <th class="text-center" rowspan="2">文件名</th>
@@ -39,7 +36,7 @@
           </span>
         </div>
         <div class="box-body">
-          <table cellpadding="0" cellspacing="0" border="0" class="display muchColumn table" id="organization"
+          <table cellpadding="0" cellspacing="0" border="0" class="display much-column table" id="organization"
                  width="100%">
             <thead>
             <tr>
@@ -79,7 +76,7 @@
             </span>
           </div>
           <div class="box-body">
-          <table cellpadding="0" cellspacing="0" border="0" class="display muchColumn table" id="report" width="100%">
+          <table cellpadding="0" cellspacing="0" border="0" class="display much-column table" id="report" width="100%">
             <thead>
             <tr>
               <th class="text-center" rowspan="2">文件名</th>
@@ -195,11 +192,11 @@
             this.projectId = data[0].id;
             let projectInfo = data[0].obj;
             this.$refs.itemSelector.$emit('update', [{id: projectInfo.id, text: projectInfo.name, obj: projectInfo}]);
-            this.reportTable.ajax.url(window.appContext.urls.getProjectReportTemplate(this.projectId)).load();
+            this.reportTable.ajax.url(window.mainConfig.url.getProjectReportTemplate(this.projectId)).load();
 //            this.loading = true;
           }.bind(this),
           ajaxUrl: function () {
-            return window.appContext.urls.getProjectPage_U(this.account.id);
+            return window.mainConfig.url.getProjectPage_U(this.account.id);
           }.bind(this),
         },
         zoneOptions: {
@@ -214,13 +211,9 @@
         },
       };
     },
-    components: {
-      'navigation-path': require('../utility/navigation-path.vue'),
-      'vue-select2': require('../utility/vue-select2.vue')
-    },
     mounted () {
       const self = this;
-      this.account = window.sessionUtility.getObj(window.sessionKeys.ACCOUNT);
+      this.account = window.session.getObj(window.sessionKeys.ACCOUNT);
       this.permission = this.account.permissionType;
       this.orgId = this.account.organizationId;
       this.initSymFileTable();
@@ -253,7 +246,7 @@
           ordering: false,
           deferRender: true,
           ajax: {
-            url: window.appContext.urls.getSystemFileList(),
+            url: window.mainConfig.url.getSystemFileList(),
             type: 'GET',
             contentType: 'application/json',
             dataType: 'json',
@@ -315,7 +308,7 @@
           ordering: false,
           deferRender: true,
           ajax: {
-            url: window.appContext.urls.getOrganizationFileList(orgId),
+            url: window.mainConfig.url.getOrganizationFileList(orgId),
             type: 'GET',
             contentType: 'application/json',
             dataType: 'json',
@@ -385,7 +378,7 @@
           ordering: false,
           deferRender: true,
           ajax: {
-            url: window.appContext.urls.getProjectReportTemplate(projectId),
+            url: window.mainConfig.url.getProjectReportTemplate(projectId),
             type: 'GET',
             contentType: 'application/json',
             dataType: 'json',
@@ -454,8 +447,8 @@
         this.formDataInfo = new FormData($("#uploadForm")[0]);
         if (this.formDataInfo) {
           let api = this.type === 1 ?
-              window.appContext.http.uploadSystemFile(this.formDataInfo) :
-              window.appContext.http.uploadOrganizationFile(this.formDataInfo, this.orgId);
+              window.mainConfig.http.uploadSystemFile(this.formDataInfo) :
+              window.mainConfig.http.uploadOrganizationFile(this.formDataInfo, this.orgId);
           let table = this.type === 1 ? self.symTable : self.orgTable;
           api.then((response) => {
                 toastr.info("上传成功！");
@@ -474,7 +467,7 @@
         const self = this;
         $('#system tbody').on('click', 'tr', function (p) {
           if (p.target.textContent === '查看') {
-            self.$route.router.go({path: '/document/details'});
+            self.$router.push({path: '/document/details'});
           }
         });
       },
@@ -482,14 +475,14 @@
         const self = this;
         $('#system tbody').on('click', 'td:nth-child(4)', function (p) {
           let data = self.symTable.row(this).data();
-          let url = window.appContext.urls.downloadFiles(data.id, data.name, data.refId, data.fileExtensions,
+          let url = window.mainConfig.url.downloadFiles(data.id, data.name, data.refId, data.fileExtensions,
               self.enumRank(data.fileRank), self.enumClassification(data.fileClassification));
 //          console.log(url);
           $('.aDownload').attr("href", url);
         });
         $('#organization tbody').on('click', 'td:nth-child(4)', function (p) {
           let data = self.orgTable.row(this).data();
-          let url = window.appContext.urls.downloadFiles(data.id, data.name, data.refId, data.fileExtensions,
+          let url = window.mainConfig.url.downloadFiles(data.id, data.name, data.refId, data.fileExtensions,
               self.enumRank(data.fileRank), self.enumClassification(data.fileClassification));
           $('.aDownload').attr("href", url);
         });
@@ -504,7 +497,7 @@
             content: '<div style="color: #c39e00;font-size: 1.1em;">您确定删除此系统文件吗?</div>',
             btn: ['确定', '取消'],
             yes: function (index, layero) {
-              window.appContext.http.fileInfoDelete(info).then((response) => {
+              window.mainConfig.http.fileInfoDelete(info).then((response) => {
                 self.symTable.ajax.reload();
                 toastr.success('已删除');
               }, (response) => {
@@ -525,7 +518,7 @@
             content: '<div style="color: #c39e00;font-size: 1.1em;">您确定删除此机构文件吗?</div>',
             btn: ['确定', '取消'],
             yes: function (index, layero) {
-              window.appContext.http.fileInfoDelete(info).then((response) => {
+              window.mainConfig.http.fileInfoDelete(info).then((response) => {
                 self.orgTable.ajax.reload();
                 toastr.success('已删除');
               }, (response) => {
@@ -629,8 +622,8 @@
         $('#myModal1').modal('toggle');
       },
       initProject(accountId){
-        window.appContext.http.getProjectPage_R(accountId).then((response) => {
-          let projectInfo = response.body[0];
+        window.mainConfig.http.getProjectPage_R(accountId).then((response) => {
+          let projectInfo = response.data[0];
           if (projectInfo && projectInfo.id) {
             this.projectId = projectInfo.id;
             this.$refs.itemSelector.$emit('update', [{id: projectInfo.id, text: projectInfo.name, obj: projectInfo}]);
@@ -645,14 +638,14 @@
         this.initUploadReportForm();
         let formDataInfo = new FormData($("#uploadReportForm")[0]);
         console.log(formDataInfo);
-        window.appContext.http.uploadProjectReportTemplate(this.projectId, 3, formDataInfo).then((response) => {
+        window.mainConfig.http.uploadProjectReportTemplate(this.projectId, 3, formDataInfo).then((response) => {
           toastr.info('上传成功!');
           $('#myModal1').modal('toggle');
           $('#file1').fileinput('clear');
           this.reportTable.ajax.reload();
         }, (response) => {
           toastr.error('上传失败!');
-          toastr.error(response.body);
+          toastr.error(response.data);
         });
       }
     }

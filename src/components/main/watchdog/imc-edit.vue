@@ -1,7 +1,4 @@
 <template>
-  <section class="content-header">
-    <navigation-path :path-key="pathKey"></navigation-path>
-  </section>
   <div class="content content-overflow">
     <div class="panel panel-info">
       <nav class="navbar navbar-inverse" role="navigation">
@@ -31,9 +28,6 @@
 </template>
 <script>
   export default {
-    components: {
-      'navigation-path': require('../../utility/navigation-path.vue'),
-    },
     props: {
       info: {
         type: Object,
@@ -51,8 +45,8 @@
       };
     },
     mounted () {
-      let project = window.sessionUtility.getObj(window.sessionKeys.PROJECT);
-      let imc = window.sessionUtility.getObj(window.sessionKeys.IMC);
+      let project = window.session.getObj(window.sessionKeys.PROJECT);
+      let imc = window.session.getObj(window.sessionKeys.IMC);
       this.info = {}; // 清空project info
       this.projectId = project.id;
       this.projectName = project.name;
@@ -61,8 +55,8 @@
     },
     methods: {
       getFirstMonitorItem(projectId){
-        window.appContext.http.getMonitorItemPage_R(projectId).then((response) => {
-          let firstOption = response.body[0];
+        window.mainConfig.http.getMonitorItemPage_R(projectId).then((response) => {
+          let firstOption = response.data[0];
           if (firstOption) {
             this.info.itemObj = firstOption;
             this.getFirstMonitorPoint( firstOption.id);
@@ -74,8 +68,8 @@
         });
       },
       getFirstMonitorPoint(itemId){
-        window.appContext.http.getFirstPointOfItem(itemId).then((response) => {
-          let option = response.body;
+        window.mainConfig.http.getFirstPointOfItem(itemId).then((response) => {
+          let option = response.data;
           if (option) {
             this.info.pointObj = option;
 //            this.$broadcast('updatePoint', this.info.pointObj);
@@ -87,7 +81,7 @@
         });
       },
       backToList(){
-        this.$route.router.go({path: '/watchdog/imcList'});
+        this.$router.push({path: '/watchdog/imcList'});
       }
     }
   };

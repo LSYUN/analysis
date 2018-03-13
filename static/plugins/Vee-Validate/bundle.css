@@ -4,168 +4,6 @@
 /*padding: 0*/
 /*}*/
 
-/*h1, h2, h3, h4, h5, h6 {*/
-/*font-size: 100%;*/
-/*font-weight: 400*/
-/*}*/
-
-/*ul {*/
-/*list-style: none*/
-/*}*/
-
-/*button, input, select, textarea {*/
-/*margin: 0*/
-/*}*/
-
-/*html {*/
-/*box-sizing: border-box*/
-/*}*/
-
-/**, :after, :before {*/
-/*box-sizing: inherit*/
-/*}*/
-
-/*audio, embed, img, object, video {*/
-/*height: auto;*/
-/*max-width: 100%*/
-/*}*/
-
-/*iframe {*/
-/*border: 0*/
-/*}*/
-
-/*table {*/
-/*border-collapse: collapse;*/
-/*border-spacing: 0*/
-/*}*/
-
-/*td, th {*/
-/*padding: 0;*/
-/*text-align: left*/
-/*}*/
-
-/*@-webkit-keyframes spin-around {*/
-/*0% {*/
-/*-webkit-transform: rotate(0deg);*/
-/*transform: rotate(0deg)*/
-/*}*/
-/*to {*/
-/*-webkit-transform: rotate(359deg);*/
-/*transform: rotate(359deg)*/
-/*}*/
-/*}*/
-
-/*html {*/
-/*background-color: #f5f5f5;*/
-/*font-size: 14px;*/
-/*-moz-osx-font-smoothing: grayscale;*/
-/*-webkit-font-smoothing: antialiased;*/
-/*min-width: 300px;*/
-/*overflow-x: hidden;*/
-/*overflow-y: scroll;*/
-/*text-rendering: optimizeLegibility*/
-/*}*/
-
-/*article, aside, figure, footer, header, hgroup, section {*/
-/*display: block*/
-/*}*/
-
-/*body, button, input, select, textarea {*/
-/*font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Helvetica, Arial, sans-serif*/
-/*}*/
-
-/*code, pre {*/
-/*-moz-osx-font-smoothing: auto;*/
-/*-webkit-font-smoothing: auto;*/
-/*font-family: Inconsolata, Consolas, Monaco, monospace;*/
-/*line-height: 1.25*/
-/*}*/
-
-/*body {*/
-/*color: #4a4a4a;*/
-/*font-size: 1rem;*/
-/*font-weight: 400;*/
-/*line-height: 1.428571428571429*/
-/*}*/
-
-/*a {*/
-/*color: #00d1b2;*/
-/*cursor: pointer;*/
-/*text-decoration: none;*/
-/*-webkit-transition: none 86ms ease-out;*/
-/*transition: none 86ms ease-out*/
-/*}*/
-
-/*a:hover {*/
-/*color: #363636*/
-/*}*/
-
-/*code {*/
-/*background-color: #f5f5f5;*/
-/*color: #ff3860;*/
-/*font-size: 12px;*/
-/*font-weight: 400;*/
-/*padding: 1px 2px 2px*/
-/*}*/
-
-/*hr {*/
-/*background-color: #dbdbdb;*/
-/*border: none;*/
-/*display: block;*/
-/*height: 1px;*/
-/*margin: 20px 0*/
-/*}*/
-
-/*img {*/
-/*max-width: 100%*/
-/*}*/
-
-/*input[type=checkbox], input[type=radio] {*/
-/*vertical-align: baseline*/
-/*}*/
-
-/*small {*/
-/*font-size: 11px*/
-/*}*/
-
-/*span {*/
-/*font-style: inherit;*/
-/*font-weight: inherit*/
-/*}*/
-
-/*strong {*/
-/*color: #363636;*/
-/*font-weight: 700*/
-/*}*/
-
-/*pre {*/
-/*white-space: pre;*/
-/*word-wrap: normal*/
-/*}*/
-
-/*pre, pre code {*/
-/*background-color: #f5f5f5;*/
-/*color: #4a4a4a*/
-/*}*/
-
-/*pre code {*/
-/*display: block;*/
-/*overflow-x: auto;*/
-/*padding: 16px 20px*/
-/*}*/
-
-/*table {*/
-/*width: 100%*/
-/*}*/
-
-/*table td, table th {*/
-/*text-align: left;*/
-/*vertical-align: top*/
-/*}*/
-
-/*table th {*/
-/*color: #363636*/
-/*}*/
 
 .is-block {
   display: block
@@ -1076,17 +914,17 @@ a.box:active {
   border-bottom: 1px solid #dbdbdb
 }
 
-.content a:not(.button):visited {
-  color: #b86bff
-}
+/*.content a:not(.button):visited {*/
+  /*color: #b86bff*/
+/*}*/
 
 .content a:not(.button):hover {
   border-bottom-color: #00d1b2
 }
 
-.content li + li {
-  margin-top: .25em
-}
+/*.content li + li {*/
+  /*margin-top: .25em*/
+/*}*/
 
 .content blockquote:not(:last-child), .content ol:not(:last-child), .content p:not(:last-child), .content ul:not(:last-child) {
   margin-bottom: 1em
@@ -6360,8 +6198,8 @@ a.panel-block:hover {
  */
 @font-face {
   font-family: FontAwesome;
-  src: url(/assets/fonts/fontawesome-webfont.eot);
-  src: url(/assets/fonts/fontawesome-webfont.eot?#iefix&v=4.7.0) format("embedded-opentype"), url(/assets/fonts/fontawesome-webfont.woff2) format("woff2"), url(/assets/fonts/fontawesome-webfont.woff) format("woff"), url(/assets/fonts/fontawesome-webfont.ttf) format("truetype"), url(/assets/fonts/fontawesome-webfont.svg#fontawesomeregular) format("svg");
+  src: url(/static/fonts/fontawesome-webfont.eot);
+  src: url(/static/fonts/fontawesome-webfont.eot?#iefix&v=4.7.0) format("embedded-opentype"), url(/static/fonts/fontawesome-webfont.woff2) format("woff2"), url(/static/fonts/fontawesome-webfont.woff) format("woff"), url(/static/fonts/fontawesome-webfont.ttf) format("truetype"), url(/static/fonts/fontawesome-webfont.svg#fontawesomeregular) format("svg");
   font-weight: 400;
   font-style: normal
 }

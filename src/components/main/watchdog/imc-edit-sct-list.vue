@@ -1,9 +1,5 @@
 <template>
   <div>
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <navigation-path :path-key="pathKey"></navigation-path>
-    </section>
     <section class="content content-overflow">
       <div class="box box-info box-solid">
         <div class="box-body">
@@ -69,11 +65,10 @@
       };
     },
     components: {
-      'navigation-path': require('../../utility/navigation-path.vue')
     },
     mounted () {
-      this.projectId = window.sessionUtility.getObj(window.sessionKeys.PROJECT).id;
-      this.imcId = window.sessionUtility.getObj(window.sessionKeys.IMC).id;
+      this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
+      this.imcId = window.session.getObj(window.sessionKeys.IMC).id;
       this.initTable();
     },
     methods: {
@@ -90,7 +85,7 @@
           order: [[1, 'asc']],
           deferRender: true,
           ajax: {
-            url: window.appContext.urls.getMcuPage(this.imcId, this.projectId),
+            url: window.mainConfig.url.getMcuPage(this.imcId, this.projectId),
             type: 'GET',
             contentType: 'application/json',
             dataType: 'json',

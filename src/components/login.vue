@@ -1,5 +1,5 @@
 <template>
-  <div class="dt-wrapper" v-on:keyup.enter='submit()'>
+  <div id="particlesJs" class="dt-wrapper" v-on:keyup.enter='submit'>
     <form role="form">
       <div class="column is-12">
         <label class="dt-label" for="loginName">用户名</label>
@@ -39,10 +39,6 @@
 
 <script>
   export default{
-    computed: {
-      operation () {
-      }
-    },
     data () {
       return {
         auto: '',
@@ -55,96 +51,82 @@
         enterprise: null
       };
     },
-    created(){
-    },
     mounted () {
-//      this.enterprise = window.appContext.enterprise;
-//      this.initParticles();
-//      if (this.$route.query.hasOwnProperty('auto')) {
+//      this.clickImgCode();
+      this.enterprise = window.mainConfig.enterprise;
+      this.initParticles();
+      if (this.$route.query.hasOwnProperty('auto')) {
 //        this.auto = true;
-//      } else {
+        this.$router.push({path: '/loginAuto'})
+      } else {
 //        this.auto = false;
 //        this.clickImgCode();
-//        this.loginImg = window.appContext.enterpriseType;
-//      }
+        this.loginImg = window.mainConfig.enterpriseType;
+      }
     },
     methods: {
       submit () {
-        console.log('ok');
-        axios.get('http://jsonplaceholder.typicode.com/todos')
-          .then(function (response) {
-            resultElement.innerHTML = generateSuccessHTMLOutput(response);
-          })
-          .catch(function (error) {
-            resultElement.innerHTML = generateErrorHTMLOutput(error);
-          });
-//        if (this.$validation.valid === false) {
-//          toastr.error('请正确填写信息!');
-//          return;
-//        }
-//        const user = {
+//        let user = {
 //          account: this.loginName,
 //          password: md5(this.password),
 //          validateCode: this.validateCode
 //        };
-//        if (user.validateCode !== this.serverCode) {
-//          toastr.error('验证码错误');
-//          this.clickImgCode();
-//          this.validateCode = '';
-//          return;
-//        }
-//        window.appContext.http.getCode({
-//          params: {account: this.loginName}
-//        }).then((response) => {
-//          const code = response.data.ENCRYPT_CODE;
-//          user.password = md5(code + user.password);
-//          window.appContext.http.login(user).then((response) => {
-//            this.setSessionCache(response);
-//            this.getAllOrganization();
-//            this.$route.router.go({path: '/project/map'});
-//          }, (response) => {
-//            if (response.status === 403) {
-//              toastr.error('账号或密码错误');
-//            } else if (response.status === 500) {
-//              toastr.error('服务器发生错误，请联系管理员!');
-//            } else {
-//              toastr.error('账号或密码错误');
-//            }
-//            this.clickImgCode();
-//            this.validateCode = '';
-//          });
-//        }, (response) => {
-//          toastr.error(JSON.stringify(response.body));
-//        });
+//        let user = {
+//          account: 'admin',
+//          password: md5('admin1002'),
+//          validateCode: ''
+//        };
+        let user = {
+          account: 'lsylsy',
+          password: md5('lsylsy'),
+          validateCode: ''
+        };
+        window.mainConfig.http.getEncryption(user.account).then(resEncrypt => {
+          let encrypt = resEncrypt.data.ENCRYPT_CODE;
+          user.password = md5(encrypt + user.password);
+          window.mainConfig.http.login(user).then(resLogin => {
+            this.setSessionCache(resLogin);
+            this.getAllOrganization();
+            this.$router.push({path: '/project/list'});
+          }, (errLogin => {
+            console.error(errLogin);
+//            console.error(resLogin);
+//            let msg = JSON.parse(errLogin.data);
+//            toastr.error("登录失败  " + msg.MESSAGE);
+          }))
+        }, (errEncrypt => {
+          _.toastr.error("通信失败");
+        }));
+      },
+      setSessionCache (response){
+        const account = response.data.ACCOUNT;
+        const token = response.data.TOKEN;
+        window.session.set(window.sessionKeys.TOKEN, token);
+        window.session.setObj(window.sessionKeys.AUTHORIZED, true);
+        account.permissionType = this.setPermission(account.roleId);
+        window.session.setObj(window.sessionKeys.ACCOUNT, account);
       },
       getAllOrganization(){
-        window.appContext.http.getAllOrganizationPage().then((response) => {
-          let account = window.sessionUtility.getObj(window.sessionKeys.ACCOUNT);
-          let organizations = response.body;
+        window.mainConfig.http.getAllOrganizationPage().then((response) => {
+          let account = window.session.getObj(window.sessionKeys.ACCOUNT);
+          let organizations = response.data;
           let organization = _.find(organizations, (org) => org.id === account.organizationId);
           organization.parsedRoleId = (organization && organization.id) ? this.setOrganization(organization.organizationRoleId) : 1;
-          window.sessionUtility.setObj(window.sessionKeys.ORGANIZATION, organization);
-          window.sessionUtility.setObj(window.sessionKeys.ORGANIZATIONS, organizations);
+          window.session.setObj(window.sessionKeys.ORGANIZATION, organization);
+          window.session.setObj(window.sessionKeys.ORGANIZATIONS, organizations);
         }, (response) => {
           toastr.error('通信失败');
         });
       },
 
       clickImgCode: function () {
-        window.appContext.http.getValidationCode().then((response) => {
-          this.imgCode = response.data.VALIDATION_CODEIMAGE;
-          this.serverCode = response.data.VALIDATION_CODE;
+        window.mainConfig.http.getValidation().then(response => {
+//          console.log(response);
+//          this.imgCode = response.data.VALIDATION_CODEIMAGE;
+//          this.serverCode = response.data.VALIDATION_CODE;
         }, (response) => {
           toastr.error('后台服务未开启，验证码获取失败!');
         });
-      },
-      setSessionCache (response){
-        const account = response.data.ACCOUNT;
-        const token = response.data.TOKEN;
-        window.sessionUtility.set(window.sessionKeys.TOKEN, token);
-        window.sessionUtility.setObj(window.sessionKeys.AUTHORIZED, true);
-        account.permissionType = this.setPermission(account.roleId);
-        window.sessionUtility.setObj(window.sessionKeys.ACCOUNT, account);
       },
       /***
        * 设置账号权限 0-超级管理员 1-普通用户 2-企业管理员
@@ -201,7 +183,7 @@
       },
 
       initParticles: function () {
-        particlesJS('particles-js',
+        particlesJS('particlesJs',
           {
             "particles": {
               "number": {
@@ -329,6 +311,15 @@
 <style type="scss" scoped>
   @import "../assets/css/dt_button.scss";
 
+  #particlesJs {
+    position: fixed;
+    width: 100%;
+    background-color: #2561a0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+  }
+
   .dt-wrapper {
     text-align: center;
     position: fixed;
@@ -398,15 +389,6 @@
     background-color: #e0dfd0;
     width: 100%;
     height: 99.4%;
-  }
-
-  #particles-js {
-    position: absolute;
-    width: 100%;
-    background-color: #2561a0;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: 50% 50%;
   }
 
   .bgImg > section {

@@ -135,10 +135,9 @@
 </template>
 <script>
   import '../../../../assets/css/pre-situation.scss';
-  import AnalysisEnum from '../../manager/enum/analysis-enum';
+  import AnalysisEnum from '../../managers/enum/analysis-enum';
   export default {
     components: {
-      'vue-select2': require('../utility/vue-select2.vue'),
       'water-level': require('../project-situation-info-pages/analysis-water-level.vue'),
       'in-displacement': require('../project-situation-info-pages/analysis-in-displacement.vue'),
       'clinometer-hole': require('../project-situation-info-pages/analysis-clinometer-hole.vue'),
@@ -217,7 +216,7 @@
             }
           }.bind(this),
           ajaxUrl: function () {
-            return window.appContext.urls.getMonitorItemPage_U(this.projectId);
+            return window.mainConfig.url.getMonitorItemPage_U(this.projectId);
           }.bind(this)
         },
         monitorPointGroups: {
@@ -238,7 +237,7 @@
             }
           }.bind(this),
           ajaxUrl: function () {
-            return window.appContext.urls.selectItemRelMonitorPointGroup(this.info.itemObj.id);
+            return window.mainConfig.url.selectItemRelMonitorPointGroup(this.info.itemObj.id);
           }.bind(this)
         },
         monitorPoints: {
@@ -254,9 +253,9 @@
           }.bind(this),
           ajaxUrl: function () {
             if (this.info.pointGroupObj && this.info.pointGroupObj.length > 0) {
-              return window.appContext.urls.selectByGroupIdPoint(this.info.pointGroupObj.id);
+              return window.mainConfig.url.selectByGroupIdPoint(this.info.pointGroupObj.id);
             } else {
-              return window.appContext.urls.getRelPointOfItems(this.info.itemObj.id);
+              return window.mainConfig.url.getRelPointOfItems(this.info.itemObj.id);
             }
           }.bind(this)
         }
@@ -324,7 +323,7 @@
           this.itemMark = data.monitorTypeId;       // 监测项(子组件)渲染条件一
         } else {
           this.info.itemObj = {};
-          this.$refs.itemSelector.$emit('clear', true);
+          this.$refs.itemSelector.clear(true);
         }
       });
       this.$on('updatePointGroup', function (data) {
@@ -335,29 +334,29 @@
 //         let timeout=setTimeout(function () {
 //            clearTimeout(timeout);
 //         })
-          this.$refs.pointSelector.$emit('clear', true);
+          this.$refs.pointSelector.clear(true);
 //          this.$refs.pointGroupSelector.$emit('update', [{id: data.id, text: data.name, obj: data}]);
         } else {
           this.info.pointGroupObj = {};
-//          this.$refs.pointGroupSelector.$emit('clear');
+//          this.$refs.pointGroupSelector.clear(true);
 //          this.isRender = true;
         }
       });
       this.$on('updatePoint', function (data) {
         if (data.length !== 0) {
           this.info.pointObj = data.slice(0, 1);
-          this.$refs.pointSelector.$emit('clear', true);
+          this.$refs.pointSelector.clear(true);
 //          this.$refs.pointSelector.$emit('update', [{id: data[0].id, text: data[0].name, obj: data[0]}]);
           this.isRender = true; // 监测项(子组件)渲染条件二
         } else {
           this.info.pointObj = [];
-//          this.$refs.pointSelector.$emit('clear');
+//          this.$refs.pointSelector.clear(true);
           this.isRender = true; // 监测项(子组件)渲染条件二
         }
       });
     },
     mounted () {
-      this.projectId = this.info.projectId = window.sessionUtility.getObj(window.sessionKeys.PROJECT).id;
+      this.projectId = this.info.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
       this.info = Object.assign({}, this.info);
       this.initItemOption();
       this.initPointGropOption();
@@ -547,7 +546,7 @@
 //        console.log(window.WebSocket);
         if (window.WebSocket) {
           //更改WebSocket的projectId
-          let encodeURIStr = window.appContext.wsUrls.getRealDataWebSockPage(this.projectId);
+          let encodeURIStr = window.mainConfig.wsUrls.getRealDataWebSockPage(this.projectId);
           let webSocket = new WebSocket(encodeURI(encodeURIStr));
           webSocket.onopen = function (evt) {
             //链接建立

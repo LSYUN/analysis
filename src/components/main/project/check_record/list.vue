@@ -1,9 +1,5 @@
 <template>
   <div>
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <navigation-path :path-key="pathKey"></navigation-path>
-    </section>
     <!--<section class="content content-overflow">-->
       <!--<div class="box box-solid">-->
     <div class="padding-default">
@@ -33,7 +29,7 @@
         </span>
       </div>
       <div class="box-body">
-        <table cellpadding="0" cellspacing="0" border="0" class="display muchColumn table" id="example" width="100%">
+        <table cellpadding="0" cellspacing="0" border="0" class="display much-column table" id="example" width="100%">
           <thead>
           <tr>
             <th class="text-center" rowspan="2"></th>
@@ -93,23 +89,19 @@
           placeholder:'请选择工程',
           evtSelected: function (event, data) {
             this.projectId = data[0].id;
-            this.table.ajax.url(window.appContext.urls.getCheckRecordPage(this.projectId)).load();
+            this.table.ajax.url(window.mainConfig.url.getCheckRecordPage(this.projectId)).load();
 //            this.loading = true;
           }.bind(this),
           ajaxUrl: function () {
-            return window.appContext.urls.getProjectPage_U(this.accountId);
+            return window.mainConfig.url.getProjectPage_U(this.accountId);
           }.bind(this)
         },
       };
     },
-    components: {
-      'navigation-path': require('../utility/navigation-path.vue'),
-      'vue-select2': require('../utility/vue-select2.vue'),
-    },
     mounted () {
-      this.accountId = window.sessionUtility.getObj(window.sessionKeys.ACCOUNT).id;
-      this.permission = window.sessionUtility.getObj(window.sessionKeys.PERMISSION);
-//      this.projectId = window.sessionUtility.getObj(window.sessionKeys.PROJECT).id;
+      this.accountId = window.session.getObj(window.sessionKeys.ACCOUNT).id;
+      this.permission = window.session.getObj(window.sessionKeys.PERMISSION);
+//      this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
       this.getAllProjects(this.accountId);
       this.modifyInfo();
       this.deleteInfo();
@@ -118,9 +110,9 @@
     },
     methods: {
       getAllProjects(accountId){
-        window.appContext.http.getProjectPage_R(accountId).then((response) => {
-          var data = response.body;
-          let projectInfo = response.body[0];
+        window.mainConfig.http.getProjectPage_R(accountId).then((response) => {
+          var data = response.data;
+          let projectInfo = response.data[0];
           this.projectId = projectInfo.id;
           this.$refs.itemSelector.$emit('update', [{id: projectInfo.id, text: projectInfo.name, obj: projectInfo}]);
           this.allProjects = data;
@@ -142,7 +134,7 @@
           order: [[1, 'asc']],
           deferRender: true,
           ajax: {
-            url: window.appContext.urls.getCheckRecordPage(this.projectId),
+            url: window.mainConfig.url.getCheckRecordPage(this.projectId),
             type: 'GET',
             contentType: 'application/json',
             dataType: 'json',
@@ -251,14 +243,14 @@
       },
       addInfo () {
         this.info = {};
-        this.$route.router.go({path: '/project/checkRecordInfo/add'});
+        this.$router.push({path: '/project/checkRecordInfo/add'});
       },
       modifyInfo(){
         const component = this;
         $('#example tbody').on('click', 'td:nth-child(8)', function (p) {
           component.info = component.table.row(this).data();
           component.info.project = component.theProject;
-          component.$route.router.go({path: '/project/checkRecordInfo/modify'});
+          component.$router.push({path: '/project/checkRecordInfo/modify'});
         });
       },
       deleteInfo () {
@@ -271,7 +263,7 @@
             content: '<div style="color: #c39e00;font-size: 1.1em;">您确定删除此巡检记录吗?</div>',
             btn: ['确定', '取消'],
             yes: function (index, layero) {
-              window.appContext.http.CheckRecordDelete(JSON.stringify(oneId)).then((response) => {
+              window.mainConfig.http.CheckRecordDelete(JSON.stringify(oneId)).then((response) => {
                 component.table.ajax.reload();
                 toastr.success('已删除');
               }, (response) => {
@@ -300,7 +292,7 @@
         });
       },
       tableDetail (data) {
-        let imgUrl = window.appContext.urls.getCheckRecordPicture(data.id);
+        let imgUrl = window.mainConfig.url.getCheckRecordPicture(data.id);
         return '<div class="pin">' +
           '<div class="col-xs-1"><p>图片详情:</p></div>' +
           '<div class="box col-xs-10">' +

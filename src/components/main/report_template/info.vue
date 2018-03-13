@@ -164,10 +164,6 @@
 </template>
 <script>
   export default {
-    components: {
-      'navigation-path': require('../utility/navigation-path.vue'),
-      'vue-select2': require('../utility/vue-select2.vue')
-    },
     props: {
       info: {
         type: Object,
@@ -196,11 +192,11 @@
             pathKey: 'organizationAdd',
             path: 'add',
             confirm: function (info) {
-              window.appContext.http.organizationAdd(info).then((response) => {
-                this.$route.router.go({path: '/organization/list'});
+              window.mainConfig.http.organizationAdd(info).then((response) => {
+                this.$router.push({path: '/organization/list'});
                 toastr.success('添加成功!');
               }, (response) => {
-                toastr.error(response.body);
+                toastr.error(response.data);
               });
             }.bind(this)
           },
@@ -209,11 +205,11 @@
             pathKey: 'organizationModify',
             path: 'modify',
             confirm: function (info) {
-              window.appContext.http.organizationModify(info).then((response) => {
-                this.$route.router.go({path: '/organization/list'});
+              window.mainConfig.http.organizationModify(info).then((response) => {
+                this.$router.push({path: '/organization/list'});
                 toastr.success('修改成功!');
               }, (response) => {
-                toastr.error(response.body);
+                toastr.error(response.data);
               });
             }.bind(this)
           }
@@ -226,8 +222,8 @@
             this.countryId = null;
             this.cityText = '';
             this.countryText = '';
-            this.$refs.citySelector.$emit('clear', true);
-            this.$refs.countrySelector.$emit('clear', true);
+            this.$refs.citySelector.clear(true);
+            this.$refs.countrySelector.clear(true);
             if (data && data.length > 0) {
               this.provinceId = data[0].obj.coding;
               this.provinceText = data[0].obj.name;
@@ -244,7 +240,7 @@
             this.$refs.citySelector.$emit('enabled');
           }.bind(this),
           ajaxUrl: function () {
-            return window.appContext.urls.getProvincePage(0);
+            return window.mainConfig.url.getProvincePage(0);
           }.bind(this)
         },
         cityOptions: {
@@ -254,7 +250,7 @@
             if (data && data.length > 0) {
               this.countryId = null;
               this.countryText = '';
-              this.$refs.countrySelector.$emit('clear', true);
+              this.$refs.countrySelector.clear(true);
               if (data && data.length > 0) {
                 this.cityId = data[0].obj.coding;
                 this.cityText = data[0].obj.name;
@@ -274,7 +270,7 @@
             this.$refs.countrySelector.$emit('enabled');
           }.bind(this),
           ajaxUrl: function () {
-            return window.appContext.urls.getCityOrCountryPage(this.provinceId);
+            return window.mainConfig.url.getCityOrCountryPage(this.provinceId);
           }.bind(this)
         },
         countryOptions: {
@@ -298,7 +294,7 @@
             }
           }.bind(this),
           ajaxUrl: function () {
-            return window.appContext.urls.getCityOrCountryPage(this.cityId);
+            return window.mainConfig.url.getCityOrCountryPage(this.cityId);
           }.bind(this)
         },
         organizationTypes: [
@@ -355,7 +351,7 @@
         this.operation.confirm(info);
       },
       cancel(){
-        this.$route.router.go({path: '/organization/list'});
+        this.$router.push({path: '/organization/list'});
       },
       loadMap(){
         $('.mapPopUp').fadeIn();

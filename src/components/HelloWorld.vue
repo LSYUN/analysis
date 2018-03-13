@@ -1,14 +1,11 @@
 <template>
   <div class="hello">
     <input type="text" v-model="lsy">
-    <button onclick="submit()" class="">{{lsy}}</button>
+    <button type="button" @click="submit()" class="">{{lsy}}</button>
   </div>
 </template>
 
 <script>
-  function submit() {
-    console.log('sure');
-  }
   export default {
     name: 'HelloWorld',
     data () {
@@ -18,14 +15,14 @@
       }
     },
     mounted: function () {
-      this.$nextTick(function () {
-
-        console.log('sure');
-      })
+//      this.$nextTick(function () {
+//        console.log('sure');
+//      })
     },
     methods: {
       submit(){
         console.log('sure');
+        this.$router.push({path: '/404'});
       }
     }
   }

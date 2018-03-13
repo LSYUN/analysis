@@ -143,10 +143,6 @@
 </template>
 <script>
   export default {
-    components: {
-      'navigation-path': require('../utility/navigation-path.vue'),
-      'vue-select2': require('../utility/vue-select2.vue')
-    },
     props: {
       info: {
         type: Object,
@@ -176,8 +172,8 @@
               wechatInfo.userid = data.phone;
               wechatInfo.name = data.name;
               wechatInfo.mobile = data.phone;
-              window.appContext.http.accountAdd(data).then((response) => {
-                let body = response.body;
+              window.mainConfig.http.accountAdd(data).then((response) => {
+                let body = response.data;
                 if (body.errcode !== 0) {
                   toastr.error(body.meesage);
                 } else {
@@ -185,11 +181,11 @@
                   //   this.addWechaUser(wechatInfo);
                   // }
                   this.addWechaUser(wechatInfo);
-                  this.$route.router.go({path: '/account/list'});
+                  this.$router.push({path: '/account/list'});
                   toastr.success('成功创建用户!');
                 }
               }, (response) => {
-                toastr.error(response.body);
+                toastr.error(response.data);
               });
 
 
@@ -210,8 +206,8 @@
               wechatInfo.name = data.name;
               wechatInfo.mobile = data.phone;
 
-              window.appContext.http.accountModify(data).then((response) => {
-                let body = response.body;
+              window.mainConfig.http.accountModify(data).then((response) => {
+                let body = response.data;
                 if (body.errcode !== 0) {
                   toastr.error(body.meesage);
                 } else {
@@ -220,7 +216,7 @@
                   //   this.addWechaUser(wechatInfo);
                   // }
                   this.addWechaUser(wechatInfo);
-                  this.$route.router.go({path: '/account/list'});
+                  this.$router.push({path: '/account/list'});
                   toastr.success('修改成功!');
                 }
               }, (response) => {
@@ -242,7 +238,7 @@
             }
           }.bind(this),
           ajaxUrl: function () {
-            return window.appContext.urls.getOrganizationsPage(this.accountId);
+            return window.mainConfig.url.getOrganizationsPage(this.accountId);
           }.bind(this)
         }
       };
@@ -256,7 +252,7 @@
       }
     },
     mounted () {
-      this.account = window.sessionUtility.getObj(window.sessionKeys.ACCOUNT);
+      this.account = window.session.getObj(window.sessionKeys.ACCOUNT);
       this.accountId = this.account.id;
       this.orgId = this.account.organizationId;
 //      Vue.validator('email', function (val) {
@@ -318,35 +314,35 @@
         this.operation.confirm(this.info);
       },
       cancel(){
-        this.$route.router.go({path: '/account/list'});
+        this.$router.push({path: '/account/list'});
       },
       /**
        * 将用户微信号加入微信企业号
        * @param wechatInfo 微信用户实体属性说明：userid——AccountPhone；name——AccountName；mobile——AccountPhone;
        */
       addWechaUser(wechatInfo){
-        let alarmMessageUrl = window.appContext.alarmMessageURL;
+        let alarmMessageUrl = window.mainConfig.alarmMessageURL;
         let addWeChatUserResoureUrl = alarmMessageUrl + '/wechat/addWeChatUser';
         let sendMessageResoureUrl = alarmMessageUrl + '/wechat/sendMsg';
         this.$http.post(addWeChatUserResoureUrl, wechatInfo)
             .then((response) => {
-              if (response.body.errcode == '0') {
+              if (response.data.errcode == '0') {
                 toastr.success("该用户微信号成功加入企业微信通讯录，扫码关注后将可随时接收平台消息推送");
-                // window.appContext.http.WeChatAccountAdd(wechatInfo.mobile).then((response) => {
+                // window.mainConfig.http.WeChatAccountAdd(wechatInfo.mobile).then((response) => {
                 // }, (response) => {
                 // })
-              } else if (response.body.errcode == '60102'|| response.body.errcode==='60104') {
+              } else if (response.data.errcode == '60102'|| response.data.errcode==='60104') {
                 toastr.success("该用户微信号成功加入企业微信通讯录，扫码关注后将可随时接收平台消息推送");
-                // window.appContext.http.WeChatAccountAdd(wechatInfo.mobile).then((response) => {
+                // window.mainConfig.http.WeChatAccountAdd(wechatInfo.mobile).then((response) => {
                 // }, (response) => {
                 // })
               } else {
                 toastr.error('1、您的微信号关联平台的微信企业号失败,请一小时后再来点击修改你的个人信息(不用做修改)，再确认保存即可。' +
-                  '2、微信企业号出错代号：'+response.body.errcode+',详情：'+response.body.meesage);
+                  '2、微信企业号出错代号：'+response.data.errcode+',详情：'+response.data.meesage);
               }
             }, (response) => {
               toastr.error('1、您的微信号关联平台的微信企业号失败,请一小时后再来点击修改你的个人信息(不用做修改)，再确认保存即可。' +
-                '2、微信企业号出错代号：'+response.body.errcode+',详情：'+response.body.meesage);
+                '2、微信企业号出错代号：'+response.data.errcode+',详情：'+response.data.meesage);
             }).bind(this)
       }
     }

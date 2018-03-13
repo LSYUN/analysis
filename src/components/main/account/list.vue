@@ -15,7 +15,7 @@
           </span>
         </div>
         <div class="box-body">
-          <table cellpadding="0" cellspacing="0" border="0" class="display muchColumn table" id="example" width="100%">
+          <table cellpadding="0" cellspacing="0" border="0" class="display much-column table" id="example" width="100%">
             <thead>
             <tr>
               <th class="text-center" rowspan="2">姓名</th>
@@ -68,16 +68,13 @@
         companyLogo: null
       };
     },
-    components: {
-      'navigation-path': require('../utility/navigation-path.vue')
-    },
     mounted () {
-      this.accountId = window.sessionUtility.getObj(window.sessionKeys.ACCOUNT).id;
+      this.accountId = window.session.getObj(window.sessionKeys.ACCOUNT).id;
       this.initTable();
       this.modifyInfo();
       this.deleteInfo();
-      this.organizationList = window.sessionUtility.getObj(window.sessionKeys.ORGANIZATIONS);
-      this.companyLogo = window.appContext.companyLogo;
+      this.organizationList = window.session.getObj(window.sessionKeys.ORGANIZATIONS);
+      this.companyLogo = window.mainConfig.companyLogo;
     },
     methods: {
       initTable () {
@@ -90,7 +87,7 @@
           ordering: false,
           deferRender: true,
           ajax: {
-            url: window.appContext.urls.getAccountOfOrganizationPage(this.accountId),
+            url: window.mainConfig.url.getAccountOfOrganizationPage(this.accountId),
             type: 'GET',
             contentType: 'application/json',
             dataType: 'json',
@@ -178,13 +175,13 @@
       },
       addInfo () {
         this.info = {};
-        this.$route.router.go({path: '/account/info/add'});
+        this.$router.push({path: '/account/info/add'});
       },
       modifyInfo(){
         const component = this;
         $('#example tbody').on('click', 'td:nth-child(9)', function (p) {
           component.info = component.table.row(this).data();
-          component.$route.router.go({path: '/account/info/modify'});
+          component.$router.push({path: '/account/info/modify'});
         });
       },
       deleteInfo () {
@@ -197,7 +194,7 @@
             content: '<div style="color: #c39e00;font-size: 1.1em;">您确定删除此人员信息吗?</div>',
             btn: ['确定', '取消'],
             yes: function (index, layero) {
-              window.appContext.http.accountDelete(JSON.stringify(oneId)).then((response) => {
+              window.mainConfig.http.accountDelete(JSON.stringify(oneId)).then((response) => {
                 component.table.ajax.reload();
                 toastr.success('已删除');
               }, (response) => {

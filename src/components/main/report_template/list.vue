@@ -14,7 +14,7 @@
           </span>
         </div>
         <div class="box-body">
-          <table cellpadding="0" cellspacing="0" border="0" class="display muchColumn table" id="example" width="100%">
+          <table cellpadding="0" cellspacing="0" border="0" class="display much-column table" id="example" width="100%">
             <thead>
             <tr>
               <th class="text-center" rowspan="2">机构名称</th>
@@ -52,13 +52,9 @@
         cityCode: null,
       };
     },
-    components: {
-      'navigation-path': require('../utility/navigation-path.vue'),
-      'vue-select2': require('../utility/vue-select2.vue')
-    },
     mounted () {
-      this.accountId = window.sessionUtility.getObj(window.sessionKeys.ACCOUNT).id;
-      this.permission = window.sessionUtility.getObj(window.sessionKeys.PERMISSION);
+      this.accountId = window.session.getObj(window.sessionKeys.ACCOUNT).id;
+      this.permission = window.session.getObj(window.sessionKeys.PERMISSION);
       this.initTable();
       this.modifyInfo();
       this.deleteInfo();
@@ -75,7 +71,7 @@
 //          serverSide: true,
 //          dom: 'frtip',
           ajax: {
-            url: window.appContext.urls.getOrganizationsPage(),
+            url: window.mainConfig.url.getOrganizationsPage(),
             type: 'GET',
             contentType: 'application/json',
             dataType: 'json',
@@ -124,19 +120,19 @@
       },
       addInfo () {
         this.info = {};
-        this.$route.router.go({path: '/organization/info/add'});
+        this.$router.push({path: '/organization/info/add'});
       },
       modifyInfo(){
         const component = this;
         $('#example tbody').on('click', 'td:nth-child(4)', function (p) {
           component.info = component.table.row(this).data();
           component.cityCode = component.info.cityCode;
-          window.appContext.http.getAddressByCode(component.info.cityCode).then((response) => {
-            component.info.cityList = response.body;
-            component.$route.router.go({path: '/organization/info/modify'});
+          window.mainConfig.http.getAddressByCode(component.info.cityCode).then((response) => {
+            component.info.cityList = response.data;
+            component.$router.push({path: '/organization/info/modify'});
           }, (response) => {
             component.address = {};
-            component.$route.router.go({path: '/organization/info/modify'});
+            component.$router.push({path: '/organization/info/modify'});
             toastr.error('工程地址未能识别,请重新设置');
           });
         });
@@ -151,11 +147,11 @@
             content: '<div style="color: #c39e00;font-size: 1.1em;">您确定删除此机构吗?</div>',
             btn: ['确定', '取消'],
             yes: function (index, layero) {
-              window.appContext.http.organizationDelete(JSON.stringify(oneId)).then((response) => {
+              window.mainConfig.http.organizationDelete(JSON.stringify(oneId)).then((response) => {
                 component.table.ajax.reload();
                 toastr.success('已删除');
               }, (response) => {
-                toastr.info(response.body);
+                toastr.info(response.data);
               });
               layer.close(index);
             },

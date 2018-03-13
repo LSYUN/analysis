@@ -2,9 +2,10 @@
 全局使用的样式写在此文件
  */
 body {
-  min-width: 301px;
+  min-width: 300px;
   overflow: auto;
   font: 12px/ 1.5 Microsoft YaHei, Helvitica, Verdana, Arial, san-serif;
+  //background-color: #2f323e;
 }
 
 @media (min-width: 540px) {
@@ -23,6 +24,7 @@ body {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  //outline: 0!important;
 }
 
 $base-color: #3595CC;
@@ -30,20 +32,23 @@ $base-border: rgba(53, 149, 204, 0.50);
 $placeholder-color: rgba(0, 170, 221, 0.45);
 $box-title-color: #3399ee;
 
-/*用于水平居中*/
-.div-grid {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  display: grid;
+header.main-header {
+
+  min-width: 300px;
 }
 
-.margin-auto {
-  margin: auto;
+input {
+  height: 32px;
 }
 
-.padding-default {
-  padding: 15px;
+@media (max-width: 768px) {
+  input {
+    height: 20px;
+  }
+}
+
+.content-overflow {
+  margin: 10px;
 }
 
 /*与form-group作用同*/
@@ -53,67 +58,95 @@ $box-title-color: #3399ee;
   overflow: hidden;
 }
 
-/*重写form-control*/
-.form-control {
-  color: $base-color;
-  font-weight: bold;
-  font-family: "Arial", "Microsoft YaHei", "黑体", "宋体", sans-serif;
-  border: 1px solid rgba(53, 149, 204, 0.50);
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  font-size: 1em;
-  background: transparent !important;
-  -webkit-box-shadow: 0 0 0 1000px transparent inset;
+/*用于水平居中*/
+.center-grid {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: grid;
 }
 
-/*重写input-group-addon*/
-.input-group-addon {
-  color: $base-color;
-  border: 1px solid rgba(53, 149, 204, 0.51);
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
+.center-margin {
+  margin: auto;
 }
 
-/*重写box-info*/
-.box.box-solid.box-info {
-  border: 0px dotted $base-border;
-  background-color: transparent;
+//
+//.padding-default {
+//  padding: 15px;
+//}
+//
+
+//
+///*重写form-control*/
+//.form-control {
+//  color: $base-color;
+//  font-weight: bold;
+//  font-family: "Arial", "Microsoft YaHei", "黑体", "宋体", sans-serif;
+//  border: 1px solid rgba(53, 149, 204, 0.50);
+//  -webkit-border-radius: 5px;
+//  -moz-border-radius: 5px;
+//  border-radius: 5px;
+//  font-size: 1em;
+//  background: transparent !important;
+//  -webkit-box-shadow: 0 0 0 1000px transparent inset;
+//}
+//
+///*重写input-group-addon*/
+//.input-group-addon {
+//  color: $base-color;
+//  border: 1px solid rgba(53, 149, 204, 0.51);
+//  -webkit-border-radius: 5px;
+//  -moz-border-radius: 5px;
+//  border-radius: 5px;
+//}
+/*重写box*/
+.box {
+  padding: 0;
+  border: 0;
+  -webkit-box-shadow: 0 2px 3px hsla(0, 0%, 4%, .1), 0 0 0 1px hsla(0, 0%, 4%, .1);
+  -moz-box-shadow: 0 2px 3px hsla(0, 0%, 4%, .1), 0 0 0 1px hsla(0, 0%, 4%, .1);
+  box-shadow: 0 2px 3px hsla(0, 0%, 4%, .1), 0 0 0 1px hsla(0, 0%, 4%, .1);
 }
 
+///*重写box-info*/
+//.box.box-solid.box-info {
+//  border: 0px dotted $base-border;
+//  background-color: transparent;
+//}
+//
 /*重写box-header*/
 .box-header {
   text-align: center;
+  padding-top: 15px;
 }
 
 /*重写box-title*/
-.box-header .box-title {
+.box-header .box-title, section .dt-form-title {
   color: $box-title-color;
   font: normal 600 1.5em Microsoft YaHei, Helvitica, Verdana, Arial, san-serif caption;
-  -webkit-transform: translateX(2.5em);
-  -moz-transform: translateX(2.5em);
-  -ms-transform: translateX(2.5em);
-  -o-transform: translateX(2.5em);
-  transform: translateX(2.5em);
+  -webkit-transform: translateX(50%);
+  -moz-transform: translateX(50%);
+  -ms-transform: translateX(50%);
+  -o-transform: translateX(50%);
+  transform: translateX(50%);
 }
 
-/*重写box-title*/
+/*重写box-title 无按钮*/
 .box-header .box-title.no-btn-title {
   color: $box-title-color;
   font: normal 600 1.5em Microsoft YaHei, Helvitica, Verdana, Arial, san-serif caption;
-  -webkit-transform: translateX(0em);
-  -moz-transform: translateX(0em);
-  -ms-transform: translateX(0em);
-  -o-transform: translateX(0em);
-  transform: translateX(0em);
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
 }
 
 /*表格表头中的按钮 决定向右浮动*/
 .table-title-span {
   position: relative;
   float: right;
-  margin: 0 2px;
+  margin: 0 15px;
 }
 
 .btn {
@@ -122,7 +155,7 @@ $box-title-color: #3399ee;
 
 /*表格表头中的按钮*/
 .btn.table-title-button,
-.box.box-solid > .box-header .btn.table-title-button {
+.box > .box-header .btn.table-title-button {
   padding: 4px 10px;
   font-size: 1em;
   background: transparent;
@@ -131,18 +164,19 @@ $box-title-color: #3399ee;
 }
 
 .btn.table-title-button:hover,
-.box.box-solid > .box-header .btn.table-title-button:hover {
+.box > .box-header .btn.table-title-button:hover {
   background: $box-title-color;
   color: #ffffff;
   text-shadow: 0 0 1px $box-title-color;
 }
 
-/*重写input-group-addon*/
-.input-group .input-group-addon {
-  border-radius: 5px 0 0 5px;
-  border-color: rgba(61, 155, 179, 0.56);
-  background-color: transparent;
-}
+//
+///*重写input-group-addon*/
+//.input-group .input-group-addon {
+//  border-radius: 5px 0 0 5px;
+//  border-color: rgba(61, 155, 179, 0.56);
+//  background-color: transparent;
+//}
 
 /*新增修改页面(xxx-info.vue)的operation.title*/
 .info-title {
@@ -153,59 +187,68 @@ $box-title-color: #3399ee;
   text-align: center;
 }
 
-.operation-header {
-  color: #00a7d0;
-  font: normal bolder 1.5em solid;
-  text-align: center;
-}
-
-/*新增修改页面(xxx-info.vue)的label*/
-.div-margin-bottom label {
-  color: $base-color;
-  padding-top: 0.5em;
-  font-size: 1em;
-  white-space: nowrap;
-  //background: white;
-  border: 0;
-}
-
-/*新增修改页面(xxx-info.vue)的页脚*/
-.box-footer {
-  font-size: 1em;
-  display: grid;
-  padding-bottom: 10px;
-  background-color: inherit;
-}
-
-/*新增修改页面(xxx-info.vue)的button*/
-.box-footer .btn-footer-wrapper {
-  margin: 0 auto;
-}
-
-/*新增修改页面(xxx-info.vue)的button*/
-.box-footer .btn-footer-wrapper button {
-  margin: 5px 15px;
-}
-
-/*新增修改页面(xxx-info.vue)的'*'必填符号 */
-.span-necessary {
-  color: $base-color;
-  vertical-align: middle
-}
-
-.vue-error-bottom {
-  margin-top: 5px;
-  color: red
-}
+//.operation-header {
+//  color: #00a7d0;
+//  font: normal bolder 1.5em solid;
+//  text-align: center;
+//}
+//
+///*新增修改页面(xxx-info.vue)的label*/
+//.div-margin-bottom label {
+//  color: $base-color;
+//  padding-top: 0.5em;
+//  font-size: 1em;
+//  white-space: nowrap;
+//  //background: white;
+//  border: 0;
+//}
+//
+///*新增修改页面(xxx-info.vue)的页脚*/
+//.box-footer {
+//  font-size: 1em;
+//  display: grid;
+//  padding-bottom: 10px;
+//  background-color: inherit;
+//}
+//
+///*新增修改页面(xxx-info.vue)的button*/
+//.box-footer .btn-footer-wrapper {
+//  margin: 0 auto;
+//}
+//
+///*新增修改页面(xxx-info.vue)的button*/
+//.box-footer .btn-footer-wrapper button {
+//  margin: 5px 15px;
+//}
+//
+///*新增修改页面(xxx-info.vue)的'*'必填符号 */
+//.span-necessary {
+//  color: $base-color;
+//  vertical-align: middle
+//}
+//
+//.vue-error-bottom {
+//  margin-top: 5px;
+//  color: red
+//}
 
 /*dataTable start*/
+table.dataTable {
+  border-collapse: collapse;
+}
+
 table.table > thead > tr th {
   text-align: center;
   font-size: 1.1em;
+  color: #000;
 }
 
 table.pointer tbody {
   cursor: pointer;
+}
+
+table.dataTable.display tbody tr.odd {
+  background-color: #ffffff;
 }
 
 td.details-control {
@@ -217,8 +260,8 @@ tr.shown td.details-control {
   background: url('/static/image/d_close.png') no-repeat center center;
 }
 
-/*table列数过多是加 .muchColumn*/
-table.dataTable.muchColumn thead th, table.dataTable thead td {
+/*table列数过多是加 .much-column*/
+table.dataTable.much-column thead th, table.dataTable thead td {
   padding: 8px 6px;
   vertical-align: middle;
   min-width: 40px;
@@ -334,171 +377,171 @@ table.dataTable.stripe tbody > tr.odd.selected, table.dataTable.stripe tbody > t
 }
 
 /*dataTable end*/
-
-/*
-侧边菜单栏效果
- */
-.sidebar-menu > li.active > a {
-  background: url(/static/image/menu-active.png) no-repeat scroll right center transparent !important;
-}
-
-/*vue animation*/
-.fade-transition {
-  transition: all .8s ease;
-  overflow: hidden;
-  margin: 0;
-}
-
-.fade-enter, .fade-leave {
-  opacity: 0;
-  height: 0;
-}
-
-.modal .modal-dialog.modal-dialog-alt {
-  width: 70%;
-  min-width: 288px;
-  position: relative;
-  left: 40%;
-  top: 40%;
-  transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-}
-
-.modal .modal-content.modal-content-alt {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  border-radius: 20px;
-  border: 1px solid #3399ee;
-  -webkit-box-shadow: 0 0 20px #3399ee, inset 0 0 20px #3399ee;
-  -moz-box-shadow: 0 0 20px #3399ee, inset 0 0 20px #3399ee;
-  box-shadow: 0 0 20px #3399ee, inset 0 0 20px #3399ee;
-}
-
-.modal .modal-body .form-group {
-  text-align: center;
-}
-
-@media screen and (max-width: 768px) {
-  .modal .modal-dialog-alt {
-    left: 50%;
-  }
-}
-
-/*fileinput start*/
-.file-live-thumbs {
-  display: grid;
-}
-
-.file-preview-frame {
-  margin: 0 auto;
-}
-
-/*fileinput end*/
-
-//.dataTables_wrapper .dataTables_filter label {
-//  float: left;
-//  margin: auto;
-//  -webkit-transform: translateX(20%);;
-//  -moz-transform: 20%;
-//  -ms-transform: 20%;
-//  -o-transform: 20%;
-//  transform: 20%;
+//
+///*
+//侧边菜单栏效果
+// */
+//.sidebar-menu > li.active > a {
+//  background: url(/static/image/menu-active.png) no-repeat scroll right center transparent !important;
 //}
-
-line {
-  stroke-width: .7px !important;
-}
-
-.line {
-  fill: none;
-  stroke-width: 1.5px !important;
-  stroke-linejoin: round !important;
-  stroke-linecap: round !important;
-}
-
-.positive {
-  stroke: #d62728 !important;
-}
-
-/* 正舆情 */
-.diamond {
-  fill: #d62728 !important;
-}
-
-/* 菱形-蓝色 */
-.dataTables_wrapper .dataTables_filter input {
-  border: 1px solid $box-title-color;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  text-align: center;
-}
-
-.dataTable .dataTables_empty {
-  color: #787878;
-  font-size: 0.5em;
-}
-
-.button.dt-button, div.dt-button, a.dt-button {
-  color: $box-title-color;
-  border: 1px solid $box-title-color;
-  border-radius: 5px;
-}
-
-.button.dt-button, div.dt-button, a.dt-button:hover {
-  color: #ffffff;
-  border: 1px solid $box-title-color !important;
-  background: $box-title-color !important;
-}
-
-line {
-  stroke-width: .7px !important;
-  stroke: #ADD8E6 !important;
-}
-
-.line {
-  fill: none;
-  stroke-width: 1.5px !important;
-  stroke-linejoin: round !important;
-  stroke-linecap: round !important;
-}
-
-.positive {
-  stroke: #67CC23 !important;
-}
-
-.circle {
-  fill: #67CC23 !important;
-}
-
-/* 正方形 */
-
-.highcharts-root {
-  padding-left: 2% !important;
-  padding-right: 2% !important;
-}
-
-.table-button {
-  padding: 1px 5px !important;
-  font-size: 12px !important;
-  line-height: 1.5 !important;
-  border-radius: 3px !important;
-  width: 6em !important;
-}
-
-.daterangepicker {
-  border: solid #ccc 1px;
-  border-radius: 2px !important;
-  cursor: pointer;
-}
-
-.daterangepicker.show-calendar {
-  border: 1px solid #a3a3a3;
-  border-radius: 5px;
-  cursor: pointer;
-}
+//
+///*vue animation*/
+//.fade-transition {
+//  transition: all .8s ease;
+//  overflow: hidden;
+//  margin: 0;
+//}
+//
+//.fade-enter, .fade-leave {
+//  opacity: 0;
+//  height: 0;
+//}
+//
+//.modal .modal-dialog.modal-dialog-alt {
+//  width: 70%;
+//  min-width: 288px;
+//  position: relative;
+//  left: 40%;
+//  top: 40%;
+//  transform: translate(-50%, -50%);
+//  -webkit-transform: translate(-50%, -50%);
+//  -moz-transform: translate(-50%, -50%);
+//}
+//
+//.modal .modal-content.modal-content-alt {
+//  -webkit-box-sizing: border-box;
+//  -moz-box-sizing: border-box;
+//  box-sizing: border-box;
+//  border-radius: 20px;
+//  border: 1px solid #3399ee;
+//  -webkit-box-shadow: 0 0 20px #3399ee, inset 0 0 20px #3399ee;
+//  -moz-box-shadow: 0 0 20px #3399ee, inset 0 0 20px #3399ee;
+//  box-shadow: 0 0 20px #3399ee, inset 0 0 20px #3399ee;
+//}
+//
+//.modal .modal-body .form-group {
+//  text-align: center;
+//}
+//
+//@media screen and (max-width: 768px) {
+//  .modal .modal-dialog-alt {
+//    left: 50%;
+//  }
+//}
+//
+///*fileinput start*/
+//.file-live-thumbs {
+//  display: grid;
+//}
+//
+//.file-preview-frame {
+//  margin: 0 auto;
+//}
+//
+///*fileinput end*/
+//
+////.dataTables_wrapper .dataTables_filter label {
+////  float: left;
+////  margin: auto;
+////  -webkit-transform: translateX(20%);;
+////  -moz-transform: 20%;
+////  -ms-transform: 20%;
+////  -o-transform: 20%;
+////  transform: 20%;
+////}
+//
+//line {
+//  stroke-width: .7px !important;
+//}
+//
+//.line {
+//  fill: none;
+//  stroke-width: 1.5px !important;
+//  stroke-linejoin: round !important;
+//  stroke-linecap: round !important;
+//}
+//
+//.positive {
+//  stroke: #d62728 !important;
+//}
+//
+///* 正舆情 */
+//.diamond {
+//  fill: #d62728 !important;
+//}
+//
+///* 菱形-蓝色 */
+//.dataTables_wrapper .dataTables_filter input {
+//  border: 1px solid $box-title-color;
+//  -webkit-border-radius: 5px;
+//  -moz-border-radius: 5px;
+//  border-radius: 5px;
+//  text-align: center;
+//}
+//
+//.dataTable .dataTables_empty {
+//  color: #787878;
+//  font-size: 0.5em;
+//}
+//
+//.button.dt-button, div.dt-button, a.dt-button {
+//  color: $box-title-color;
+//  border: 1px solid $box-title-color;
+//  border-radius: 5px;
+//}
+//
+//.button.dt-button, div.dt-button, a.dt-button:hover {
+//  color: #ffffff;
+//  border: 1px solid $box-title-color !important;
+//  background: $box-title-color !important;
+//}
+//
+//line {
+//  stroke-width: .7px !important;
+//  stroke: #ADD8E6 !important;
+//}
+//
+//.line {
+//  fill: none;
+//  stroke-width: 1.5px !important;
+//  stroke-linejoin: round !important;
+//  stroke-linecap: round !important;
+//}
+//
+//.positive {
+//  stroke: #67CC23 !important;
+//}
+//
+//.circle {
+//  fill: #67CC23 !important;
+//}
+//
+///* 正方形 */
+//
+//.highcharts-root {
+//  padding-left: 2% !important;
+//  padding-right: 2% !important;
+//}
+//
+//.table-button {
+//  padding: 1px 5px !important;
+//  font-size: 12px !important;
+//  line-height: 1.5 !important;
+//  border-radius: 3px !important;
+//  width: 6em !important;
+//}
+//
+//.daterangepicker {
+//  border: solid #ccc 1px;
+//  border-radius: 2px !important;
+//  cursor: pointer;
+//}
+//
+//.daterangepicker.show-calendar {
+//  border: 1px solid #a3a3a3;
+//  border-radius: 5px;
+//  cursor: pointer;
+//}
 
 //.input {
 //  color: #ff0000;

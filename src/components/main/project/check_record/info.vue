@@ -1,9 +1,5 @@
 <template>
   <div>
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <navigation-path :path-key=operation.pathKey></navigation-path>
-    </section>
     <section class="content content-overflow">
       <h4 class="info-title">{{operation.title}}</h4>
       <div class="box box-solid">
@@ -102,10 +98,6 @@
 </template>
 <script>
   export default {
-    components: {
-      'navigation-path': require('../utility/navigation-path.vue'),
-      'vue-select2': require('../utility/vue-select2.vue')
-    },
     props: {
       info: {
         type: Object,
@@ -136,11 +128,11 @@
 //                            let reDate =component.formDataInfo.entries[3];
 //                            console.log(reDate[1]);
 //                            component.formDataInfo.entries[3]=["recordDate",component.getDate(reDate[1])]
-              window.appContext.http.checkRecordAdd( component.formDataInfo).then((response) => {
+              window.mainConfig.http.checkRecordAdd( component.formDataInfo).then((response) => {
                 toastr.info('添加成功!');
-                this.$route.router.go({path: '/project/checkRecord'});
+                this.$router.push({path: '/project/checkRecord'});
               }, (response) => {
-                toastr.error(response.body);
+                toastr.error(response.data);
               });
             }.bind(this)
           },
@@ -151,13 +143,13 @@
             confirm: function (info) {
               const component = this;
               component.formDataInfo = new FormData($("#uploadForm")[0]);
-              window.appContext.http.CheckRecordModify( component.formDataInfo).then((response) => {
+              window.mainConfig.http.CheckRecordModify( component.formDataInfo).then((response) => {
                 console.log(response);
 
-                this.$route.router.go({path: '/project/checkRecord'});
+                this.$router.push({path: '/project/checkRecord'});
                 toastr.info('修改成功!');
               }, (response) => {
-                toastr.error(response.body);
+                toastr.error(response.data);
               });
             }.bind(this)
           }
@@ -181,7 +173,7 @@
             }
           }.bind(this),
           ajaxUrl: function () {
-            return window.appContext.urls.getProjectPage_U(this.account);
+            return window.mainConfig.url.getProjectPage_U(this.account);
           }.bind(this)
         },
       };
@@ -195,7 +187,7 @@
       }
     },
     mounted () {
-      this.account = window.sessionUtility.getObj(window.sessionKeys.ACCOUNT).id;
+      this.account = window.session.getObj(window.sessionKeys.ACCOUNT).id;
       if (this.info.hasOwnProperty('id') === true) {
         let data = this.info.project;
         this.projectOptions.initData.push({
@@ -203,7 +195,7 @@
           text: data.name,
           obj: data
         });
-        window.appContext.http.CheckRecordPicture(this.info.id).then((response) => {
+        window.mainConfig.http.CheckRecordPicture(this.info.id).then((response) => {
           console.log(response);
         })
       } else {
@@ -235,7 +227,7 @@
         this.operation.confirm(this.info);
       },
       cancel(){
-        this.$route.router.go({path: '/project/checkRecord'});
+        this.$router.push({path: '/project/checkRecord'});
       },
 
       initProjectOptions(){

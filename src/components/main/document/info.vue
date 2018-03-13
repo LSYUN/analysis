@@ -17,7 +17,6 @@
 <script>
   export default {
     components: {
-//            'navigation-path': require('../utility/navigation-path.vue'),
     },
     props: {
       info: {

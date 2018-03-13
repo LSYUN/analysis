@@ -1,15 +1,12 @@
 <template>
   <div>
-    <section class="content-header">
-      <navigation-path :path-key="pathKey"></navigation-path>
-    </section>
     <section class="content content-overflow">
       <div class="box box-solid">
         <div class="box-header">
           <h3 class="box-title">工程监测</h3>
         </div>
         <div class="box-body">
-          <table cellpadding="0" cellspacing="0" border="0" class="display muchColumn table pointer" id="example"
+          <table cellpadding="0" cellspacing="0" border="0" class="display much-column table pointer" id="example"
                  width="100%">
             <thead>
             <tr>
@@ -30,7 +27,8 @@
   </div>
 </template>
 <script>
-  import GlobalEnum from '../../manager/enum/global-enum';
+  import GlobalEnum from '../../../../managers/enum/global-enum';
+  import * as tableConfig from "../../../../managers/configs/dataTable.js"
   export default {
     props: {
       info: {
@@ -48,12 +46,10 @@
         organizationList: []
       };
     },
-    components: {
-      'navigation-path': require('../utility/navigation-path.vue')
-    },
+    components: {},
     mounted () {
-      this.account = window.sessionUtility.getObj(window.sessionKeys.ACCOUNT).id;
-      this.organizationList = window.sessionUtility.getObj(window.sessionKeys.ORGANIZATIONS);
+      this.account = window.session.getObj(window.sessionKeys.ACCOUNT).id;
+      this.organizationList = window.session.getObj(window.sessionKeys.ORGANIZATIONS);
       this.initTable();
       this.intoDetails();
     },
@@ -73,7 +69,7 @@
           lengthMenu: [[10, 15, 25, 50], [10, 15, 25, 50]],
           select: {style: 'single', selector: 'td:not(:nth-child(6))'},
           ajax: {
-            url: window.appContext.urls.getProjectPage_U(this.account),
+            url: window.mainConfig.url.getProjectPage_U(this.account),
             type: 'GET',
             contentType: 'application/json',
             dataType: 'json',
@@ -84,7 +80,7 @@
               });
             }
           },
-          language: this.$store.state.dataTable.language,
+          language: tableConfig.LANGUAGE,
           createdRow: function (row, data, index) {
             $('td', row).addClass('text-center');
           },
@@ -159,9 +155,9 @@
         const component = this;
         $('#example tbody').on('click', 'td:nth-child(6)', function (p) {
           let project = component.table.row(this).data();
-          window.sessionUtility.setObj(window.sessionKeys.PROJECT, project);
-//                        component.$route.router.go({path: '/project/situationinfo/diagram'});
-          component.$route.router.go({path: '/project/situationInfo/realTime'});
+          window.session.setObj(window.sessionKeys.PROJECT, project);
+//                        component.$router.push({path: '/project/situationinfo/diagram'});
+          component.$router.push({path: '/project/situationInfo/realTime'});
         });
       },
     }
