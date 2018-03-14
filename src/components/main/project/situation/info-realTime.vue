@@ -6,7 +6,6 @@
                style="max-height: 25vh">
           <thead>
           <tr>
-            <!--<th class="text-center" style="width:15px"></th>-->
             <th class="text-center">名称</th>
             <th class="text-center">时间</th>
             <th class="text-center">详细信息</th>
@@ -28,12 +27,6 @@
 <script>
   import * as tableConfig from "../../../../managers/configs/dataTable.js"
   export default {
-//    props: {
-//      info: {
-//        type: Object,
-//        required: true
-//      }
-//    },
     data () {
       return {
         realTimeTable: {},
@@ -64,7 +57,7 @@
     mounted () {
       this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
       this.initRealTimeTable(this.projectId);
-      this.webSocket();
+//      this.webSocket();
     },
     methods: {
       initRealTimeTable(Id){

@@ -29,21 +29,8 @@ const router = new Router({
           component: resolve => require(['../components/main/project/manager.vue'], resolve),
           children: [
             {path: 'map', component: resolve => require(['../components/main/project/map.vue'], resolve)},
-            {path: 'test', component: resolve => require(['../components/main/project/test.vue'], resolve)},
             {path: 'list', component: resolve => require(['../components/main/project/list.vue'], resolve)},
-            {
-              path: 'info/:operation',
-              component: resolve => require(['../components/main/project/info.vue'], resolve),
-              // beforeEnter: (to, from, next) => {
-              //   // if (from.fullPath = '/')
-              //   //   console.log(to, from);
-              //   next();
-              // },
-              // beforeEnter: (to, from, next) => {
-              //   console.log(to, from);
-              //   next();
-              // },
-            },
+            {path: 'info/:operation', component: resolve => require(['../components/main/project/info.vue'], resolve)},
             {
               path: 'edit',
               component: resolve => require(['../components/main/project/edit/manager.vue'], resolve),

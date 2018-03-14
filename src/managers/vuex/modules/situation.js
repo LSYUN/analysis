@@ -8,36 +8,32 @@ const state = {
   groupObj: {},
   pointObj1: {},
   pointObj2: {},
-  itemOption: {
-    mark:'',
-    url:'',
-
-  },
+  itemOption: {},
   startDate: {},
   endDate: {},
   dateCheck: false,
   pointCheck: false
 };
 const mutations = {
-  ['ITEM_OBJ_1'](state, obj){
+  setItemObj1(state, obj){
     state.itemObj1 = obj;
   },
-  ['ITEM_OBJ_2'](state, obj){
+  setItemObj2(state, obj){
     state.itemObj2 = obj;
   },
-  ['POINT_OBJ_1'](state, obj){
+  setPointObj1(state, obj){
     state.pointObj1 = obj;
   },
-  ['POINT_OBJ_2'](state, obj){
+  setPointObj2(state, obj){
     state.pointObj2 = obj;
   },
-  ['ITEM_OPTION'](state, obj){
+  setItemOption(state, obj){
     state.itemOption = obj;
   },
-  ['START_DATE'](state, obj){
+  setStartDate(state, obj){
     state.startDate = obj;
   },
-  ['END_DATE'](state, obj){
+  setEndDate(state, obj){
     state.endDate = obj;
   },
 };
@@ -65,28 +61,36 @@ const actions = {
   },
 };
 const getters = {
-  itemObj1: state => state.itemObj1,
-  // getItemObj1({commit}, obj){
-  //   commit(['ITEM_OBJ_1'], obj);
-  // },
-  // getItemObj2({commit}, obj){
-  //   commit(['ITEM_OBJ_2'], obj);
-  // },
-  // getPointObj1({commit}, obj){
-  //   commit(['POINT_OBJ_1'], obj);
-  // },
-  // getPointObj2({commit}, obj){
-  //   commit(['POINT_OBJ_2'], obj);
-  // },
-  // getItemOption({commit}, obj){
-  //   commit(['ITEM_OPTION'], obj);
-  // },
-  // getStartDate({commit}, obj){
-  //   commit(['START_DATE'], obj);
-  // },
-  // getEndDate({commit}, obj){
-  //   commit(['END_DATE'], obj);
-  // },
+  getItemObj1(state){
+    return state.itemObj1;
+  },
+  getItemObj2(state){
+    return state.itemObj2;
+  },
+  getGroupObj(state){
+    return state.groupObj;
+  },
+  getPointObj1(state){
+    return state.pointObj1;
+  },
+  getPointObj2(state){
+    return state.pointObj2;
+  },
+  getItemOption(state){
+    return state.itemOption;
+  },
+  getStartDate(state){
+    return state.startDate;
+  },
+  getEndDate(state){
+    return state.endDate;
+  },
+  getDateCheck(state){
+    return state.dateCheck;
+  },
+  getPointCheck(state){
+    return state.pointCheck;
+  }
 };
 
 export default {

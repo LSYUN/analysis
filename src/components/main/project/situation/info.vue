@@ -26,7 +26,7 @@
               <li>
                 <router-link :to="{path:'/project/situationInfo/relAnalysis'}">关联分析(趋势)</router-link>
               </li>
-              <li class="active">
+              <li>
                 <router-link :to="{path:'/project/situationInfo/realTime'}">实时数据</router-link>
               </li>
             </ul>
@@ -34,7 +34,7 @@
         </div><!-- /.container-fluid -->
       </nav>
       <div>
-        <router-view :info.sync="info"></router-view>
+        <router-view></router-view>
       </div>
     </div>
   </div>
@@ -55,13 +55,14 @@
         this.$router.push({path: '/project/situationList'});
         return;
       }
+      this.active();
       let project = window.session.getObj(window.sessionKeys.PROJECT);
       this.projectId = project.id;
       this.projectName = project.name;
       this.getFirstMonitorItem(this.projectId);// 用来获取第一个监测项
-      bus.$on('filterTable', function (data) {
-        console.log('grand');
-      });
+//      bus.$on('filterTable', function (data) {
+//        console.log('grand');
+//      });
     },
     methods: {
       getFirstMonitorItem(projectId){
@@ -71,8 +72,9 @@
           if (oneOption && oneOption.id) {
 //            this.info.itemObj = firstOption;
 //            this.info.itemObj2 = secondOption;
-            this.$store.state.situation.itemObj1 = oneOption;
-            this.$store.state.situation.itemObj2 = twoOption;
+//            this.$store.state.situation.itemObj1 = oneOption;
+//            this.$store.state.situation.itemObj2 = twoOption;
+            this.$store.commit('setItemObj1',oneOption);
             bus.$emit('updateItem1', oneOption);
 //            bus.$emit('updateItem2', twoOption);
 //            this.$broadcast('updateItem2', this.info.itemObj2);
@@ -151,6 +153,23 @@
       },
       backToList(){
         this.$router.push({path: '/project/situationList'});
+      },
+      active(){
+        let _this = this;
+        let li = $('#nav-collapse ul li');
+        for (let i = 0; i < li.length; i++) {
+          let $li = li[i];
+          if ($($li).children('a')[0].href.indexOf(_this.$route.path) > 0) {
+            $($li).addClass('active');
+            break;
+          }
+        }
+        $('#nav-collapse ul li').click(function () {
+          let $this = $(this);
+          let $sib = $this.siblings('li');
+          $this.addClass('active');
+          $sib.removeClass('active');
+        })
       }
     }
   };
@@ -243,6 +262,10 @@
   }
 
   ul.nav > li a:hover {
+    background-color: #f44336;
+  }
+
+  ul.nav > li.active a:visited {
     background-color: #f44336;
   }
 

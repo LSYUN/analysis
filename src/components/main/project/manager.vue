@@ -5,10 +5,13 @@
 </template>
 <script>
   export default {
-    data () {
-      return {
-      };
-    },
+    watch: {
+      $route: (to, from) => {
+        if (from.path.indexOf('/info/') > 0) {
+          window.session.setObj(window.sessionKeys.TEMPINFO, {});
+        }
+      }
+    }
   }
 </script>
 <style lang="scss" scoped>

@@ -97,7 +97,6 @@
           columnDefs: [
             {
               render: function (data, type, row) {
-                console.log(data);
                 return `<span style="font-size:0.75em" >${data}</span>`
               }.bind(this),
               targets: 1

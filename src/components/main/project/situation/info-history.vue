@@ -138,14 +138,11 @@
 //      'message': require('./info-history-table/message.vue'),
 //      'station-check': require('./info-history-table/total-station-coord-check.vue')
     },
-    computed: {},
     data () {
       return {
         projectId: {},
         itemMark: null,
         isRender: false, //控制v-if与页面更新
-        dateCheck: false,
-        pointCheck: false,
         groupCheck: false,
         firstTime: true, //首次加载不触发watch
         calculateType: 1,//解算类型默认为0
@@ -154,8 +151,6 @@
         currentTime: {},
         itemObj: {},
         pointObj: [],
-        groupObj: [],
-        itemOption: {},
         tableOption: [],
         keepDecs: [],
         monitorItems: {
@@ -234,6 +229,33 @@
         },
       };
     },
+    computed: {
+      itemObj1(){
+        console.log(this.$store.getters.getItemObj1);
+        return this.$store.getters.getItemObj1;
+      },
+      groupObj(){
+        return this.$store.getters.getItemObj2;
+      },
+      pointObj1(){
+        return this.$store.getters.getPointObj1;
+      },
+      itemOption(){
+        return this.$store.getters.getItemOption;
+      },
+      startDate(){
+        return this.$store.getters.getStartDate;
+      },
+      endDate(){
+        return this.$store.getters.getEndDate;
+      },
+      dateCheck(){
+        return this.$store.getters.getDateCheck;
+      },
+      pointCheck(){
+        return this.$store.getters.getPointCheck;
+      },
+    },
     watch: {
       'calculateType': function (e) {
         if (!this.firstTime) {
@@ -245,58 +267,58 @@
           this.itemOption.pointType = e;
         }
       },
-      'dateCheck': function (e) {
-        this.dateCheck = e;
-      }
+//      'dateCheck': function (e) {
+//        this.dateCheck = e;
+//      }
     },
     created: function () {// 当前页面刷新
-      const _this = this;
-      bus.$on('updateItem1', function (data) {
-        _this.startEndDate = {};
-        let option;
-        if (data && data.id) {
-          _this.itemMark = data.monitorTypeId;
-          _this.itemObj = data;
-          option = AnalysisEnum.getItemMark(data.monitorTypeId);
-          if (_this.$refs.itemSlt) _this.$refs.itemSlt.update([{id: data.id, text: data.name, obj: data}]);
-        } else {
-          _this.itemObj = {};
-          _this.$refs.itemSlt.clear(true);
-        }
-        _this.itemOption = {
-          url: option.url,
-          calculateType: _this.calculateType,
-          pointType: _this.pointType,
-          mark: 1
-        };
-        _this.initTableConfig();
-      });
-      bus.$on('updateGroup', function (data) {
-        if (data) {
-          _this.pointGroupObj = data;
-          _this.$refs.pointSlt.clear(true);
-        } else {
-          _this.pointGroupObj = [];
-        }
-      });
-      bus.$on('updatePoint1', function (data) {
-        if (data && data.length > 0) {
-          _this.dateCheck = false;
-          _this.pointObj = data.slice(0, 1);
-          if (_this.$refs.pointSlt) _this.$refs.pointSlt.update(data);
-        } else if (_this.itemMark !== 200) {
-          _this.dateCheck = false;
-          _this.pointObj = [];
-          _this.$refs.pointSlt.clear(true);
-        }
-      });
+//      const _this = this;
+//      bus.$on('updateItem1', function (data) {
+//        _this.startEndDate = {};
+//        let option;
+//        if (data && data.id) {
+//          _this.itemMark = data.monitorTypeId;
+//          _this.itemObj = data;
+//          option = AnalysisEnum.getItemMark(data.monitorTypeId);
+//          if (_this.$refs.itemSlt) _this.$refs.itemSlt.update([{id: data.id, text: data.name, obj: data}]);
+//        } else {
+//          _this.itemObj = {};
+//          _this.$refs.itemSlt.clear(true);
+//        }
+//        _this.itemOption = {
+//          url: option.url,
+//          calculateType: _this.calculateType,
+//          pointType: _this.pointType,
+//          mark: 1
+//        };
+//        _this.initTableConfig();
+//      });
+//      bus.$on('updateGroup', function (data) {
+//        if (data) {
+//          _this.pointGroupObj = data;
+//          _this.$refs.pointSlt.clear(true);
+//        } else {
+//          _this.pointGroupObj = [];
+//        }
+//      });
+//      bus.$on('updatePoint1', function (data) {
+//        if (data && data.length > 0) {
+//          _this.dateCheck = false;
+//          _this.pointObj = data.slice(0, 1);
+//          if (_this.$refs.pointSlt) _this.$refs.pointSlt.update(data);
+//        } else if (_this.itemMark !== 200) {
+//          _this.dateCheck = false;
+//          _this.pointObj = [];
+//          _this.$refs.pointSlt.clear(true);
+//        }
+//      });
     },
     mounted () {
       this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
 //      console.log(this.$store.state.situation.itemObj1);
 //      this.info = Object.assign({}, this.info);
-      this.initDateRangePicker();
-      this.initDateTime();
+//      this.initDateRangePicker();
+//      this.initDateTime();
 //      this.initItemOption();
 //      this.initPointGroupOption();
 //      this.initPointOption();
@@ -319,7 +341,16 @@
         }
         this.firstTime = false;
       },
-      initTableConfig(){
+      initPointGroupOption(){
+        this.firstTime = false;
+      },
+      initPointOption(){
+        if (this.pointObj && this.pointObj.length > 0) {
+          this.dateCheck = false;
+        }
+      },
+      initTableConfig()
+      {
         if (!this.itemObj || !this.itemObj.id) {
           this.itemObj = window.session.getObj(window.sessionKeys.ITEMOBJ2);
           return;
@@ -354,15 +385,8 @@
         }, (response) => {
           toastr.error(response.data);
         });
-      },
-      initPointGroupOption(){
-        this.firstTime = false;
-      },
-      initPointOption(){
-        if (this.pointObj && this.pointObj.length > 0) {
-          this.dateCheck = false;
-        }
-      },
+      }
+      ,
       getDefaultTime(){/*获取最近一万点时间段*/
         let startEndDate = {};
         let eDate = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1);//这是获取当前时间
@@ -497,7 +521,7 @@
         };
 //        console.log(this.$refs);
 //        bus.$emit('filterTable', itemOption);
-        this.$refs.child.init(itemOption);
+//        this.$refs.child.init(itemOption);
       },
       queryAll(){
         let startDate = '1000-01-01 00:00:00', endDate = '9999-12-31 23:59:59', e = this.info;

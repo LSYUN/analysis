@@ -30,12 +30,6 @@
   import GlobalEnum from '../../../../managers/enum/global-enum';
   import * as tableConfig from "../../../../managers/configs/dataTable.js"
   export default {
-    props: {
-      info: {
-        type: Object,
-        required: true
-      },
-    },
     data () {
       return {
         pathKey: 'projectSituationList',
@@ -152,12 +146,11 @@
         });
       },
       intoDetails(){
-        const component = this;
+        const _this = this;
         $('#example tbody').on('click', 'td:nth-child(6)', function (p) {
-          let project = component.table.row(this).data();
+          let project = _this.table.row(this).data();
           window.session.setObj(window.sessionKeys.PROJECT, project);
-//                        component.$router.push({path: '/project/situationinfo/diagram'});
-          component.$router.push({path: '/project/situationInfo/realTime'});
+          _this.$router.push({path: '/project/situationInfo/realTime'});
         });
       },
     }
