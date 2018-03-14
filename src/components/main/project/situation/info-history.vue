@@ -7,11 +7,11 @@
             <div class="input-group ">
               <label class="input-group-addon addon-label">监测项</label>
               <vue-select2 :ajax=true :paging=false :multiple=false ref="itemSlt"
-                           :ajax-url="monitorItems.ajaxUrl"
-                           :init-data="monitorItems.initData"
-                           :result-add="monitorItems.resultAdd"
-                           :placeholder="monitorItems.placeholder"
-                           :evt-selected="monitorItems.evtSelected"></vue-select2>
+                           :ajax-url="itemOption.ajaxUrl"
+                           :init-data="itemOption.initData"
+                           :result-add="itemOption.resultAdd"
+                           :placeholder="itemOption.placeholder"
+                           :evt-selected="itemOption.evtSelected"></vue-select2>
             </div>
           </div>
           <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 wrap-padding">
@@ -39,10 +39,10 @@
             </span>
               <label class="input-group-addon addon-label select-label" style="*margin-top: 1px;">测点点组</label>
               <vue-select2 :ajax=true :paging=false :multiple=true ref="pointGroupSlt"
-                           :ajax-url="monitorPointGroups.ajaxUrl"
-                           :init-data="monitorPointGroups.initData"
-                           :placeholder="monitorPointGroups.placeholder"
-                           :evt-selected="monitorPointGroups.evtSelected">
+                           :ajax-url="groupOption.ajaxUrl"
+                           :init-data="groupOption.initData"
+                           :placeholder="groupOption.placeholder"
+                           :evt-selected="groupOption.evtSelected">
               </vue-select2>
             </div>
           </div>
@@ -54,10 +54,10 @@
             </span>
               <label class="input-group-addon addon-label select-label">测点</label>
               <vue-select2 :ajax=true :paging=false :multiple=true :allow-clear=true ref="pointSlt"
-                           :ajax-url="monitorPoints.ajaxUrl"
-                           :init-data="monitorPoints.initData"
-                           :placeholder="monitorPoints.placeholder"
-                           :evt-selected="monitorPoints.evtSelected">
+                           :ajax-url="pointOption.ajaxUrl"
+                           :init-data="pointOption.initData"
+                           :placeholder="pointOption.placeholder"
+                           :evt-selected="pointOption.evtSelected">
               </vue-select2>
             </div>
           </div>
@@ -153,7 +153,7 @@
         pointObj: [],
         tableOption: [],
         keepDecs: [],
-        monitorItems: {
+        itemOption: {
           initData: [],
           placeholder: '请选择监测项',
           resultAdd: [{
@@ -171,15 +171,14 @@
                 this.groupCheck = false;
                 this.dateCheck = false;
                 this.itemMark = item.monitorTypeId;
-                this.itemOption = AnalysisEnum.getItemMark(item.monitorTypeId);
+                this.request = AnalysisEnum.getItemMark(item.monitorTypeId);
                 if (this.itemMark === 200 || this.itemMark === 201) { // 消息查询或者误差查询
                   this.isRender = true;
                 } else {
                   this.$emit('monitorItem', item);
                   this.itemObj = item;
-                  window.session.setObj(window.sessionKeys.ITEMOBJ2, item);
-                  this.itemOption = {
-                    url: this.itemOption.url,
+                  this.request = {
+                    url: this.request.url,
                     calculateType: this.calculateType,
                     pointType: this.pointType,
                     mark: 1
@@ -193,7 +192,7 @@
             return window.mainConfig.url.getMonitorItemAndMsgQueryPage(this.projectId);
           }.bind(this)
         },
-        monitorPointGroups: {
+        groupOption: {
           initData: [],
           placeholder: '请选择测点点组',
           evtSelected: function (evt, data) {
@@ -211,7 +210,7 @@
             return window.mainConfig.url.selectItemRelMonitorPointGroup(this.itemObj.id);
           }.bind(this)
         },
-        monitorPoints: {
+        pointOption: {
           initData: [],
           placeholder: '请选择测点',
           evtSelected: function (evt, data) {
@@ -240,8 +239,14 @@
       pointObj1(){
         return this.$store.getters.getPointObj1;
       },
-      itemOption(){
-        return this.$store.getters.getItemOption;
+      request(){
+        console.log(this.$store.getters.getRequest);
+        return this.$store.getters.getRequest || {
+            calculateType: 1,
+            pointType: 1,
+            mark: 1,
+            url: '',
+          };
       },
       startDate(){
         return this.$store.getters.getStartDate;
@@ -259,12 +264,12 @@
     watch: {
       'calculateType': function (e) {
         if (!this.firstTime) {
-          this.itemOption.calculateType = e;
+          this.request.calculateType = e;
         }
       },
       'pointType': function (e) {
         if (!this.firstTime) {
-          this.itemOption.pointType = e;
+          this.request.pointType = e;
         }
       },
 //      'dateCheck': function (e) {
@@ -285,7 +290,7 @@
 //          _this.itemObj = {};
 //          _this.$refs.itemSlt.clear(true);
 //        }
-//        _this.itemOption = {
+//        _this.request = {
 //          url: option.url,
 //          calculateType: _this.calculateType,
 //          pointType: _this.pointType,
@@ -315,29 +320,29 @@
     },
     mounted () {
       this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
-//      console.log(this.$store.state.situation.itemObj1);
 //      this.info = Object.assign({}, this.info);
-//      this.initDateRangePicker();
-//      this.initDateTime();
-//      this.initItemOption();
-//      this.initPointGroupOption();
+      this.initDateRangePicker();
+      this.initDateTime();
+      this.initRequest();
+//      this.initPoinstGroupOption();
 //      this.initPointOption();
     },
     methods: {
-      initItemOption(){
-        if (this.itemObj) {
-          let item = this.itemObj;
+      initRequest(){
+        console.log(this.itemObj1);
+        if (this.itemObj1) {
+          let item = this.itemObj1;
           this.itemMark = item.monitorTypeId;//= this.itemMark
-          this.itemOption = AnalysisEnum.getItemMark(item.monitorTypeId);
+          let request = AnalysisEnum.getItemMark(item.monitorTypeId);
 //          console.log(this.itemMark);
-          this.monitorItems.initData.push({id: item.id, text: item.name, obj: item});
+          this.itemOption.initData.push({id: item.id, text: item.name, obj: item});
           this.initTableConfig();
-          this.itemOption = {
-            url: this.itemOption.url,
-            calculateType: this.calculateType,
-            pointType: this.pointType,
-            mark: 1
-          };
+//          this.request = {
+//            url: request.url,
+//            calculateType: this.calculateType,
+//            pointType: this.pointType,
+//            mark: 1
+//          };
         }
         this.firstTime = false;
       },
@@ -473,7 +478,7 @@
         if (this.pointCheck === true && this.dateCheck === false) mark = 2;
         if (this.pointCheck === false && this.dateCheck === true) mark = 3;
         if (this.pointCheck === true && this.dateCheck === true) mark = 4;
-        switch (this.itemOption.mark) {
+        switch (this.request.mark) {
           case 1://select all
             startDate = '1000-01-01 0:0:0';
             endDate = '9999-12-31 23:59:59';
@@ -501,16 +506,16 @@
             pointNames = _.map(this.pointObj, (d) => encodeURIComponent(d.name));
             groupNames = _.map(this.groupObj, (d) => encodeURIComponent(d.name));
             allNames = pointNames.concat(groupNames);
-//            e.itemOption.pointNames = pointNames.concat(pointGroupName);
+//            e.request.pointNames = pointNames.concat(pointGroupName);
             break;
           default:
 
         }
-        let itemOption = {
+        let request = {
           projectId: this.projectId,
           itemId: this.itemObj.id,
           mark: mark,
-          url: this.itemOption.url,
+          url: this.request.url,
           pointNames: pointNames,
           groupName: groupNames,
           allNames: allNames,
@@ -520,22 +525,22 @@
           pointType: this.pointType,// 全站仪
         };
 //        console.log(this.$refs);
-//        bus.$emit('filterTable', itemOption);
-//        this.$refs.child.init(itemOption);
+//        bus.$emit('filterTable', request);
+//        this.$refs.child.init(request);
       },
       queryAll(){
         let startDate = '1000-01-01 00:00:00', endDate = '9999-12-31 23:59:59', e = this.info;
         this.$emit('filterTable', {
-          url: e.itemOption.url,
+          url: e.request.url,
           projectId: e.projectId,
           monitorItemId: e.itemObj.id,
-          pointNames: e.itemOption.pointNames,
-          pointGroupName: e.itemOption.pointGroupName,
+          pointNames: e.request.pointNames,
+          pointGroupName: e.request.pointGroupName,
           startDate: startDate,
           endDate: endDate,
           mark: 1,
-          calculateType: e.itemOption.calculateType, // 全站仪
-          pointType: e.itemOption.pointType,// 全站仪
+          calculateType: e.request.calculateType, // 全站仪
+          pointType: e.request.pointType,// 全站仪
         });
       },
     }

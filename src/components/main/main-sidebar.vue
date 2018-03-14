@@ -1,29 +1,29 @@
 <template>
-  <div class="main-sidebar" role="navigation">
-    <div class="sidebar" style="position: relative; overflow: hidden; width: auto; height: 100%;">
-      <div class="" style="overflow: hidden; width: auto; height: 100%;">
-        <ul class="sidebar-menu tree" data-widget="tree">
+  <aside class="main-sidebar">
+    <section class="sidebar">
+      <!--<div class="" style="overflow: hidden; width: auto; height: 100%;">-->
+      <ul class="sidebar-menu">
           <li class="header"><span>管理菜单</span></li>
           <li class="treeview" v-for="row in menus" :class=" {live: row.live}">
             <router-link v-account-type="row.accountType" :to="{ path: row.link }" class="a-link row-link"
-                         :data-path="row.key">
-              <i :class="row.icon" class="row-icon"></i><span class="link-name row-name">{{ row.name }}</span>
+                         :data-path="row.key" href="javascript:void(0)">
+              <i :class="row.icon" class="row-icon"></i>
+              <span class="link-name row-name">{{ row.name }}</span>
               <span v-if="row.child" class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
             </router-link>
-            <ul v-show="row.child" class="treeview-menu row-child" style="display: none;">
+            <ul v-show="row.child" class="treeview-menu row-child">
               <li class="treeview" v-for="child in row.child">
                 <router-link v-organization-type="child.organizationType" :to="{ path: child.link }"
-                             class="a-link child-link"
-                             :data-path="child.key">
+                             class="a-link child-link" :data-path="child.key">
                   <i :class="child.icon"></i><span class="link-name child-name"> {{ child.name }}</span>
                 </router-link>
               </li>
             </ul>
           </li>
         </ul>
-      </div>
-    </div>
-  </div>
+      <!--</div>-->
+    </section>
+  </aside>
 </template>
 <script>
   export default {
@@ -161,13 +161,13 @@
     mounted(){
       let _this = this;
       $('.treeview').click(function (e) {
-//        e.stopPropagation();
         var $this = $(this);
         var $sib = $this.siblings('.treeview');
-        var $children = $this.children('.a-link');
-        var enPath = $children.attr('data-path');
-        var cnPath = $children.text();
-        $children.addClass('live');
+        var $childrenA = $this.children('.a-link');
+        var enPath = $childrenA.attr('data-path');
+        var cnPath = $childrenA.text();
+//        var $childrenUl = $this.children('.treeview-menu').css('display', 'block');
+        $childrenA.addClass('live');
         $sib.children('.a-link').removeClass('live');
         $sib.children('.row-child').children('.treeview').children('.child-link').removeClass('live');
         if (enPath) {
@@ -222,11 +222,6 @@
   .sidebar-menu .treeview > a .row-name {
     font-weight: bold;
     margin-top: -3px;
-    /*-webkit-transform: translateY(5px);*/
-    /*-moz-transform: translateY(5px);*/
-    /*-ms-transform: translateY(5px);*/
-    /*-o-transform: translateY(5px);*/
-    /*transform: translateY(5px);*/
   }
 
   .sidebar-menu .treeview a:hover {
@@ -236,6 +231,20 @@
   .sidebar-menu .treeview .row-link.live {
     color: #ffffff;
     background-color: #f44336;
+  }
+
+  .sidebar-menu .treeview .row-link .pull-right-container .pull-right {
+    color: inherit;
+    background-color: inherit;
+    transition: all 1s;
+  }
+
+  .sidebar-menu .treeview .row-link.live .pull-right-container .pull-right {
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(-90deg);
   }
 
   .sidebar-menu .treeview .child-link.live {

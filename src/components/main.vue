@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="wrapper">
     <div style="display: none">
       <svg class="loading">
         <circle r="50"></circle>
@@ -33,7 +33,7 @@
   };
 </script>
 <style scoped>
-  .main {
+  .wrapper {
     height: 100%;
   }
 

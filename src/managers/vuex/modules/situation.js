@@ -8,7 +8,7 @@ const state = {
   groupObj: {},
   pointObj1: {},
   pointObj2: {},
-  itemOption: {},
+  request: {},
   startDate: {},
   endDate: {},
   dateCheck: false,
@@ -27,8 +27,8 @@ const mutations = {
   setPointObj2(state, obj){
     state.pointObj2 = obj;
   },
-  setItemOption(state, obj){
-    state.itemOption = obj;
+  setRequest(state, obj){
+    state.request = obj;
   },
   setStartDate(state, obj){
     state.startDate = obj;
@@ -50,7 +50,7 @@ const actions = {
   setPointObj2({commit}, obj){
     commit(['POINT_OBJ_2'], obj);
   },
-  setItemOption({commit}, obj){
+  setRequest({commit}, obj){
     commit(['ITEM_OPTION'], obj);
   },
   setStartDate({commit}, obj){
@@ -76,8 +76,8 @@ const getters = {
   getPointObj2(state){
     return state.pointObj2;
   },
-  getItemOption(state){
-    return state.itemOption;
+  getRequest(state){
+    return state.request;
   },
   getStartDate(state){
     return state.startDate;

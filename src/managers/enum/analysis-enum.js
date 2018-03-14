@@ -3,7 +3,7 @@
  */
 class Enum {
   static getItemMark(mark) {
-    let url = '', DataType = [];
+    let url = '', dataType = [];
     let waterLevel = [
         {value: 'valueLevel', text: '水位值', unit: 'm', selected: true},
         {value: 'changeLevel', text: '变化值', unit: 'm',},
@@ -110,97 +110,97 @@ class Enum {
     switch (parseInt(mark)) {
       case 1://水位
         url = 'waterLevelData';
-        DataType = waterLevel;
+        dataType = waterLevel;
         break;
       case 2://侧斜孔 注：（基坑-深层水平位移 尾矿-内部位移）
         url = 'inDisplacementData';
-        DataType = inDisplacement;
+        dataType = inDisplacement;
         break;
       case 3://支撑轴力
         url = 'braceAxialForceData';
-        DataType = brace;
+        dataType = brace;
         break;
       case 4://锚索
         url = null;
-        DataType = null;
+        dataType = null;
         break;
       case 5://降雨量
         url = 'ombrometerData';
-        DataType = ombrometer;
+        dataType = ombrometer;
         break;
       case 6://裂缝
         url = 'jointMeterData';
-        DataType = joint;
+        dataType = joint;
         break;
       case 7://表面位移(GPS)
         url = 'GpsData';
-        DataType = Gps;
+        dataType = Gps;
         break;
       case 8://干滩
         url = 'dryShoal';
-        DataType = dryShoal;
+        dataType = dryShoal;
         break;
       case 9://浸润线
         url = 'saturationLineData';
-        DataType = saturationLine;
+        dataType = saturationLine;
         break;
       case 10://浊度
         url = 'turbidityData';
-        DataType = turbidity;
+        dataType = turbidity;
         break;
       case 11://渗流量
         url = 'seepageData';
-        DataType = seepage;
+        dataType = seepage;
         break;
       case 12://压力
         url = 'stressData';
-        DataType = stress;
+        dataType = stress;
         break;
       case 13://应力
         url = 'strainData';
-        DataType = strain;
+        dataType = strain;
         break;
       case 14://土壤水分
         url = 'soilMoisture';
-        DataType = soilMoisture;
+        dataType = soilMoisture;
         break;
       case 15://水准高程
         url = 'waterElevationDatas';
-        DataType = waterElevation;
+        dataType = waterElevation;
         break;
       case 16://混凝土
         url = 'concretebraceData';
-        DataType = concreteBrace;
+        dataType = concreteBrace;
         break;
       case 17://压强
         url = 'PressureData';
-        DataType = pressure;
+        dataType = pressure;
         break;
       case 18://PH
         url = 'phData';
-        DataType = ph;
+        dataType = ph;
         break;
       case 19://内部沉降
         url = 'inSettlementData';
-        DataType = inSettlement;
+        dataType = inSettlement;
         break;
       case 20://全站仪位移
         url = 'measureData';
-        DataType = totalStation;
+        dataType = totalStation;
         break;
       case 21://应变
         url = 'strainDeformationData';
-        DataType = strainDeformationData;
+        dataType = strainDeformationData;
         break;
       case 50://原始数据
         url = 'dataSensor';
-        DataType = dataSensor;
+        dataType = dataSensor;
         break;
       default:
         url = null;
-        DataType = null;
+        dataType = null;
     }
-    return {url, DataType};
+    return {url, dataType};
   }
 }
 export default Enum;
