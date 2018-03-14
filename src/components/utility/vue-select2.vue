@@ -68,46 +68,6 @@
         type: Boolean
       }
     },
-//    computed: {
-//      evtSelected: () => {
-//      },
-//      multiple: () => {
-//      },
-//      paging: () => {
-//      },
-//      initData: () => {
-//      },
-//      placeholder: () => {
-//      },
-//      search: () => {
-//      },
-//      ajax: () => {
-//      },
-//      ajaxUrl: () => {
-//      },
-//      ajaxDataType: () => {
-//      },
-//      ajaxType: () => {
-//      },
-//      ajaxContentType: () => {
-//      },
-//      ajaxCache: () => {
-//      },
-//      ajaxData: () => {
-//      },
-//      ajaxResults: () => {
-//      },
-//      options: () => {
-//      },
-//      tags: () => {
-//      },
-//      allowClear: () => {
-//      },
-//      localData: () => {
-//      },
-//      resultAdd: () => {
-//      },
-//    },
     data () {
       return {
         selectObj: null,

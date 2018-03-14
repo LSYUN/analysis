@@ -95,7 +95,8 @@
     </div>
     <div class="min-wrapper">
       <div class="min-size">
-        <common-table ref="child"></common-table><!--水位-->
+        <base-table></base-table>
+        <!--<common-table ref="child"></common-table>&lt;!&ndash;水位&ndash;&gt;-->
         <!--<common-table v-if="itemMark===2 && isRender"></common-table>&lt;!&ndash;内部位移&ndash;&gt;-->
         <!--<common-table v-if="itemMark===3 && isRender"></common-table>&lt;!&ndash;支撑轴力&ndash;&gt;-->
         <!--&lt;!&ndash;<brace v-if="itemMark===3 && isRender"></brace>&lt;!&ndash;支撑轴力&ndash;&gt;&ndash;&gt;-->
@@ -130,9 +131,11 @@
   import AnalysisEnum from '../../../../managers/enum/analysis-enum';
   import TableConfig from '../../../../managers/enum/tableConfig-enum';
   import commonTable from './info-history-table/common-table.vue'
+  import baseTable from './info-history-table/base-table.vue'
   export default {
     components: {
       'common-table': commonTable,
+      'base-table': baseTable,
 //      'brace': require('../project-situation-info-pages/history-brace-axial-force.vue'),
 //      'total-station': require('./info-history-table/total-station.vue'),
 //      'message': require('./info-history-table/message.vue'),
@@ -149,7 +152,6 @@
         pointType: 1,//点类型默认为0
         startEndDate: {},
         currentTime: {},
-        itemObj: {},
         pointObj: [],
         tableOption: [],
         keepDecs: [],
@@ -176,7 +178,7 @@
                   this.isRender = true;
                 } else {
                   this.$emit('monitorItem', item);
-                  this.itemObj = item;
+                  this.itemObj1 = item;
                   this.request = {
                     url: this.request.url,
                     calculateType: this.calculateType,
@@ -207,7 +209,7 @@
             }
           }.bind(this),
           ajaxUrl: function () {
-            return window.mainConfig.url.selectItemRelMonitorPointGroup(this.itemObj.id);
+            return window.mainConfig.url.selectItemRelMonitorPointGroup(this.itemObj1.id);
           }.bind(this)
         },
         pointOption: {
@@ -222,7 +224,7 @@
             }
           }.bind(this),
           ajaxUrl: function () {
-            return window.mainConfig.url.getRelPointOfItems(this.itemObj.id);
+            return window.mainConfig.url.getRelPointOfItems(this.itemObj1.id);
           }.bind(this)
 
         },
@@ -230,7 +232,6 @@
     },
     computed: {
       itemObj1(){
-        console.log(this.$store.getters.getItemObj1);
         return this.$store.getters.getItemObj1;
       },
       groupObj(){
@@ -238,15 +239,6 @@
       },
       pointObj1(){
         return this.$store.getters.getPointObj1;
-      },
-      request(){
-        console.log(this.$store.getters.getRequest);
-        return this.$store.getters.getRequest || {
-            calculateType: 1,
-            pointType: 1,
-            mark: 1,
-            url: '',
-          };
       },
       startDate(){
         return this.$store.getters.getStartDate;
@@ -283,11 +275,11 @@
 //        let option;
 //        if (data && data.id) {
 //          _this.itemMark = data.monitorTypeId;
-//          _this.itemObj = data;
+//          _this.itemObj1 = data;
 //          option = AnalysisEnum.getItemMark(data.monitorTypeId);
 //          if (_this.$refs.itemSlt) _this.$refs.itemSlt.update([{id: data.id, text: data.name, obj: data}]);
 //        } else {
-//          _this.itemObj = {};
+//          _this.itemObj1 = {};
 //          _this.$refs.itemSlt.clear(true);
 //        }
 //        _this.request = {
@@ -323,28 +315,28 @@
 //      this.info = Object.assign({}, this.info);
       this.initDateRangePicker();
       this.initDateTime();
-      this.initRequest();
+      this.initItemOption();
 //      this.initPoinstGroupOption();
 //      this.initPointOption();
     },
     methods: {
-      initRequest(){
-        console.log(this.itemObj1);
+      initItemOption(){
         if (this.itemObj1) {
           let item = this.itemObj1;
           this.itemMark = item.monitorTypeId;//= this.itemMark
           let request = AnalysisEnum.getItemMark(item.monitorTypeId);
-//          console.log(this.itemMark);
-          this.itemOption.initData.push({id: item.id, text: item.name, obj: item});
+////          console.log(this.itemMark);
+////          this.itemOption.initData.push({id: item.id, text: item.name, obj: item});
+          this.$refs.itemSlt.update([{id: item.id, text: item.name, obj: item}]);
           this.initTableConfig();
-//          this.request = {
-//            url: request.url,
-//            calculateType: this.calculateType,
-//            pointType: this.pointType,
-//            mark: 1
-//          };
+          this.request = {
+            url: request.url,
+            calculateType: this.calculateType,
+            pointType: this.pointType,
+            mark: 1
+          };
         }
-        this.firstTime = false;
+//        this.firstTime = false;
       },
       initPointGroupOption(){
         this.firstTime = false;
@@ -354,13 +346,12 @@
           this.dateCheck = false;
         }
       },
-      initTableConfig()
-      {
-        if (!this.itemObj || !this.itemObj.id) {
-          this.itemObj = window.session.getObj(window.sessionKeys.ITEMOBJ2);
+      initTableConfig(){
+        if (!this.itemObj1 || !this.itemObj1.id) {
+          this.itemObj1 = window.session.getObj(window.sessionKeys.ITEMOBJ2);
           return;
         }
-        window.mainConfig.http.selectConfigNamesR(this.projectId, this.itemObj.id).then((response) => {
+        window.mainConfig.http.selectConfigNamesR(this.projectId, this.itemObj1.id).then((response) => {
           let changeData = [], keepDecs = [], data = [];
           if (response.data && response.data.length > 0) {
             data = response.data;
@@ -385,13 +376,12 @@
             this.$store.state.table.tableOption = changeData;
             this.$store.state.table.keepDecs = keepDecs;
           }
-          this.isRender = true;
+//          this.isRender = true;
           this.query();
         }, (response) => {
           toastr.error(response.data);
         });
-      }
-      ,
+      },
       getDefaultTime(){/*获取最近一万点时间段*/
         let startEndDate = {};
         let eDate = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1);//这是获取当前时间
@@ -513,7 +503,7 @@
         }
         let request = {
           projectId: this.projectId,
-          itemId: this.itemObj.id,
+          itemId: this.itemObj1.id,
           mark: mark,
           url: this.request.url,
           pointNames: pointNames,
@@ -526,14 +516,14 @@
         };
 //        console.log(this.$refs);
 //        bus.$emit('filterTable', request);
-//        this.$refs.child.init(request);
+        this.$refs.child.init(request);
       },
       queryAll(){
         let startDate = '1000-01-01 00:00:00', endDate = '9999-12-31 23:59:59', e = this.info;
         this.$emit('filterTable', {
           url: e.request.url,
           projectId: e.projectId,
-          monitorItemId: e.itemObj.id,
+          monitorItemId: e.itemObj1.id,
           pointNames: e.request.pointNames,
           pointGroupName: e.request.pointGroupName,
           startDate: startDate,
