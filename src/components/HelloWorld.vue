@@ -11,7 +11,8 @@
     data () {
       return {
         lsy: 'you are ok?',
-        msg: 'Welcome to Your Vue.js App'
+        msg: 'Welcome to Your Vue.js App',
+        lsy:'lushiyun'
       }
     },
     mounted: function () {
