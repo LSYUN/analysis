@@ -24,8 +24,9 @@ class AxiosManager {
       toastr.error("错误的参数", "fail");
     });
     this.http.interceptors.response.use((res) => {
-      if (!res.data) {
+      if (res.data === undefined || res.data === null) {
         console.log('error');
+        console.log(res);
         return Promise.reject(res);
       }
       else if (res.status !== 200) {

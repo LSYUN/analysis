@@ -299,7 +299,7 @@
           }.bind(this),
           ajaxUrl: function () {
             let projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
-            return window.mainConfig.urls.getMonitorItemPage_U(projectId);
+            return window.mainConfig.url.getMonitorItemPage_U(projectId);
           }.bind(this)
         },
         monitorPoints: {
@@ -319,7 +319,7 @@
             }
           }.bind(this),
           ajaxUrl: function () {
-            return window.mainConfig.urls.getRelPointOfItems(this.info.itemObj.id);
+            return window.mainConfig.url.getRelPointOfItems(this.info.itemObj.id);
           }.bind(this)
 
         },

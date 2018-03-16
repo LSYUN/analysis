@@ -170,7 +170,7 @@
           }.bind(this),
           ajaxUrl: function () {
             let projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
-            return window.mainConfig.urls.getMonitorItemPage_U(projectId);
+            return window.mainConfig.url.getMonitorItemPage_U(projectId);
           }.bind(this)
         }
       };

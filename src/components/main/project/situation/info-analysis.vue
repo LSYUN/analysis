@@ -6,7 +6,7 @@
           <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 wrap-padding">
             <div class="input-group ">
               <label for="monitorItem" class="input-group-addon addon-label">监测项</label>
-              <vue-select2 id="monitorItem" :ajax=true :paging=false :multiple=false v-ref:item-selector
+              <vue-select2 id="monitorItem" :ajax=true :paging=false :multiple=false ref="itemSlt"
                            :ajax-url="monitorItems.ajaxUrl"
                            :init-data="monitorItems.initData"
                            :placeholder="monitorItems.placeholder"
@@ -39,7 +39,7 @@
                   <label for="pointGroupCheck"></label>
                 </span>
                 <label for="pointGroup" class="input-group-addon addon-label select-label">测点点组</label>
-                <vue-select2 id="pointGroup" :ajax=true :paging=false :multiple=false v-ref:point-group-selector
+                <vue-select2 id="pointGroup" :ajax=true :paging=false :multiple=false ref="groupSlt"
                              :ajax-url="monitorPointGroups.ajaxUrl"
                              :init-data="monitorPointGroups.initData"
                              :placeholder="monitorPointGroups.placeholder"
@@ -55,7 +55,7 @@
                 <label for="pointCheck"></label>
               </span>
               <label for="point" class="input-group-addon addon-label select-label" style="*margin-top: 1px;">测点</label>
-              <vue-select2 id="point" :ajax=true :paging=false :multiple=true :allow-clear=true v-ref:point-selector
+              <vue-select2 id="point" :ajax=true :paging=false :multiple=true :allow-clear=true ref="pointSlt"
                            :ajax-url="monitorPoints.ajaxUrl"
                            :init-data="monitorPoints.initData"
                            :placeholder="monitorPoints.placeholder"
@@ -262,37 +262,37 @@
       };
     },
     watch: {
-      'attrValue': function (e) {
-        if (!this.firstTime) {
-          let obj = _.find(this.attrOption, function (type) {
-            return type.value === e;
-          });
-          this.attrText = obj.text;
-          this.attrUnit = obj.unit;
-          this.info.itemOption = {
-            Url: this.itemOption.Url,
-            attrValue: this.attrValue,
-            attrText: this.attrText,
-            attrUnit: this.attrUnit,
-            calculateType: this.calculateType,
-            pointType: this.pointType,
-            mark: 1
-          };
-        }
-      },
-      'calculateType': function (e) {
-        if (!this.firstTime) {
-          this.info.itemOption.calculateType = e;
-        }
-      },
-      'pointType': function (e) {
-        if (!this.firstTime) {
-          this.info.itemOption.pointType = e;
-        }
-      },
-      'dateCheck': function (e) {
-        this.info.dateCheck = e;
-      }
+//      'attrValue': function (e) {
+//        if (!this.firstTime) {
+//          let obj = _.find(this.attrOption, function (type) {
+//            return type.value === e;
+//          });
+//          this.attrText = obj.text;
+//          this.attrUnit = obj.unit;
+//          this.info.itemOption = {
+//            Url: this.itemOption.Url,
+//            attrValue: this.attrValue,
+//            attrText: this.attrText,
+//            attrUnit: this.attrUnit,
+//            calculateType: this.calculateType,
+//            pointType: this.pointType,
+//            mark: 1
+//          };
+//        }
+//      },
+//      'calculateType': function (e) {
+//        if (!this.firstTime) {
+//          this.info.itemOption.calculateType = e;
+//        }
+//      },
+//      'pointType': function (e) {
+//        if (!this.firstTime) {
+//          this.info.itemOption.pointType = e;
+//        }
+//      },
+//      'dateCheck': function (e) {
+//        this.info.dateCheck = e;
+//      }
     },
     route: {
       deactivate: function (transition) {
@@ -326,7 +326,7 @@
           this.$refs.itemSelector.clear(true);
         }
       });
-      this.$on('updatePointGroup', function (data) {
+      this.$on('updateGroup', function (data) {
         if (data) {
           let self = this;
           this.info.pointGroupObj = data;
@@ -368,27 +368,19 @@
     },
     methods: {
       initItemOption(){
-        if (this.info.itemObj) {
-          let item = this.info.itemObj;
-          this.itemMark = item.monitorTypeId; //render child condition 1
-          this.itemOption = AnalysisEnum.getItemMark(item.monitorTypeId);
-          this.attrOption = this.itemOption.DataType;
-          this.attrValue = this.attrOption[0].value;
-          this.attrText = this.attrOption[0].text;
-          this.attrUnit = this.attrOption[0].unit;
-          this.info.itemOption = {
-            Url: this.itemOption.Url,
-            mark: 1,
-            attrValue: this.attrValue,
-            attrText: this.attrText,
-            attrUnit: this.attrUnit,
+        if (this.itemObj1 && this.itemObj1.hasOwnProperty('id')) {
+          let item = Object.assign({}, this.itemObj1);
+          let request = AnalysisEnum.getItemMark(item.monitorTypeId);
+          this.itemType = item.monitorTypeId;
+          if (this.$refs.itemSlt) this.$refs.itemSlt.update([{id: item.id, text: item.name, obj: item}]);
+          this.initTableConfig();
+          this.request = {
+            url: request.url,
             calculateType: this.calculateType,
-            pointType: this.pointType
+            pointType: this.pointType,
+            mark: 1
           };
-          this.monitorItems.initData.push({id: item.id, text: item.name, obj: item});
-          this.isRender = true;
         }
-        this.firstTime = false;
       },
       initPointGropOption(){
         if (this.info.pointGroupObj) {
@@ -409,33 +401,19 @@
         }
       },
       query(){
-        let mark = null, startDate = null, endDate = null, e = this.info;
-        if (this.pointCheck === false && this.dateCheck === false && this.pointGroupCheck === false) {
-          mark = 1;
-        }
-        if (this.pointCheck === true && this.dateCheck === false && this.pointGroupCheck === false) {
-          mark = 2;
-        }
-        if (this.pointCheck === false && this.dateCheck === true && this.pointGroupCheck === false) {
-          mark = 3;
-        }
-        if (this.pointCheck === true && this.dateCheck === true && this.pointGroupCheck === false) {
-          mark = 4
-        }
+        let mark = null, startDate = null, endDate = null;
+        let pointNames, groupNames, allNames = [];
+        if (this.pointCheck === false && this.dateCheck === false && this.pointGroupCheck === false) mark = 1;
+        if (this.pointCheck === true && this.dateCheck === false && this.pointGroupCheck === false) mark = 2;
+        if (this.pointCheck === false && this.dateCheck === true && this.pointGroupCheck === false) mark = 3;
+        if (this.pointCheck === true && this.dateCheck === true && this.pointGroupCheck === false) mark = 4;
         if (this.itemMark === 2) {
-          if (this.pointGroupCheck === false && this.dateCheck === false && this.pointCheck === false) {
-            mark = 5;
-          }
+          if (this.pointGroupCheck === false && this.dateCheck === false && this.pointCheck === false) mark = 5;
+          if (this.pointGroupCheck === true && this.dateCheck === false && this.pointCheck === false) mark = 6;
+          if (this.pointGroupCheck === false && this.dateCheck === true && this.pointCheck === false) mark = 7;
+          if (this.pointGroupCheck === true && this.dateCheck === true && this.pointCheck === false) mark = 8;
         }
-        if (this.pointGroupCheck === true && this.dateCheck === false && this.pointCheck === false) {
-          mark = 6;
-        }
-        if (this.pointGroupCheck === false && this.dateCheck === true && this.pointCheck === false) {
-          mark = 7;
-        }
-        if (this.pointGroupCheck === true && this.dateCheck === true && this.pointCheck === false) {
-          mark = 8;
-        }
+
         switch (mark) {
           case 1://select all
             startDate = '1000-01-01 0:0:0';
@@ -446,29 +424,25 @@
           case 2://ByPoint
             startDate = '1000-01-01 0:0:0';
             endDate = '9999-12-31 23:59:59';
-            e.itemOption.pointNames = _.map(e.pointObj, function (d) {
-              return d.name;
-            });
-            e.itemOption.pointGroupName = _.map(e.pointGroupObj, function (a) {
-              return a.name;
-            });
+            pointNames = _.map(this.pointObj, (d) => encodeURIComponent(d.name));
+            groupNames = _.map(this.groupObj, (d) => encodeURIComponent(d.name));
+            allNames = pointNames.concat(groupNames);
             break;
           case 3://ByTime
-            startDate = e.startEndDate.startDate.dateL;
-            endDate = e.startEndDate.endDate.dateL;
-            e.itemOption.pointNames = [];// _.map(e.pointObj, (d) => (d.name));
-            e.itemOption.pointGroupName = [];
+            startDate = this.dateObj.start;
+            endDate = this.dateObj.end;
             break;
           case 4://ByPointAndTime
-            startDate = e.startEndDate.startDate.dateL;
-            endDate = e.startEndDate.endDate.dateL;
-            e.itemOption.pointNames = _.map(e.pointObj, (d) => (d.name));
-            e.itemOption.pointGroupName = _.map(e.pointGroupObj, (d) => (d.name));
+            startDate = this.dateObj.start;
+            endDate = this.dateObj.end;
+            pointNames = _.map(this.pointObj, (d) => encodeURIComponent(d.name));
+            groupNames = _.map(this.groupObj, (d) => encodeURIComponent(d.name));
+            allNames = pointNames.concat(groupNames);
             break;
           case 5://ByPointAndTime
             startDate = e.startEndDate.startDate.dateL;
             endDate = e.startEndDate.endDate.dateL;
-            e.itemOption.pointNames = [];
+            e.itemOption.pointNames = [];//todo
 //            e.monitorGroupId = this.info.pointGroupObj.id;
             e.monitorGroupId = this.monitorGroupId;
             break;

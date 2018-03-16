@@ -48,7 +48,7 @@
           initData: [],
           placeholder: '请选择人员',
           ajaxUrl: function () {
-            return window.mainConfig.urls.getAccountOfOrganizationPage(this.account.id);
+            return window.mainConfig.url.getAccountOfOrganizationPage(this.account.id);
           }.bind(this),
           evtSelected: function (evt, data) {
             if (data && data.length > 0) {

@@ -60,9 +60,6 @@
       this.projectId = project.id;
       this.projectName = project.name;
       this.getFirstMonitorItem(this.projectId);// 用来获取第一个监测项
-//      bus.$on('filterTable', function (data) {
-//        console.log('grand');
-//      });
     },
     methods: {
       getFirstMonitorItem(projectId){
@@ -70,14 +67,10 @@
           let oneOption = response.data[0];
           let twoOption = response.data[1] || oneOption;
           if (oneOption && oneOption.id) {
-//            this.info.itemObj = firstOption;
-//            this.info.itemObj2 = secondOption;
-//            this.$store.state.situation.itemObj1 = oneOption;
-//            this.$store.state.situation.itemObj2 = twoOption;
-            this.$store.commit('setItemObj1',oneOption);
-            bus.$emit('updateItem1', oneOption);
-//            bus.$emit('updateItem2', twoOption);
-//            this.$broadcast('updateItem2', this.info.itemObj2);
+            this.$store.commit('setItemObj1', oneOption);  //修改session
+            this.$store.commit('setItemObj2', twoOption);  //修改session
+            bus.$emit('updateItem1', oneOption);  //修改session
+            bus.$emit('updateItem2', twoOption);  //修改session
             this.getFirstPointGroupOfFirstItem(oneOption.id);// 用来加载第一个点组
 //            this.getFirstPointOfSecondItem(secondOption.id, true);  //第二个参数控制关联分析是否自动画图
           } else {
@@ -91,15 +84,13 @@
         window.mainConfig.http.getFirstPointGroupOfItem(itemId).then((response) => {
           let option = response.data;
           if (option && option.length > 0) {
-//            this.info.pointGroupObj = firstGroupOption;
-            this.$store.state.situation.groupObj = option;
+            this.$store.commit('setGroupObj', option);  //修改session
             bus.$emit('updateGroup', option);
             this.getFirstPointOfFirstPointGroup(option.id);// 用来加载第一个点组数据
           } else {
 //            toastr.info('项目下没有点组');
             this.getFirstPointOfFirstItem(itemId);// 用来加载第一个测点数据(之前的)
           }
-//          this.$broadcast('updatePointGroup', this.info.pointGroupObj);
         }, (response) => {
           toastr.error('通信失败');
         });
@@ -109,15 +100,11 @@
           let option = response.data;
           console.log(option);
           if (option && option.length > 0) {
-//            this.info.pointObj = option;
-            this.$store.state.situation.pointObj1 = option;
+            this.$store.commit('setPointObj1', option);  //修改session
             bus.$emit('updatePoint1', option);
-//            console.log(this.info.pointObj);
           } else {
-            this.info.pointObj = [];
             toastr.info('该点组下没有关联测点');
           }
-//          this.$broadcast('updatePoint', this.info.pointObj);
         }, (response) => {
           console.log(response);
           toastr.error('通信失败');
@@ -127,8 +114,8 @@
         window.mainConfig.http.getFirstPointOfItem(itemId).then((response) => {
           let option = response.data;
           if (option && option.length > 0) {
-//            this.info.pointObj = option;
-            this.$store.state.situation.pointObj1 = option;
+            this.$store.commit('setPointObj1', option);  //修改session
+            bus.$emit('updatePoint1', option);
           } else {
 //            this.info.pointObj = [];
           }
@@ -141,8 +128,8 @@
         window.mainConfig.http.getFirstPointOfItem(itemId).then((response) => {
           let option = response.data[0];
           if (option && option.id) {
-            this.info.pointObj2 = option;
-//            this.$broadcast('updatePoint2', this.info.pointObj2, autoReq);
+            this.$store.commit('setPointObj2', option);  //修改session
+            bus.$emit('updatePoint2', option);
           } else {
             this.info.pointObj2 = {};
 //            this.$broadcast('updatePoint2', this.info.pointObj2, autoReq);

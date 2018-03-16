@@ -314,6 +314,17 @@ table.dataTable tbody th, table.dataTable tbody td .btn i {
   padding: 2px 8px;
 }
 
+.middle-layout .dataTables_wrapper .dataTables_scroll {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border: 1px solid rgba(144, 144, 148, 0.51);
+  border-bottom: 0;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
 /*表格中的Search*/
 .dataTables_wrapper input {
   border-color: $box-title-color;

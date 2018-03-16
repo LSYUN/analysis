@@ -21,6 +21,9 @@ const mutations = {
   setItemObj2(state, obj){
     state.itemObj2 = obj;
   },
+  setGroupObj(state, obj){
+    state.groupObj = obj;
+  },
   setPointObj1(state, obj){
     state.pointObj1 = obj;
   },
@@ -36,6 +39,15 @@ const mutations = {
   setEndDate(state, obj){
     state.endDate = obj;
   },
+  setDateCheck(state, check){
+    state.dateCheck = check;
+  },
+  setPointCheck(state, check){
+    state.pointCheck = check;
+  },
+  setGroupCheck(state, check){
+    state.groupCheck = check;
+  }
 };
 const actions = {
   setItemObj1({commit}, obj){
@@ -90,6 +102,9 @@ const getters = {
   },
   getPointCheck(state){
     return state.pointCheck;
+  },
+  getGroupCheck(state){
+    return state.groupCheck;
   }
 };
 
