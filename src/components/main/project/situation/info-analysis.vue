@@ -464,9 +464,9 @@
         this.info = Object.assign({}, request);
       },
       queryAll(){
-//        let startDate = null, endDate = null, e = this.info;
-//        startDate = '1000-01-01 00:00:00';
-//        endDate = '9999-12-31 23:59:59';
+        this.pointCheckD = false;
+        this.dateCheckD = false;
+        this.query();
       },
       webSocket(){
 //        console.log(window.WebSocket);

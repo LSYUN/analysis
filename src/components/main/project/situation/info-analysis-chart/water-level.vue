@@ -14,7 +14,7 @@
         let info = this.info;
         console.log(this.info);
         this.touchTimes = 1;
-        this.filterByPointAndTime(info.url, info.mark, info.itemId, info.projectId, info.pointNames,
+        this.renderChart(info.url, info.mark, info.itemId, info.projectId, info.pointNames,
           info.startDate, info.endDate, info.attrValue, info.attrText, info.attrUnit);
       }
     },
@@ -29,43 +29,23 @@
         touchTimes: 1,
       };
     },
-    created: function () {
-      this.$on('filterChart', function (e) {
-        this.chart.showLoading("<img src='../static/image/spinner_B.gif'>");
-        if (this.info.mark === 2 || this.info.mark === 4) { //如果是按点和时间或者仅按点查询，找到要查询的点，并将点名保存在setPointName中
-          let pointNameArr = [];
-          for (let i = 0; i < this.pointObj1.length; i++) {
-            pointNameArr.push(this.pointObj1[i].name);
-          }
-          this.setPointName = pointNameArr;
-        }
-        this.filterByPointAndTime(e.Url, e.mark, e.monitorItemId, e.projectId, e.pointNames,
-          e.startDate, e.endDate, e.attrValue, e.attrText, e.attrUnit);
-      });
-      this.$on('updateChart', function (obj) {
-        let setAttr = window.globalTool.setUpperCase(this.info.attrValue);// 将获取到的显示类型属性首字母转大写
-        if (this.chart.series && this.chart.series.length > 0 && obj) {
-          for (let i = 0; i < this.chart.series.length; i++) {
-            if (this.chart.series[i].name === obj.PointName)
-              this.chart.series[i].addPoint([Date.parse(obj.DTime), obj[setAttr]], true, false);
-          }
-        }
-      });
-    },
     mounted () {
       let info = this.info;
       this.createChart();
       this.chart.showLoading("<img src='../static/image/spinner_B.gif'>");
-      this.filterByPointAndTime(info.url, info.mark, info.itemId, info.projectId, info.pointNames,
+      this.renderChart(info.url, info.mark, info.itemId, info.projectId, info.pointNames,
         info.startDate, info.endDate, info.attrValue, info.attrText, info.attrUnit);
     },
     methods: {
-      filterByPointAndTime(variety, mark, itemId, projectId, pointNames, startTime, endTime, attrY, attrText, attrUnit, pageIndex){
+      /***
+       * 初始化与更改chart
+       */
+      renderChart(variety, mark, itemId, projectId, pointNames, startTime, endTime, attrY, attrText, attrUnit, pageIndex){
         window.mainConfig.http.getMonitorItemData_R(variety, mark, itemId, projectId, pointNames, startTime, endTime, {
           syncNo: 1, pageIndex: pageIndex || 1, pageSize: 300
         }).then((response) => {
           if (response.data && response.data.dataList && response.data.dataList.length > 0) { // 判断返回内容是否有数据
-            this.seriesOptions = this.getSeriesOptions(response.data.dataList, attrY);
+            this.seriesOptions = this.getSeries(response.data.dataList, attrY);
             this.createChart(attrText, attrUnit, mark);
           } else {
             layer.msg('当前时间测点暂无数据');
@@ -76,7 +56,11 @@
           toastr.error('通信失败');
         })
       },
-      getSeriesOptions(data, attrY){
+
+      /***
+       * 把后台数据转换成chart所需数据
+       */
+      getSeries(data, attrY){
         let map = {}, dest = [];
         if (data) {
           for (let i = 0; i < data.length; i++) {
@@ -102,7 +86,11 @@
           }
         }
         return {dest};
-      },//getSeriesOptions
+      },//getSeries
+
+      /***
+       * chart setting
+       */
       createChart(attrText, attrUnit, mark) {
         Highcharts.setOptions({
           global: {useUTC: false},
@@ -120,46 +108,14 @@
             downloadSVG: '导出 SVG'
           }
         });
-        let chartOptions = this.getChartOptions(attrText, attrUnit, mark);
+        let chartOptions = this.getOptions(attrText, attrUnit, mark);
         this.chart = Highcharts.stockChart('chart', chartOptions);
       },//createChart
-      afterSetExtremes(e){
-        this.chart.xAxis[0].setExtremes(e.min, e.max, true, false);
-        if (e.min <= e.dataMin) {
-          if (e.min > Date.parse(this.info.startDate)) {
-            if (this.touchTimes === 1) {
-              this.touchTimes = this.touchTimes + 1;
-              this.pageIndex = this.pageIndex + 1;
-              this.chart.showLoading("<img src='../static/image/spinner_B.gif'>正在加载更早前数据");
-              window.mainConfig.http.getMonitorItemData_R(this.info.url, this.info.mark, this.itemId, this.info.projectId, this.info.pointNames,
-                this.info.startDate, this.info.endDate, {
-                  syncNo: 1, pageIndex: this.pageIndex || 1, pageSize: 1000
-                }).then((response) => {
-                let seriesOptions = this.getSeriesOptions(response.data.dataList, this.info.attrValue);
-                if (seriesOptions.dest.length === 0) {
-                  layer.msg('已经加载全部数据');
-                  this.chart.hideLoading();
-                  return;
-                }
-                for (let i = 0; i < this.chart.series.length / 2; i++) {
-                  let oldX = (_.find(this.seriesOptions.dest, (series) => this.chart.series[i].name === series.name)).data,
-                    newX = (_.find(seriesOptions.dest, (series) => this.chart.series[i].name === series.name)).data;
-                  this.chart.series[i].setData(newX.concat(oldX));
-                  this.chart.hideLoading();
-                }
-              }, (response) => {
-                toastr.error('通信失败');
-              })
-//                }.bind(this)
-//              });
-            }
-          } else {
-            console.log('超出范围了');
-            toastr.warning('超出范围了');
-          }
-        }
-      },
-      getChartOptions(text, unit, mark){
+
+      /***
+       * 初始化与更改chart
+       */
+      getOptions(text, unit, mark){
         return {
           credits: {enabled: false},
           chart: {
@@ -170,7 +126,7 @@
           },
           title: {text: '水位监测', style: {color: '#7cb5ec', fontSize: '1.8em', fill: '#7cb5ec'}},
           subtitle: {
-            text: mark == 1 ? '当前显示的是全部测点数据' : ''
+            text: mark === 1 ? '当前显示的是全部测点数据' : ''
           },
           colors: ['#80699B', '#DB843D', '#89A54E', '#3D96AE', '#4572A7', '#AA4643', '#92A8CD', '#A47D7C', '#B5CA92'],
           yAxis: {
@@ -291,7 +247,44 @@
           },
           series: this.seriesOptions.dest,
         }
-      }
+      },//getOptions
+
+      afterSetExtremes(e){
+        this.chart.xAxis[0].setExtremes(e.min, e.max, true, false);
+        if (e.min <= e.dataMin) {
+          if (e.min > Date.parse(this.info.startDate)) {
+            if (this.touchTimes === 1) {
+              this.touchTimes = this.touchTimes + 1;
+              this.pageIndex = this.pageIndex + 1;
+              this.chart.showLoading("<img src='../static/image/spinner_B.gif'>正在加载更早前数据");
+              window.mainConfig.http.getMonitorItemData_R(this.info.url, this.info.mark, this.itemId, this.info.projectId, this.info.pointNames,
+                this.info.startDate, this.info.endDate, {
+                  syncNo: 1, pageIndex: this.pageIndex || 1, pageSize: 1000
+                }).then((response) => {
+                let seriesOptions = this.getSeries(response.data.dataList, this.info.attrValue);
+                if (seriesOptions.dest.length === 0) {
+                  layer.msg('已经加载全部数据');
+                  this.chart.hideLoading();
+                  return;
+                }
+                for (let i = 0; i < this.chart.series.length / 2; i++) {
+                  let oldX = (_.find(this.seriesOptions.dest, (series) => this.chart.series[i].name === series.name)).data,
+                    newX = (_.find(seriesOptions.dest, (series) => this.chart.series[i].name === series.name)).data;
+                  this.chart.series[i].setData(newX.concat(oldX));
+                  this.chart.hideLoading();
+                }
+              }, (response) => {
+                toastr.error('通信失败');
+              })
+//                }.bind(this)
+//              });
+            }
+          } else {
+            console.log('超出范围了');
+            toastr.warning('超出范围了');
+          }
+        }
+      },
     }//methods
   }
 </script>
