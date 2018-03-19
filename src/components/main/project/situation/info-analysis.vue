@@ -1,26 +1,27 @@
 <template>
-  <div class="box box-info box-solid div-margin-bottom">
-    <div class="box-body">
-      <div class="form-group">
-        <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10 wrap-padding">
-          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 wrap-padding">
-            <div class="input-group ">
-              <label for="monitorItem" class="input-group-addon addon-label">监测项</label>
-              <vue-select2 id="monitorItem" :ajax=true :paging=false :multiple=false ref="itemSlt"
-                           :ajax-url="monitorItems.ajaxUrl"
-                           :init-data="monitorItems.initData"
-                           :placeholder="monitorItems.placeholder"
-                           :evt-selected="monitorItems.evtSelected"></vue-select2>
+  <div>
+    <div class="box box-info box-solid div-margin-bottom">
+      <div class="box-body">
+        <div class="form-group">
+          <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10 wrap-padding">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 wrap-padding">
+              <div class="input-group ">
+                <label class="input-group-addon addon-label">监测项</label>
+                <vue-select2 :ajax=true :paging=false :multiple=false ref="itemSlt"
+                             :ajax-url="itemOption.ajaxUrl"
+                             :init-data="itemOption.initData"
+                             :placeholder="itemOption.placeholder"
+                             :evt-selected="itemOption.evtSelected"></vue-select2>
+              </div>
             </div>
-          </div>
-          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 wrap-padding">
-            <div class="input-group">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 wrap-padding">
+              <div class="input-group">
               <span class="input-group-addon">
-                <input id="dateCheck" class="hiddenCheckbox" type="checkbox" v-model="dateCheck">
+                <input id="dateCheck" class="hiddenCheckbox" type="checkbox" v-model="dateCheckD">
                 <label for="dateCheck"></label>
               </span>
-              <label class="input-group-addon addon-label">日期</label>
-              <span>
+                <label class="input-group-addon addon-label">日期</label>
+                <span>
                 <div class="col-xs-6 picker-wrapper">
                   <input id="dateSelect1" class="form-control daterangepicker" placeholder="请输入开始时间">
                 </div>
@@ -28,499 +29,450 @@
                   <input id="dateSelect2" class="form-control daterangepicker" placeholder="请输入结束时间">
                 </div>
               </span>
+              </div>
             </div>
-          </div>
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 wrap-padding"
-               v-if="itemMark==2 || itemMark==16 && isRender">
-            <div id="toggleHide">
-              <div class="input-group">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 wrap-padding"
+                 v-if="itemType==2 || itemType==16 && isRender">
+              <div id="toggleHide">
+                <div class="input-group">
                 <span class="input-group-addon">
-                  <input id="pointGroupCheck" class="hiddenCheckbox" type="checkbox" v-model="pointGroupCheck">
+                  <input id="pointGroupCheck" class="hiddenCheckbox" type="checkbox" v-model="groupCheckD">
                   <label for="pointGroupCheck"></label>
                 </span>
-                <label for="pointGroup" class="input-group-addon addon-label select-label">测点点组</label>
-                <vue-select2 id="pointGroup" :ajax=true :paging=false :multiple=false ref="groupSlt"
-                             :ajax-url="monitorPointGroups.ajaxUrl"
-                             :init-data="monitorPointGroups.initData"
-                             :placeholder="monitorPointGroups.placeholder"
-                             :evt-selected="monitorPointGroups.evtSelected">
+                  <label for="pointGroup" class="input-group-addon addon-label select-label">测点点组</label>
+                  <vue-select2 :ajax=true :paging=false :multiple=false ref="groupSlt"
+                               :ajax-url="groupOption.ajaxUrl"
+                               :init-data="groupOption.initData"
+                               :placeholder="groupOption.placeholder"
+                               :evt-selected="groupOption.evtSelected">
+                  </vue-select2>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 wrap-padding" id="toggleShow" v-if="itemType !=16">
+              <div class="input-group">
+              <span class="input-group-addon">
+                <input id="pointCheck" class="hiddenCheckbox" type="checkbox" v-model="pointCheckD">
+                <label for="pointCheck"></label>
+              </span>
+                <label class="input-group-addon addon-label select-label" style="*margin-top: 1px;">测点</label>
+                <vue-select2 :ajax=true :paging=false :multiple=true :allow-clear=true ref="pointSlt"
+                             :ajax-url="pointOption.ajaxUrl"
+                             :init-data="pointOption.initData"
+                             :placeholder="pointOption.placeholder"
+                             :evt-selected="pointOption.evtSelected">
                 </vue-select2>
               </div>
             </div>
-          </div>
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 wrap-padding" id="toggleShow" v-if="itemMark !=16">
-            <div class="input-group">
-              <span class="input-group-addon">
-                <input id="pointCheck" class="hiddenCheckbox" type="checkbox" v-model="pointCheck">
-                <label for="pointCheck"></label>
-              </span>
-              <label for="point" class="input-group-addon addon-label select-label" style="*margin-top: 1px;">测点</label>
-              <vue-select2 id="point" :ajax=true :paging=false :multiple=true :allow-clear=true ref="pointSlt"
-                           :ajax-url="monitorPoints.ajaxUrl"
-                           :init-data="monitorPoints.initData"
-                           :placeholder="monitorPoints.placeholder"
-                           :evt-selected="monitorPoints.evtSelected">
-              </vue-select2>
+            <div class="col-xs-12 col-sm-12 wrap-padding"
+                 v-if="itemType!=5 && itemType!=7 && itemType!=20">
+              <div class="input-group" id="showTypes">
+                <label for="showType" class="input-group-addon addon-label">显示类型</label>
+                <select id="showType" class="form-control" v-model="attrValue">
+                  <option v-for="option in attrOption" :value="option.value" :selected="option.selected">
+                    {{ option.text }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 wrap-padding" v-if="itemType===20 && isRender">
+              <div class="input-group">
+                <label for="dataType" class="input-group-addon addon-label">数据类型</label>
+                <select id="dataType" class="form-control type-select" v-model="calculateType">
+                  <option value=0>极坐标数据</option>
+                  <option value=1 selected="selected">解算数据</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 wrap-padding" v-if="itemType===20 && isRender">
+              <div class="input-group">
+                <label for="pointType" class="input-group-addon addon-label">测点类型</label>
+                <select id="pointType" class="form-control type-select" v-model="pointType">
+                  <option value=0>控制点</option>
+                  <option value=1 selected="selected">监测点</option>
+                  <!--<option value="2">联测点</option>-->
+                </select>
+              </div>
             </div>
           </div>
-          <div class="col-xs-12 col-sm-12 wrap-padding"
-               v-if="itemMark!=5 && itemMark!=7 && itemMark!=20">
-            <div class="input-group" id="showTypes">
-              <label for="showType" class="input-group-addon addon-label">显示类型</label>
-              <select id="showType" class="form-control" v-model="attrValue">
-                <option v-for="option in attrOption" :value="option.value" :selected="option.selected">
-                  {{ option.text }}
-                </option>
-              </select>
+          <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2 wrap-padding">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 wrap-padding">
+              <button class="btn btn-info btn-block" v-on:click.capture="query()">查询</button>
             </div>
           </div>
-          <div class="col-xs-12 col-sm-12 wrap-padding" v-if="itemMark===20 && isRender">
-            <div class="input-group">
-              <label for="dataType" class="input-group-addon addon-label">数据类型</label>
-              <select id="dataType" class="form-control type-select" v-model="calculateType">
-                <option value=0>极坐标数据</option>
-                <option value=1 selected="selected">解算数据</option>
-              </select>
+          <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2 wrap-padding">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 wrap-padding">
+              <button class="btn btn-info btn-block" v-on:click.capture="queryAll()">查询全部</button>
             </div>
-          </div>
-          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 wrap-padding" v-if="itemMark===20 && isRender">
-            <div class="input-group">
-              <label for="pointType" class="input-group-addon addon-label">测点类型</label>
-              <select id="pointType" class="form-control type-select" v-model="pointType">
-                <option value=0>控制点</option>
-                <option value=1 selected="selected">监测点</option>
-                <!--<option value="2">联测点</option>-->
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2 wrap-padding">
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 wrap-padding">
-            <button class="btn btn-info btn-block" v-on:click.capture="query()">查询</button>
-          </div>
-        </div>
-        <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2 wrap-padding">
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 wrap-padding">
-            <button class="btn btn-info btn-block" v-on:click.capture="queryAll()">查询全部</button>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="min-wrapper">
-    <div class="min-size">
-      <img src="/static/image/spinner_B.gif" class="loadingImg "/>
-      <water-level :info.sync="info" v-if="itemMark===1 && isRender"></water-level><!--水位-->
-      <in-displacement :info.sync="info" v-if="itemMark===2 && isRender"></in-displacement><!--内部位移 -->
-      <brace :info.sync="info" v-if="itemMark===3 && isRender"></brace><!--支撑轴力-->
-      <ombrometer :info.sync="info" v-if="itemMark===5 && isRender"></ombrometer><!--降雨量-->
-      <joint :info.sync="info" v-if="itemMark===6 && isRender"></joint><!--裂缝-->
-      <surface-gps :info.sync="info" v-if="itemMark===7 && isRender"></surface-gps><!--GPS-->
-      <dry-shoal :info.sync="info" v-if="itemMark===8 && isRender"></dry-shoal><!--干滩-->
-      <saturation :info.sync="info" v-if="itemMark===9 && isRender"></saturation><!--浸润线-->
-      <turbidity :info.sync="info" v-if="itemMark===10 && isRender"></turbidity><!--浊度-->
-      <seepage :info.sync="info" v-if="itemMark===11 && isRender"></seepage><!--渗流量-->
-      <stress :info.sync="info" v-if="itemMark===12 && isRender"></stress><!--压力-->
-      <strain :info.sync="info" v-if="itemMark===13 && isRender"></strain><!--应力-->
-      <soil-moisture :info.sync="info" v-if="itemMark===14 && isRender"></soil-moisture><!--土壤水分-->
-      <water-elevation :info.sync="info" v-if="itemMark===15 && isRender"></water-elevation><!--高程水准/沉降-->
-      <concrete-brace :info.sync="info" v-if="itemMark===16 && isRender"></concrete-brace><!--混凝土支撑-->
-      <pressure :info.sync="info" v-if="itemMark===17 && isRender"></pressure><!--压强-->
-      <ph :info.sync="info" v-if="itemMark===18 && isRender"></ph><!--PH-->
-      <in-settlement :info.sync="info" v-if="itemMark===19 && isRender"></in-settlement><!--内部沉降-->
-      <total-station :info.sync="info" v-if="itemMark===20 && isRender"></total-station><!--全站仪位移-->
-      <data-sensor :info.sync="info" v-if="itemMark===50 && isRender"></data-sensor><!--原始数据 湘银河-->
+    <div class="min-wrapper">
+      <div class="min-size">
+        <!--<img src="/static/image/spinner_B.gif" class="loadingImg "/>-->
+        <water-level :info="info" v-if="itemType===1"></water-level><!--水位-->
+        <!--<in-displacement :info.sync="info" v-if="itemType===2 && isRender"></in-displacement>&lt;!&ndash;内部位移 &ndash;&gt;-->
+        <!--<brace :info.sync="info" v-if="itemType===3 && isRender"></brace>&lt;!&ndash;支撑轴力&ndash;&gt;-->
+        <!--<ombrometer :info.sync="info" v-if="itemType===5 && isRender"></ombrometer>&lt;!&ndash;降雨量&ndash;&gt;-->
+        <!--<joint :info.sync="info" v-if="itemType===6 && isRender"></joint>&lt;!&ndash;裂缝&ndash;&gt;-->
+        <!--<surface-gps :info.sync="info" v-if="itemType===7 && isRender"></surface-gps>&lt;!&ndash;GPS&ndash;&gt;-->
+        <!--<dry-shoal :info.sync="info" v-if="itemType===8 && isRender"></dry-shoal>&lt;!&ndash;干滩&ndash;&gt;-->
+        <!--<saturation :info.sync="info" v-if="itemType===9 && isRender"></saturation>&lt;!&ndash;浸润线&ndash;&gt;-->
+        <!--<turbidity :info.sync="info" v-if="itemType===10 && isRender"></turbidity>&lt;!&ndash;浊度&ndash;&gt;-->
+        <!--<seepage :info.sync="info" v-if="itemType===11 && isRender"></seepage>&lt;!&ndash;渗流量&ndash;&gt;-->
+        <!--<stress :info.sync="info" v-if="itemType===12 && isRender"></stress>&lt;!&ndash;压力&ndash;&gt;-->
+        <!--<strain :info.sync="info" v-if="itemType===13 && isRender"></strain>&lt;!&ndash;应力&ndash;&gt;-->
+        <!--<soil-moisture :info.sync="info" v-if="itemType===14 && isRender"></soil-moisture>&lt;!&ndash;土壤水分&ndash;&gt;-->
+        <!--<water-elevation :info.sync="info" v-if="itemType===15 && isRender"></water-elevation>&lt;!&ndash;高程水准/沉降&ndash;&gt;-->
+        <!--<concrete-brace :info.sync="info" v-if="itemType===16 && isRender"></concrete-brace>&lt;!&ndash;混凝土支撑&ndash;&gt;-->
+        <!--<pressure :info.sync="info" v-if="itemType===17 && isRender"></pressure>&lt;!&ndash;压强&ndash;&gt;-->
+        <!--<ph :info.sync="info" v-if="itemType===18 && isRender"></ph>&lt;!&ndash;PH&ndash;&gt;-->
+        <!--<in-settlement :info.sync="info" v-if="itemType===19 && isRender"></in-settlement>&lt;!&ndash;内部沉降&ndash;&gt;-->
+        <!--<total-station :info.sync="info" v-if="itemType===20 && isRender"></total-station>&lt;!&ndash;全站仪位移&ndash;&gt;-->
+        <!--<data-sensor :info.sync="info" v-if="itemType===50 && isRender"></data-sensor>&lt;!&ndash;原始数据 湘银河&ndash;&gt;-->
+      </div>
     </div>
   </div>
 </template>
 <script>
+  import {bus} from '../../../../managers/utils/bus';
   import '../../../../assets/css/pre-situation.scss';
-  import AnalysisEnum from '../../managers/enum/analysis-enum';
+  import AnalysisEnum from '../../../../managers/enum/analysis-enum';
+  import chart from './info-analysis-chart/water-level.vue';
   export default {
     components: {
-      'water-level': require('../project-situation-info-pages/analysis-water-level.vue'),
-      'in-displacement': require('../project-situation-info-pages/analysis-in-displacement.vue'),
-      'clinometer-hole': require('../project-situation-info-pages/analysis-clinometer-hole.vue'),
-      'brace': require('../project-situation-info-pages/analysis-brace-axial-force.vue'),
-      'ombrometer': require('../project-situation-info-pages/analysis-ombrometer.vue'),
-      'joint': require('../project-situation-info-pages/analysis-jointmeter.vue'),
-      'surface-gps': require('../project-situation-info-pages/analysis-surface-GPS.vue'),
-      'dry-shoal': require('../project-situation-info-pages/analysis-dry-shoal.vue'),
-      'saturation': require('../project-situation-info-pages/analysis-saturation.vue'),
-      'turbidity': require('../project-situation-info-pages/analysis-turbidity.vue'),
-      'seepage': require('../project-situation-info-pages/analysis-seepage.vue'),
-      'stress': require('../project-situation-info-pages/analysis-stress.vue'),
-      'strain': require('../project-situation-info-pages/analysis-strain.vue'),
-      'soil-moisture': require('../project-situation-info-pages/analysis-soil-moisture.vue'),
-      'water-elevation': require('../project-situation-info-pages/analysis-water-elevation.vue'),
-      'concrete-brace': require('../project-situation-info-pages/analysis-concrete-brace.vue'),
-      'pressure': require('../project-situation-info-pages/analysis-pressure.vue'),
-      'ph': require('../project-situation-info-pages/analysis-PH.vue'),
-      'in-settlement': require('../project-situation-info-pages/analysis-in-settlement.vue'),
-      'total-station': require('../project-situation-info-pages/analysis-total-station.vue'),
-      'data-sensor': require('../project-situation-info-pages/analysis-data-sensor.vue'),
+      'water-level': chart,
+//      'in-displacement': require('../project-situation-info-pages/analysis-in-displacement.vue'),
+//      'clinometer-hole': require('../project-situation-info-pages/analysis-clinometer-hole.vue'),
+//      'brace': require('../project-situation-info-pages/analysis-brace-axial-force.vue'),
+//      'ombrometer': require('../project-situation-info-pages/analysis-ombrometer.vue'),
+//      'joint': require('../project-situation-info-pages/analysis-jointmeter.vue'),
+//      'surface-gps': require('../project-situation-info-pages/analysis-surface-GPS.vue'),
+//      'dry-shoal': require('../project-situation-info-pages/analysis-dry-shoal.vue'),
+//      'saturation': require('../project-situation-info-pages/analysis-saturation.vue'),
+//      'turbidity': require('../project-situation-info-pages/analysis-turbidity.vue'),
+//      'seepage': require('../project-situation-info-pages/analysis-seepage.vue'),
+//      'stress': require('../project-situation-info-pages/analysis-stress.vue'),
+//      'strain': require('../project-situation-info-pages/analysis-strain.vue'),
+//      'soil-moisture': require('../project-situation-info-pages/analysis-soil-moisture.vue'),
+//      'water-elevation': require('../project-situation-info-pages/analysis-water-elevation.vue'),
+//      'concrete-brace': require('../project-situation-info-pages/analysis-concrete-brace.vue'),
+//      'pressure': require('../project-situation-info-pages/analysis-pressure.vue'),
+//      'ph': require('../project-situation-info-pages/analysis-PH.vue'),
+//      'in-settlement': require('../project-situation-info-pages/analysis-in-settlement.vue'),
+//      'total-station': require('../project-situation-info-pages/analysis-total-station.vue'),
+//      'data-sensor': require('../project-situation-info-pages/analysis-data-sensor.vue'),
     },
-    props: {
-      info: {
-        type: Object,
-        required: true
-      }
+    computed: {
+      itemObj1: {
+        set: function (obj) {
+          this.$store.dispatch('setItemObj1', obj);
+        },
+        get: function () {
+          return this.$store.getters.getItemObj1;
+        }
+      },
+      groupObj: {
+        set: function (obj) {
+          this.$store.dispatch('setItemObj2', obj);
+        },
+        get: function () {
+          return this.$store.getters.getItemObj2;
+        }
+      },
+      pointObj1: {
+        set: function (obj) {
+          this.$store.dispatch('setPointObj1', obj);
+        },
+        get: function () {
+          return this.$store.getters.getPointObj1;
+        }
+      },
+      startDate: {
+        set: function (obj) {
+          this.$store.dispatch('setStartDate', obj);
+        },
+        get: function () {
+          return this.$store.getters.getStartDate;
+        }
+      },
+      endDate: {
+        set: function (obj) {
+          this.$store.dispatch('setEndDate', obj);
+        },
+        get: function () {
+          return this.$store.getters.getEndDate;
+        }
+      },
+      dateCheck: {
+        set: function (obj) {
+          this.$store.dispatch('setDateCheck', obj);
+        },
+        get: function () {
+          this.dateCheckD = this.dateCheckD !== '' ? this.dateCheckD : this.$store.getters.getPointCheck;
+          return this.dateCheckD;
+        }
+      },
+      groupCheck: {
+        set: function (obj) {
+          this.$store.dispatch('setGroupCheck', obj);
+        },
+        get: function () {
+          this.groupCheckD = this.groupCheckD !== '' ? this.groupCheckD : this.$store.getters.getGroupCheck;
+          return this.groupCheckD;
+        }
+      },
+      pointCheck: {
+        set: function (obj) {
+          this.$store.dispatch('setPointCheck', obj);
+        },
+        get: function () {
+          this.pointCheckD = this.pointCheckD !== '' ? this.pointCheckD : this.$store.getters.getPointCheck;
+          return this.pointCheckD;
+        }
+      },
     },
     data () {
       return {
+        info: {},
         projectId: {},
-        dateCheck: false,
-        pointCheck: false,
-        pointGroupCheck: false,
+        dateCheckD: false,
+        pointCheckD: false,
+        groupCheckD: false,
         calculateType: 1,//解算类型默认为0
         pointType: 1,//点类型默认为1
         startEndDate: {},
         timeout: null,
         firstTime: true, //首次加载不触发watch
-        itemOption: {},  //AnalysisEnum.getItemMark(Name,DataType)
-        attrOption: [],  //itemOption.DataType
-        attrValue: null,//itemOption.DataType.value
-        attrText: null, //itemOption.DataType.text
-        attrUnit: null,  //itemOption.DataType.unit
+        request: {},//AnalysisEnum.getItemMark(Name,dataType)
+        attrOption: [],  //request.dataType
+        attrValue: null,//request.dataType.value
+        attrText: null, //request.dataType.text
+        attrUnit: null,  //request.dataType.unit
         isRender: false,
-        itemMark: null,
-        monitorItems: {
+        itemType: null,
+        itemOption: {
           initData: [],
           placeholder: '请选择监测项',
           evtSelected: function (evt, data) {
-            if (data && data.length > 0) {
-              let item = data[0].obj;
-              this.isRender = false;
-              this.pointCheck = false;
-              this.dateCheck = false;
-//              this.pointGroupCheck = false;
-              this.info.itemObj = item;
-              this.$dispatch('monitorItem', item);
-              this.$broadcast('refresh', item);
-              this.itemMark = item.monitorTypeId;
-              this.itemOption = AnalysisEnum.getItemMark(item.monitorTypeId);
-              this.attrOption = this.itemOption.DataType;
-              this.attrValue = this.attrOption[0].value;
-              this.attrText = this.attrOption[0].text;
-              this.attrUnit = this.attrOption[0].unit;
-              this.info.itemOption = {
-                Url: this.itemOption.Url,
-                attrValue: this.attrValue,
-                attrText: this.attrText,
-                attrUnit: this.attrUnit,
-                calculateType: this.calculateType,
-                pointType: this.pointType,
-                mark: 1
-              };
-              this.info.itemMark = this.itemMark;
-            }
+            this.itemObj1 = data[0];
+            this.initItemOption();
           }.bind(this),
           ajaxUrl: function () {
             return window.mainConfig.url.getMonitorItemPage_U(this.projectId);
           }.bind(this)
         },
-        monitorPointGroups: {
+        groupOption: {
           initData: [],
           placeholder: '请选择测点点组',
           evtSelected: function (evt, data) {
             if (data && data.length > 0) {
-              this.pointGroupCheck = true;
+              this.groupCheckD = true;
               this.isRender = true;
               let groupItem = data[0].obj;
-              this.info.pointGroupObj = groupItem;
-              this.monitorGroupId = this.info.pointGroupObj.id;
-//              console.log(this.info.pointGroupObj);
-              this.$dispatch('monitorGroupItem', groupItem);
-              this.info.pointGroupObj = _.map(data, (d) => {
-                return d.obj;
-              });
+              this.groupObj = groupItem;
+              this.$store.dispatch('setGroupObj', groupItem);
+              this.groupObj = _.map(data, (d) => d.obj);
             }
           }.bind(this),
           ajaxUrl: function () {
-            return window.mainConfig.url.selectItemRelMonitorPointGroup(this.info.itemObj.id);
+            return window.mainConfig.url.selectItemRelMonitorPointGroup(this.itemObj1.id);
           }.bind(this)
         },
-        monitorPoints: {
+        pointOption: {
           initData: [],
           placeholder: '请选择测点',
           evtSelected: function (evt, data) {
             if (data && data.length > 0) {
-              this.pointCheck = true;
-              this.info.pointObj = _.map(data, (d) => {
-                return d.obj;
-              });
+              this.pointCheckD = true;
+              this.pointObj1 = _.map(data, (d) => d.obj);
             }
           }.bind(this),
           ajaxUrl: function () {
-            if (this.info.pointGroupObj && this.info.pointGroupObj.length > 0) {
-              return window.mainConfig.url.selectByGroupIdPoint(this.info.pointGroupObj.id);
+            if (this.groupObj && this.groupObj.length > 0) {
+              return window.mainConfig.url.selectByGroupIdPoint(this.groupObj.id);
             } else {
-              return window.mainConfig.url.getRelPointOfItems(this.info.itemObj.id);
+              return window.mainConfig.url.getRelPointOfItems(this.itemObj1.id);
             }
           }.bind(this)
         }
       };
     },
     watch: {
-//      'attrValue': function (e) {
-//        if (!this.firstTime) {
-//          let obj = _.find(this.attrOption, function (type) {
-//            return type.value === e;
-//          });
-//          this.attrText = obj.text;
-//          this.attrUnit = obj.unit;
-//          this.info.itemOption = {
-//            Url: this.itemOption.Url,
-//            attrValue: this.attrValue,
-//            attrText: this.attrText,
-//            attrUnit: this.attrUnit,
-//            calculateType: this.calculateType,
-//            pointType: this.pointType,
-//            mark: 1
-//          };
-//        }
-//      },
+      'attrValue': function (e) {
+        if (!this.firstTime) {
+          let obj = _.find(this.attrOption, (type) => type.value === e);
+          this.attrText = obj.text;
+          this.attrValue = obj.value;
+          this.attrUnit = obj.unit;
+        }
+      },
 //      'calculateType': function (e) {
 //        if (!this.firstTime) {
-//          this.info.itemOption.calculateType = e;
+//          this.request.calculateType = e;
 //        }
 //      },
-//      'pointType': function (e) {
-//        if (!this.firstTime) {
-//          this.info.itemOption.pointType = e;
-//        }
-//      },
-//      'dateCheck': function (e) {
-//        this.info.dateCheck = e;
-//      }
     },
     route: {
       deactivate: function (transition) {
         clearInterval(this.timeout);
-//        transition.next;
         setTimeout(transition.next, 10);
       }
     },
     created: function () {
-      this.$on('updateItem', function (data) {
-        this.startEndDate = {};
-        if (data) {
-          this.itemOption = AnalysisEnum.getItemMark(data.monitorTypeId);
-          this.attrOption = this.itemOption.DataType;
+    },
+    mounted () {
+      this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
+      this.initDatePicker();
+      this.initItemOption();
+//      this.initGroupOption();
+//      this.initPointOption();
+//      this.webSocket();
+//      this.info = Object.assign({}, this.info);
+//      console.log('加载分析页面完成');
+    },
+    methods: {
+      /***
+       * 初始化监测项选项, this.itemObj1 自动从$store中获取
+       */
+      initItemOption(){
+        if (this.itemObj1 && this.itemObj1.hasOwnProperty('id')) {
+          this.isRender = false;
+          this.dateCheckD = false;
+          this.groupCheckD = false;
+          this.pointCheckD = false;
+          let item = Object.assign({}, this.itemObj1);
+          let request = AnalysisEnum.getItemMark(item.monitorTypeId);
+          this.itemType = item.monitorTypeId;
+          this.attrOption = request.dataType;
           this.attrValue = this.attrOption[0].value;
           this.attrText = this.attrOption[0].text;
           this.attrUnit = this.attrOption[0].unit;
-          this.info.itemOption = {
-            Url: this.itemOption.Url,
-            mark: 1,
+          if (this.$refs.itemSlt) this.$refs.itemSlt.update([{id: item.id, text: item.name, obj: item}]);
+          this.request = {
+            url: request.url,
             attrValue: this.attrValue,
             attrText: this.attrText,
             attrUnit: this.attrUnit,
             calculateType: this.calculateType,
-            pointType: this.pointType
-          };
-          this.$refs.itemSelector.$emit('update', [{id: data.id, text: data.name, obj: data}]);
-          this.itemMark = data.monitorTypeId;       // 监测项(子组件)渲染条件一
-        } else {
-          this.info.itemObj = {};
-          this.$refs.itemSelector.clear(true);
-        }
-      });
-      this.$on('updateGroup', function (data) {
-        if (data) {
-          let self = this;
-          this.info.pointGroupObj = data;
-          this.monitorGroupId = this.info.pointGroupObj.id;
-//         let timeout=setTimeout(function () {
-//            clearTimeout(timeout);
-//         })
-          this.$refs.pointSelector.clear(true);
-//          this.$refs.pointGroupSelector.$emit('update', [{id: data.id, text: data.name, obj: data}]);
-        } else {
-          this.info.pointGroupObj = {};
-//          this.$refs.pointGroupSelector.clear(true);
-//          this.isRender = true;
-        }
-      });
-      this.$on('updatePoint', function (data) {
-        if (data.length !== 0) {
-          this.info.pointObj = data.slice(0, 1);
-          this.$refs.pointSelector.clear(true);
-//          this.$refs.pointSelector.$emit('update', [{id: data[0].id, text: data[0].name, obj: data[0]}]);
-          this.isRender = true; // 监测项(子组件)渲染条件二
-        } else {
-          this.info.pointObj = [];
-//          this.$refs.pointSelector.clear(true);
-          this.isRender = true; // 监测项(子组件)渲染条件二
-        }
-      });
-    },
-    mounted () {
-      this.projectId = this.info.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
-      this.info = Object.assign({}, this.info);
-      this.initItemOption();
-      this.initPointGropOption();
-      this.initPointOption();
-      this.webSocket();
-      this.initDateRangePicker();
-      this.initDateTime();
-      console.log('加载分析页面完成');
-    },
-    methods: {
-      initItemOption(){
-        if (this.itemObj1 && this.itemObj1.hasOwnProperty('id')) {
-          let item = Object.assign({}, this.itemObj1);
-          let request = AnalysisEnum.getItemMark(item.monitorTypeId);
-          this.itemType = item.monitorTypeId;
-          if (this.$refs.itemSlt) this.$refs.itemSlt.update([{id: item.id, text: item.name, obj: item}]);
-          this.initTableConfig();
-          this.request = {
-            url: request.url,
-            calculateType: this.calculateType,
             pointType: this.pointType,
             mark: 1
           };
+          this.query();
+        } else {
+          if (this.$refs.itemSlt) this.$refs.itemSlt.update([{id: null}]);
         }
       },
-      initPointGropOption(){
-        if (this.info.pointGroupObj) {
-//          let pointGroup = this.info.pointGroupObj;
-//          console.log(this.info.pointGroupObj.id);
-//          this.monitorPointGroups.initData.push({id: pointGroup.id, text: pointGroup.name, obj: pointGroup})
+      initGroupOption(){
+        if (this.groupObj && this.groupObj.id) {
+          let group = this.groupObj;
+          if (this.$refs.groupSlt) this.$refs.groupSlt.update([{id: group.id, text: group.name, obj: group}]);
           this.isRender = true;
         }
         this.firstTime = false;
       },
       initPointOption(){
-        if (this.info.pointObj && this.info.pointObj.length > 0) {
-//          this.dateCheck = true;
-          this.dateCheck = false;
-          let point = this.info.pointObj;
-//          this.monitorPoints.initData.push({id: point[0].id, text: point[0].name, obj: point[0]});  //只显示一个测点数据
-          this.isRender = true;//render child condition 2
+        if (this.pointObj1 && this.pointObj1.length > 0) {
+          let pointList = this.pointObj1.map((obj, idx) => {
+
+            return {id: obj.id, text: obj.name, obj: obj}
+          });
+          if (this.$refs.pointSlt) this.$refs.pointSlt.update(pointList);
+          this.isRender = true;
         }
       },
       query(){
         let mark = null, startDate = null, endDate = null;
         let pointNames, groupNames, allNames = [];
-        if (this.pointCheck === false && this.dateCheck === false && this.pointGroupCheck === false) mark = 1;
-        if (this.pointCheck === true && this.dateCheck === false && this.pointGroupCheck === false) mark = 2;
-        if (this.pointCheck === false && this.dateCheck === true && this.pointGroupCheck === false) mark = 3;
-        if (this.pointCheck === true && this.dateCheck === true && this.pointGroupCheck === false) mark = 4;
-        if (this.itemMark === 2) {
-          if (this.pointGroupCheck === false && this.dateCheck === false && this.pointCheck === false) mark = 5;
-          if (this.pointGroupCheck === true && this.dateCheck === false && this.pointCheck === false) mark = 6;
-          if (this.pointGroupCheck === false && this.dateCheck === true && this.pointCheck === false) mark = 7;
-          if (this.pointGroupCheck === true && this.dateCheck === true && this.pointCheck === false) mark = 8;
+        if (this.pointCheck === false && this.dateCheck === false && this.groupCheck === false) mark = 1;
+        if (this.pointCheck === true && this.dateCheck === false && this.groupCheck === false) mark = 2;
+        if (this.pointCheck === false && this.dateCheck === true && this.groupCheck === false) mark = 3;
+        if (this.pointCheck === true && this.dateCheck === true && this.groupCheck === false) mark = 4;
+        if (this.itemType === 2) {
+          if (this.groupCheck === false && this.dateCheck === false && this.pointCheck === false) mark = 5;
+          if (this.groupCheck === true && this.dateCheck === false && this.pointCheck === false) mark = 6;
+          if (this.groupCheck === false && this.dateCheck === true && this.pointCheck === false) mark = 7;
+          if (this.groupCheck === true && this.dateCheck === true && this.pointCheck === false) mark = 8;
         }
-
         switch (mark) {
-          case 1://select all
-            startDate = '1000-01-01 0:0:0';
+          case 1://select all point
+            startDate = '1000-01-01 00:00:00';
             endDate = '9999-12-31 23:59:59';
-            e.itemOption.pointNames = [];//_.map(e.pointObj, (d) => (d.name));
-            e.itemOption.pointGroupName = [];
+            pointNames = [];
+            groupNames = [];
             break;
-          case 2://ByPoint
-            startDate = '1000-01-01 0:0:0';
+          case 2://by point
+            startDate = '1000-01-01 00:00:00';
             endDate = '9999-12-31 23:59:59';
-            pointNames = _.map(this.pointObj, (d) => encodeURIComponent(d.name));
+            pointNames = _.map(this.pointObj1, (d) => encodeURIComponent(d.name));
             groupNames = _.map(this.groupObj, (d) => encodeURIComponent(d.name));
             allNames = pointNames.concat(groupNames);
             break;
-          case 3://ByTime
-            startDate = this.dateObj.start;
-            endDate = this.dateObj.end;
+          case 3://by time
+            startDate = this.startDate;
+            endDate = this.endDate;
             break;
-          case 4://ByPointAndTime
-            startDate = this.dateObj.start;
-            endDate = this.dateObj.end;
-            pointNames = _.map(this.pointObj, (d) => encodeURIComponent(d.name));
+          case 4://by point and time
+            startDate = this.startDate;
+            endDate = this.endDate;
+            pointNames = _.map(this.pointObj1, (d) => encodeURIComponent(d.name));
             groupNames = _.map(this.groupObj, (d) => encodeURIComponent(d.name));
             allNames = pointNames.concat(groupNames);
             break;
-          case 5://ByPointAndTime
-            startDate = e.startEndDate.startDate.dateL;
-            endDate = e.startEndDate.endDate.dateL;
-            e.itemOption.pointNames = [];//todo
-//            e.monitorGroupId = this.info.pointGroupObj.id;
-            e.monitorGroupId = this.monitorGroupId;
+          case 5://select all group
+            startDate = '1000-01-01 00:00:00';
+            endDate = '9999-12-31 23:59:59';
+            pointNames = _.map(this.pointObj1, (d) => encodeURIComponent(d.name));
+            groupNames = _.map(this.groupObj, (d) => encodeURIComponent(d.name));
             break;
-          case 6://ByPointAndTime
-            startDate = e.startEndDate.startDate.dateL;
-            endDate = e.startEndDate.endDate.dateL;
-            e.itemOption.pointNames = [];
-//            e.monitorGroupId = this.info.pointGroupObj.id;
-            e.monitorGroupId = this.monitorGroupId;
+          case 6://by group
+            startDate = '1000-01-01 00:00:00';
+            endDate = '9999-12-31 23:59:59';
+            pointNames = _.map(this.pointObj1, (d) => encodeURIComponent(d.name));
+            groupNames = _.map(this.groupObj, (d) => encodeURIComponent(d.name));
             break;
-          case 7://ByPointAndTime
-            startDate = e.startEndDate.startDate.dateL;
-            endDate = e.startEndDate.endDate.dateL;
-            e.itemOption.pointNames = [];
-//            e.monitorGroupId = this.info.pointGroupObj.id;
-            e.monitorGroupId = this.monitorGroupId;
+          case 7://by time
+            startDate = this.startDate;
+            endDate = this.endDate;
+            pointNames = _.map(this.pointObj1, (d) => encodeURIComponent(d.name));
+            groupNames = _.map(this.groupObj, (d) => encodeURIComponent(d.name));
             break;
-          case 8://ByPointAndTime
-            startDate = e.startEndDate.startDate.dateL;
-            endDate = e.startEndDate.endDate.dateL;
-            e.itemOption.pointNames = [];
-//            e.monitorGroupId = this.info.pointGroupObj.id;
-            e.monitorGroupId = this.monitorGroupId;
+          case 8://by group and time
+            startDate = this.startDate;
+            endDate = this.endDate;
+            pointNames = _.map(this.pointObj1, (d) => encodeURIComponent(d.name));
+            groupNames = _.map(this.groupObj, (d) => encodeURIComponent(d.name));
             break;
         }
-        this.info.itemOption.mark = mark;
-        let pointNames = [];
-        for (let i = 0; i < e.itemOption.pointNames.length; i++) {
-          let a = e.itemOption.pointNames[i].replace(/\+/g, '%2B').replace(/\+/g, ' %20').replace(/\+/g, '%2F').replace(/\+/g, '%3F')
-            .replace(/\+/g, '%25').replace(/\+/g, '%23').replace(/\+/g, '%26').replace(/\+/g, '%3D');
-          pointNames.push(a);
-        }
-        this.$broadcast('filterChart', {
-          Url: e.itemOption.Url,
-          projectId: e.projectId,
-          monitorItemId: e.itemObj.id,
-          mark: e.itemOption.mark,
-          itemId: e.itemObj.id,                     // 查全部
+        let request = {
+          url: this.request.url,
+          projectId: this.projectId,
+          itemId: this.itemObj1.id,
+          groupId: this.groupObj && this.groupObj.id ? this.groupObj.id : '',
+          mark: mark,
           pointNames: pointNames,
-          pointGroupName: e.itemOption ? e.itemOption.pointGroupName : null,
+          groupName: groupNames,
           startDate: startDate,
           endDate: endDate,
-          attrText: e.itemOption.attrText,
-          attrValue: e.itemOption.attrValue,
-          attrUnit: e.itemOption.attrUnit,
-          calculateType: e.itemOption.calculateType, // 全站仪
-          pointType: e.itemOption.pointType, // 全站仪
-//          monitorGroupId: e.pointGroupObj ? e.pointGroupObj.id : null
-          monitorGroupId: e.monitorGroupId,
-        });
+          attrText: this.attrText,
+          attrValue: this.attrValue,
+          attrUnit: this.attrUnit,
+          calculateType: this.calculateType, // 全站仪
+          pointType: this.pointType, // 全站仪
+        };
+        this.info = Object.assign({}, request);
       },
       queryAll(){
-        let startDate = null, endDate = null, e = this.info;
-        startDate = '1000-01-01 0:0:0';
-        endDate = '9999-12-31 23:59:59';
-        this.$broadcast('filterChart', {
-          Url: e.itemOption.Url,
-          projectId: e.projectId,
-          monitorItemId: e.itemObj.id,
-          mark: 1,
-          itemId: e.itemObj.id,                     // 查全部
-          pointNames: e.itemOption.pointNames,
-          pointGroupName: e.itemOption.pointGroupName,
-          startDate: startDate,
-          endDate: endDate,
-          attrText: e.itemOption.attrText,
-          attrValue: e.itemOption.attrValue,
-          attrUnit: e.itemOption.attrUnit,
-          calculateType: e.itemOption.calculateType, // 全站仪
-          pointType: e.itemOption.pointType, // 全站仪
-          monitorGroupId: e.pointGroupObj ? e.pointGroupObj.id : null
-        });
+//        let startDate = null, endDate = null, e = this.info;
+//        startDate = '1000-01-01 00:00:00';
+//        endDate = '9999-12-31 23:59:59';
       },
       webSocket(){
 //        console.log(window.WebSocket);
         if (window.WebSocket) {
           //更改WebSocket的projectId
-          let encodeURIStr = window.mainConfig.wsUrls.getRealDataWebSockPage(this.projectId);
+          let encodeURIStr = window.mainConfig.wsUrl.getRealDataWebSockPage(this.projectId);
           let webSocket = new WebSocket(encodeURI(encodeURIStr));
           webSocket.onopen = function (evt) {
             //链接建立
@@ -549,7 +501,7 @@
             if (data.commandKey === 'RealtimeData') {
               let dict = JSON.parse(data.dict.RealtimeData);
 //              console.log(dict);
-              if (this.itemMark === dict.monitorTypeCode) {
+              if (this.itemType === dict.monitorTypeCode) {
                 if (dict.jsonData) {
                   let jsonData = JSON.parse(dict.jsonData);
 //                  console.log(jsonData);
@@ -572,36 +524,43 @@
           if (times > 10) clearInterval(this.timeout);
         }.bind(this), 1000);
       },
-      initDateRangePicker(){
-        let component = this;
-        $("#dateSelect1").daterangepicker({
+      initDatePicker(){
+        let _this = this, start = '开始时间', end = '结束时间';
+        let option = {
           singleDatePicker: true,
           showDropdowns: true,
           opens: 'center',
           maxDate: new Date(),
-        }, function (date) {
-          component.info.startEndDate.startDate.dateL = date.format('YYYY-MM-DD HH:mm:ss');
-          component.info.startEndDate.startDate.dateS = date.format('YYYY-MM-DD');
-          if (!component.dateCheck) component.dateCheck = true;
-          component.toDate(component.info.startEndDate.startDate.dateS);
-        });
-        $("#dateSelect2").daterangepicker({
-          singleDatePicker: true,
-          showDropdowns: true,
-          opens: 'center',
-          maxDate: new Date(),
-        }, function (date) {
-          component.info.startEndDate.endDate.dateL = date.format('YYYY-MM-DD 23:59:59');
-          component.info.startEndDate.endDate.dateS = date.format('YYYY-MM-DD');
-          if (!component.dateCheck) component.dateCheck = true;
-        });
-        $('#dateSelect1').on('cancel.daterangepicker', function (ev, picker) {
-          $("#dateSelect").val('请选择日期');
-        });
-        $('#dateSelect2').on('cancel.daterangepicker', function (ev, picker) {
-          $("#dateSelect").val('请选择日期');
-        });
+          timePicker: true,
+          timePickerIncrement: 1,
+          timePicker24Hour: true,
+          locale: {
+            format: 'YYYY-MM-DD',// HH:mm:ss
+            applyLabel: "应用",
+            cancelLabel: "取消",
+            resetLabel: "重置",
+          }
+        };
+        $("#dateSelect1").daterangepicker(option).on('apply.daterangepicker', function (ev, date) {
+          if (!_this.dateCheckD && _this.endDate && typeof _this.endDate === 'string') _this.dateCheckD = true;
+          _this.startDate = date.startDate.format('YYYY-MM-DD 00:00:00');
+        }).on('cancel.daterangepicker', function () {
+          $("#dateSelect1").val(start);
+          _this.dateCheckD = false;
+          _this.startDate = '';
+        }).val(start);
+
+        $("#dateSelect2").daterangepicker(option).on('apply.daterangepicker', function (ev, date) {
+          if (!_this.dateCheckD && _this.startDate && typeof _this.startDate === 'string') _this.dateCheckD = true;
+          _this.endDate = date.startDate.format('YYYY-MM-DD 23:59:59');
+        }).on('cancel.daterangepicker', function () {
+          $("#dateSelect2").val(end);
+          _this.dateCheckD = false;
+          _this.endDate = '';
+        }).val(end);
       },
+
+
       initDateTime(){
         if (!this.info.startEndDate) {
           this.info.startEndDate = this.getDefaultTime();
@@ -645,8 +604,8 @@
       },
       formatDate(objDate){
         let date = {};
-        date.dateS = window.global.formatDate(objDate, 4);
-        date.dateL = window.global.formatDate(objDate, 1);
+        date.dateS = window.globalTool.formatDate(objDate, 4);
+        date.dateL = window.globalTool.formatDate(objDate, 1);
         return date;
       },
     }
@@ -682,7 +641,7 @@
   .min-size {
     position: relative;
     width: inherit;
-    min-width: 550px;
+    min-width: inherit;
     min-height: inherit;
   }
 

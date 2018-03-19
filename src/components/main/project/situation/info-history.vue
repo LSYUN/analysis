@@ -104,7 +104,6 @@
 </template>
 <script>
   import {bus} from '../../../../managers/utils/bus';
-  import {mapState, mapGetters} from 'vuex';
   import AnalysisEnum from '../../../../managers/enum/analysis-enum';
   import TableConfig from '../../../../managers/enum/tableConfig-enum';
   import baseTable from './info-history-table/base-table.vue'
@@ -116,6 +115,75 @@
 //      'message': require('./info-history-table/message.vue'),
 //      'station-check': require('./info-history-table/total-station-coord-check.vue')
     },
+    computed: {
+      itemObj1: {
+        set: function (obj) {
+          this.$store.dispatch('setItemObj1', obj);
+        },
+        get: function () {
+          return this.$store.getters.getItemObj1;
+        }
+      },
+      groupObj: {
+        set: function (obj) {
+          this.$store.dispatch('setItemObj2', obj);
+        },
+        get: function () {
+          return this.$store.getters.getItemObj2;
+        }
+      },
+      pointObj1: {
+        set: function (obj) {
+          this.$store.dispatch('setPointObj1', obj);
+        },
+        get: function () {
+          return this.$store.getters.getPointObj1;
+        }
+      },
+      startDate: {
+        set: function (obj) {
+          this.$store.dispatch('setStartDate', obj);
+        },
+        get: function () {
+          return this.$store.getters.getStartDate;
+        }
+      },
+      endDate: {
+        set: function (obj) {
+          this.$store.dispatch('setEndDate', obj);
+        },
+        get: function () {
+          return this.$store.getters.getEndDate;
+        }
+      },
+      dateCheck: {
+        set: function (obj) {
+          this.$store.dispatch('setDateCheck', obj);
+        },
+        get: function () {
+          this.dateCheckD = this.dateCheckD !== '' ? this.dateCheckD : this.$store.getters.getPointCheck;
+          return this.dateCheckD;
+        }
+      },
+      groupCheck: {
+        set: function (obj) {
+          this.$store.dispatch('setGroupCheck', obj);
+        },
+        get: function () {
+          this.groupCheckD = this.groupCheckD !== '' ? this.groupCheckD : this.$store.getters.getGroupCheck;
+          return this.pointCheckD;
+        }
+      },
+      pointCheck: {
+        set: function (obj) {
+          this.$store.dispatch('setPointCheck', obj);
+        },
+        get: function () {
+          this.pointCheckD = this.pointCheckD !== '' ? this.pointCheckD : this.$store.getters.getPointCheck;
+          return this.pointCheckD;
+        }
+      },
+    },
     data () {
       return {
         info: {},
@@ -125,18 +193,10 @@
         dateCheckD: '',
         groupCheckD: '',
         pointCheckD: '',
-        dateObj: {
-//          start: '',
-//          end: ''
-        },
-        groupObj: [],
-        pointObj: [],
+        request: {},
         firstTime: true, //首次加载不触发watch
         calculateType: 1,//解算类型默认为0
         pointType: 1,//点类型默认为0
-//        currentTime: {},
-//        tableOption: [],
-//        keepDecs: [],
         itemOption: {
           initData: [],
           placeholder: '请选择监测项',
@@ -147,27 +207,28 @@
             projectId: window.session.getObj(window.sessionKeys.PROJECT).id,
           }],
           evtSelected: function (evt, data) {
-            if (data && data.length > 0) {
-              let item = data[0].obj;
-              if (item) {
-//                this.pointCheck = false;
-//                this.groupCheck = false;
-//                this.dateCheck = false;
-                this.itemType = item.monitorTypeId;
-                let request = AnalysisEnum.getItemMark(item.monitorTypeId);
-                if (this.itemType === 200 || this.itemType === 201) { // 消息查询或者误差查询
-                  this.isRender = true;
-                } else {
-//                  this.$emit('monitorItem', item);//用于控制点名选框的获取与渲染
-                  this.$store.commit('setItemObj1', item);
-                  this.request = {
-                    url: request.url,
-                    mark: 1
-                  };
-                  this.initTableConfig();
-                }
-              }
-            }
+            this.itemObj1 = data[0];
+            this.initItemOption();
+//            if (data && data.length > 0) {
+//              let item = data[0].obj;
+//              if (item) {
+//                this.dateCheckD = false;
+//                this.groupCheckD = false;
+//                this.pointCheckD = false;
+//                this.itemType = item.monitorTypeId;
+//                let request = AnalysisEnum.getItemMark(item.monitorTypeId);
+//                if (this.itemType === 200 || this.itemType === 201) { // 消息查询或者误差查询
+//                  this.isRender = true;
+//                } else {
+//                  this.$store.dispatch('setItemObj1', item);
+//                  this.request = {
+//                    url: request.url,
+//                    mark: 1
+//                  };
+//                  this.initTableConfig();
+//                }
+//              }
+//            }
           }.bind(this),
           ajaxUrl: function () {
             return window.mainConfig.url.getMonitorItemAndMsgQueryPage(this.projectId);
@@ -206,43 +267,6 @@
         },
       };
     },
-    computed: {
-      itemObj1: {
-        set: function (obj) {
-        },
-        get: function () {
-          return this.$store.getters.getItemObj1;
-        }
-      },
-//      groupObj(){
-//        return this.$store.getters.getItemObj2;
-//      },
-      pointObj1(){
-        return this.$store.getters.getPointObj1;
-      },
-      startDate(){
-        return this.$store.getters.getStartDate;
-      },
-      endDate(){
-        return this.$store.getters.getEndDate;
-      },
-      dateCheck: {
-        set: function () {
-        },
-        get: function () {
-          this.dateCheckD = this.dateCheckD !== '' ? this.dateCheckD : this.$store.getters.getPointCheck;
-          return this.dateCheckD;
-        }
-      },
-      pointCheck: {
-        set: function () {
-        },
-        get: function () {
-          this.pointCheckD = this.pointCheckD !== '' ? this.pointCheckD : this.$store.getters.getPointCheck;
-          return this.pointCheckD;
-        }
-      },
-    },
     watch: {
       'calculateType': function (e) {
         if (!this.firstTime) {
@@ -259,38 +283,14 @@
 //      }
     },
     created: function () {// 当前页面刷新
-      const _this = this;
-      bus.$on('updateItem1', function () {
-        _this.initItemOption();
-      });
-//      bus.$on('updateGroup', function (data) {
-//        if (data) {
-//          _this.pointGroupObj = data;
-//          _this.$refs.pointSlt.clear(true);
-//        } else {
-//          _this.pointGroupObj = [];
-//        }
-//      });
-//      bus.$on('updatePoint1', function (data) {
-//        if (data && data.length > 0) {
-//          _this.dateCheck = false;
-//          _this.pointObj = data.slice(0, 1);
-//          if (_this.$refs.pointSlt) _this.$refs.pointSlt.update(data);
-//        } else if (_this.itemType !== 200) {
-//          _this.dateCheck = false;
-//          _this.pointObj = [];
-//          _this.$refs.pointSlt.clear(true);
-//        }
-//      });
     },
     mounted () {
       this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
-//      this.info = Object.assign({}, this.info);
       this.initDatePicker();
-//      this.initDateTime();
       this.initItemOption();
       this.initGroupOption();
-//      this.initPointOption();
+      this.initPointOption();
+//      this.info = Object.assign({}, this.info);
     },
     methods: {
       /***
@@ -298,6 +298,9 @@
        */
       initItemOption(){
         if (this.itemObj1 && this.itemObj1.hasOwnProperty('id')) {
+          this.dateCheckD = false;
+          this.groupCheckD = false;
+          this.pointCheckD = false;
           let item = Object.assign({}, this.itemObj1);
           let request = AnalysisEnum.getItemMark(item.monitorTypeId);
           this.itemType = item.monitorTypeId;
@@ -371,23 +374,23 @@
         if (this.pointCheck === true && this.dateCheck === true) mark = 4;
         switch (mark) {
           case 1://select all
-            startDate = '1000-01-01 0:0:0';
+            startDate = '1000-01-01 00:00:00';
             endDate = '9999-12-31 23:59:59';
             break;
           case 2://ByPoint
-            startDate = '1000-01-01 0:0:0';
+            startDate = '1000-01-01 00:00:00';
             endDate = '9999-12-31 23:59:59';
             pointNames = _.map(this.pointObj, (d) => encodeURIComponent(d.name));
             groupNames = _.map(this.groupObj, (d) => encodeURIComponent(d.name));
             allNames = pointNames.concat(groupNames);
             break;
           case 3://ByTime
-            startDate = this.dateObj.start;
-            endDate = this.dateObj.end;
+            startDate = this.startDate;
+            endDate = this.endDate;
             break;
           case 4://ByPointAndTime
-            startDate = this.dateObj.start;
-            endDate = this.dateObj.end;
+            startDate = this.startDate;
+            endDate = this.endDate;
             pointNames = _.map(this.pointObj, (d) => encodeURIComponent(d.name));
             groupNames = _.map(this.groupObj, (d) => encodeURIComponent(d.name));
             allNames = pointNames.concat(groupNames);
@@ -420,18 +423,6 @@
         this.query();
       },
       /***
-       * 获取初始查询时间段
-       * @returns {{}}
-       */
-      getDefaultTime(){/*获取最近一万点时间段*/
-        let startEndDate = {};
-        let eDate = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1);//这是获取当前时间
-        let sDate = new Date(eDate.getTime() - 10 * 24 * 60 * 60 * 1000 + 1000);//当前时间的前10日
-        startEndDate.startDate = this.formatDate(sDate);//转换成日期格式
-        startEndDate.endDate = this.formatDate(eDate);
-        return startEndDate;
-      },
-      /***
        * 转换时间格式
        */
       formatDate(objDate){
@@ -461,62 +452,23 @@
           }
         };
         $("#dateSelect1").daterangepicker(option).on('apply.daterangepicker', function (ev, date) {
-          if (!_this.dateCheckD && _this.dateObj.end) _this.dateCheckD = true;
-          _this.dateObj.start = date.startDate.format('YYYY-MM-DD 00:00:00');
+          console.log(typeof _this.endDate);
+          if (!_this.dateCheckD && _this.endDate && typeof _this.endDate === 'string') _this.dateCheckD = true;
+          _this.startDate = date.startDate.format('YYYY-MM-DD 00:00:00');
         }).on('cancel.daterangepicker', function () {
           $("#dateSelect1").val(start);
           _this.dateCheckD = false;
-          _this.dateObj.start = '';
+          _this.startDate = '';
         }).val(start);
 
         $("#dateSelect2").daterangepicker(option).on('apply.daterangepicker', function (ev, date) {
-          if (!_this.dateCheckD && _this.dateObj.start) _this.dateCheckD = true;
-          _this.dateObj.end = date.startDate.format('YYYY-MM-DD 23:59:59');
+          if (!_this.dateCheckD && _this.startDate && typeof _this.startDate === 'string') _this.dateCheckD = true;
+          _this.endDate = date.startDate.format('YYYY-MM-DD 23:59:59');
         }).on('cancel.daterangepicker', function () {
           $("#dateSelect2").val(end);
           _this.dateCheckD = false;
-          _this.dateObj.end = '';
+          _this.endDate = '';
         }).val(end);
-      },
-      /***
-       *
-       */
-      initDateTime(){
-        if (!this.startEndDate) {
-          this.startEndDate = this.getDefaultTime();
-          this.startEndDate.startDate.dateL = '1000-01-01 00:00:00';
-          this.startEndDate.endDate.dateL = "9999-12-31 23:59:59";
-        } else if (this.$store.state.situation.dateCheck) {
-          this.dateCheck = this.$store.state.situation.dateCheck;
-          this.startEndDate = this.$store.state.situation.startEndDate;
-        }
-        if (!this.startEndDate.startDate) {
-          $("#dateSelect1").val('开始日期');
-          $("#dateSelect2").val('结束日期');
-        } else {
-          $("#dateSelect1").val(this.startEndDate.startDate.dateS);
-          $("#dateSelect2").val(this.startEndDate.endDate.dateS);
-        }
-      },
-      /***
-       *
-       * @param minDate
-       */
-      toDate(minDate){
-        let that = this;
-        $("#dateSelect2").daterangepicker({
-          singleDatePicker: true,
-          showDropdowns: true,
-          opens: 'center',
-          minDate: new Date(Date.parse(minDate)),
-          maxDate: new Date(),
-        }, function (date) {
-          that.startEndDate.endDate.dateL = date.format('YYYY-MM-DD 23:59:59');
-          that.startEndDate.endDate.dateS = date.format('YYYY-MM-DD');
-          if (!that.dateCheck) {
-            that.dateCheck = true;
-          }
-        });
       },
     }
   };

@@ -3,7 +3,7 @@
  */
 class Enum {
   static getItemMark(mark) {
-    let Url = '', DataType = [];
+    let url = '', dataType = [];
     let waterLevel = [
           {value: 'prewarningRate', text: '单次变化三级(黄色)预警值', unit: 'm'},
           {value: 'warningRate', text: '单次变化二级(橙色)报警值', unit: 'm',},
@@ -160,98 +160,98 @@ class Enum {
           {value: 'controlAccumulation', text: '累计变化一级(红色)控制值', unit: 'mm',}];
     switch (parseInt(mark)) {
       case 1://水位
-        Url = 'waterLevelData';
-        DataType = waterLevel;
+        url = 'waterLevelData';
+        dataType = waterLevel;
         break;
       case 2://侧斜孔 注：（基坑-深层水平位移 尾矿-内部位移）
-        Url = 'inDisplacementData';
-        DataType = inDisplacement;
+        url = 'inDisplacementData';
+        dataType = inDisplacement;
         break;
       case 3://支撑轴力
-        Url = 'braceAxialForceData';
-        DataType = brace;
+        url = 'braceAxialForceData';
+        dataType = brace;
         break;
       case 4://锚索
-        Url = null;
-        DataType = null;
+        url = null;
+        dataType = null;
         break;
       case 5://降雨量
-        Url = 'ombrometerData';
-        DataType = ombrometer;
+        url = 'ombrometerData';
+        dataType = ombrometer;
         break;
       case 6://裂缝
-        Url = 'jointMeterData';
-        DataType = joint;
+        url = 'jointMeterData';
+        dataType = joint;
         break;
       case 7://表面位移(GPS)
-        Url = 'GpsData';
-        DataType = Gps;
+        url = 'GpsData';
+        dataType = Gps;
         break;
       case 8://干滩
-        Url = 'dryShoal';
-        DataType = dryShoal;
+        url = 'dryShoal';
+        dataType = dryShoal;
         break;
       case 9://浸润线
-        Url = 'saturationLineData';
-        DataType = saturationLine;
+        url = 'saturationLineData';
+        dataType = saturationLine;
         break;
       case 10://浊度
-        Url = 'turbidityData';
-        DataType = turbidity;
+        url = 'turbidityData';
+        dataType = turbidity;
         break;
       case 11://渗流量
-        Url = 'seepageData';
-        DataType = seepage;
+        url = 'seepageData';
+        dataType = seepage;
         break;
       case 12://压力
-        Url = 'stressData';
-        DataType = stress;
+        url = 'stressData';
+        dataType = stress;
         break;
       case 13://应力
-        Url = 'strainData';
-        DataType = strain;
+        url = 'strainData';
+        dataType = strain;
         break;
       case 14://土壤水分
-        Url = 'soilMoisture';
-        DataType = soilMoisture;
+        url = 'soilMoisture';
+        dataType = soilMoisture;
         break;
       case 15://水准高程
-        Url = 'waterElevationDatas';
-        DataType = waterElevation;
+        url = 'waterElevationDatas';
+        dataType = waterElevation;
         break;
       case 16://混凝土
-        Url = 'concretebraceData';
-        DataType = concreteBrace;
+        url = 'concretebraceData';
+        dataType = concreteBrace;
         break;
       case 17://压强
-        Url = 'PressureData';
-        DataType = pressure;
+        url = 'PressureData';
+        dataType = pressure;
         break;
       case 18://PH
-        Url = 'phData';
-        DataType = ph;
+        url = 'phData';
+        dataType = ph;
         break;
       case 19://内部沉降
-        Url = 'inSettlementData';
-        DataType = inSettlement;
+        url = 'inSettlementData';
+        dataType = inSettlement;
         break;
       case 20://全站仪位移
-        Url = 'measureData';
-        DataType = totalStation;
+        url = 'measureData';
+        dataType = totalStation;
         break;
       case 21://应力
-        Url = 'strainDeformationData';
-        DataType = strainDeformationData;
+        url = 'strainDeformationData';
+        dataType = strainDeformationData;
         break;
       case 50://原始数据
-        Url = 'dataSensor';
-        DataType = dataSensor;
+        url = 'dataSensor';
+        dataType = dataSensor;
         break;
       default:
-        Url = null;
-        DataType = null;
+        url = null;
+        dataType = null;
     }
-    return {Url, DataType};
+    return {url, dataType};
   }
 
   static getTableColumn(mark) {

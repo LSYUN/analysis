@@ -141,7 +141,7 @@
         },
       };
     },
-    attached () {
+    mounted () {
       let project = window.session.getObj(window.sessionKeys.PROJECT);
       this.account = window.session.getObj(window.sessionKeys.ACCOUNT);
       this.projectId = project.id;

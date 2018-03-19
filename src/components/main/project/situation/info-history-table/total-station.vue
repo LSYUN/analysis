@@ -59,15 +59,15 @@
     },
     created: function () {
       this.$on('filterTable', function (e) {
-        this.filterByPointAndTime(e.Url, e.mark, e.monitorItemId, e.projectId, e.pointNames, e.calculateType, e.pointType, e.startDate, e.endDate);
+        this.filterByPointAndTime(e.url, e.mark, e.monitorItemId, e.projectId, e.pointNames, e.calculateType, e.pointType, e.startDate, e.endDate);
       });
     },
-    attached () {
+    mounted () {
       this.projectId = window.sessionUtility.getObj(window.sessionKeys.PROJECT).id;
       let info = this.info;
       let startDate = info.startEndDate.startDate.dateL;
       let endDate = info.startEndDate.endDate.dateL;
-      this.initTable(info.itemOption.Url, info.itemOption.mark, info.itemObj.id, info.projectId, info.itemOption.pointNames, info.itemOption.calculateType, info.itemOption.pointType, startDate, endDate);
+      this.initTable(info.itemOption.url, info.itemOption.mark, info.itemObj.id, info.projectId, info.itemOption.pointNames, info.itemOption.calculateType, info.itemOption.pointType, startDate, endDate);
       $('a.dt-button').css({
         'padding': '.1em .5em',
         'min-width': '45px'
@@ -91,7 +91,7 @@
           buttons: ['excelHtml5', 'pdfHtml5'],
           language: this.$store.state.dataTable.language,
           ajax: {
-            url: window.appContext.urls.getMeasureDataByPointAndTime_U(variety, mark, itemId, projectId, pointNames, calculateType, pointType, startDate, endDate),
+            url: window.mainConfig.url.getMeasureDataByPointAndTime_U(variety, mark, itemId, projectId, pointNames, calculateType, pointType, startDate, endDate),
             type: 'POST',
             contentType: 'application/json',
             dataType: 'json',
@@ -242,7 +242,7 @@
         });
       },
       filterByPointAndTime(variety, mark, monitorItemId, projectId, pointNames, calculateType, pointType, startDate, endDate){
-        this.tStationTable.ajax.url(window.appContext.urls.getMeasureDataByPointAndTime_U(variety, mark, monitorItemId, projectId, pointNames, calculateType, pointType, startDate, endDate, {
+        this.tStationTable.ajax.url(window.mainConfig.url.getMeasureDataByPointAndTime_U(variety, mark, monitorItemId, projectId, pointNames, calculateType, pointType, startDate, endDate, {
           syncNo: 1, pageIndex: 1, pageSize: 50
         })).load();
       }

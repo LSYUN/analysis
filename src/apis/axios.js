@@ -9,7 +9,6 @@ import axios from "axios";
 class AxiosManager {
   constructor(baseUrl) {
     this.http = axios.create({
-      // baseURL: 'http://112.74.205.248:8400/api/',
       baseURL: baseUrl + '/',
       // timeout: 5000,
     });
@@ -24,16 +23,13 @@ class AxiosManager {
       toastr.error("错误的参数", "fail");
     });
     this.http.interceptors.response.use((res) => {
-      if (res.data === undefined || res.data === null) {
-        console.log('error');
+      if (res.status >= 200 && res.status < 300) {
+        return Promise.resolve(res);
+      }
+      else {
         console.log(res);
         return Promise.reject(res);
       }
-      else if (res.status !== 200) {
-        console.log('error');
-        return Promise.resolve(res);
-      }
-      return res;
     }, (error) => {
       return Promise.reject(error);
     });

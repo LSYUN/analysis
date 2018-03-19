@@ -102,7 +102,7 @@
         const account = response.data.ACCOUNT;
         const token = response.data.TOKEN;
         window.session.set(window.sessionKeys.TOKEN, token);
-        window.session.setObj(window.sessionKeys.AUTHORIZED, true);
+        window.session.set(window.sessionKeys.AUTHORIZED, true);
         account.permissionType = this.setPermission(account.roleId);
         window.session.setObj(window.sessionKeys.ACCOUNT, account);
       },

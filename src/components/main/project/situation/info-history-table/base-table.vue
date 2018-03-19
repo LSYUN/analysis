@@ -64,7 +64,7 @@
         table: {},
       };
     },
-    attached () {
+    mounted () {
 //      let that = this;
 //      this.table = $('#example').DataTable({
 //        scrollX: that.scrollX || true,

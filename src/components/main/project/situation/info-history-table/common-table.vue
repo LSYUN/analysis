@@ -35,7 +35,7 @@
 //          ordering: true,
 //          columnsNames: ['测点名称', '水位值(m)', '变化值(m)', '液面高度(m)', '测量时间'], //'累计变化值(m)',
           ajaxUrl: function () {
-//            return window.mainConfig.url.getMonitorItemData_U(this.info.itemOption.Url, this.info.itemOption.mark, this.info.itemObj.id, this.info.projectId, this.info.itemOption.pointNames,
+//            return window.mainConfig.url.getMonitorItemData_U(this.info.itemOption.url, this.info.itemOption.mark, this.info.itemObj.id, this.info.projectId, this.info.itemOption.pointNames,
 //              this.info.startEndDate.startDate.dateL, this.info.startEndDate.endDate.dateL);
           }.bind(this),
           columnsData: function () {
@@ -61,7 +61,7 @@
 //      bus.$on('filterTable', function (e) {
 //        function filterUrl() {
 //          return window.mainConfig.url.getMonitorItemData_U(e.url, e.mark, e.itemId, e.projectId, e.pointNames, e.startDate, e.endDate);
-////          return window.appContext.urls.getPageByMonitorItemIdAndTime(component.variety,e.monitorItemId, e.projectId, e.startDate, e.endDate);
+////          return window.mainConfig.url.getPageByMonitorItemIdAndTime(component.variety,e.monitorItemId, e.projectId, e.startDate, e.endDate);
 //        }
 //
 //        console.log('filterTable');
@@ -78,7 +78,7 @@
         return decs;
       }
     },
-    attached () {
+    mounted () {
     },
     methods: {
       init(e){

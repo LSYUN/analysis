@@ -121,11 +121,11 @@
               this.info.itemObj = item;
               this.$dispatch('monitorItem', item);
               this.itemOption1 = AnalysisEnum.getItemMark(item.monitorTypeId);
-              let DataType = this.itemOption1.DataType;
-              this.attrValue1 = DataType[0].value;
-              this.attrText1 = DataType[0].text;
-              this.attrUnit1 = DataType[0].unit;
-              this.$refs.attrSelector1.$emit('changeLocal', DataType);
+              let dataType = this.itemOption1.dataType;
+              this.attrValue1 = dataType[0].value;
+              this.attrText1 = dataType[0].text;
+              this.attrUnit1 = dataType[0].unit;
+              this.$refs.attrSelector1.$emit('changeLocal', dataType);
             }
           }.bind(this),
           ajaxUrl: function () {
@@ -141,11 +141,11 @@
               this.info.itemObj2 = item;
               this.$dispatch('monitorItem2', item, false);
               this.itemOption2 = AnalysisEnum.getItemMark(item.monitorTypeId);
-              let DataType = this.itemOption2.DataType;
-              this.attrValue2 = DataType[0].value;
-              this.attrText2 = DataType[0].text;
-              this.attrUnit2 = DataType[0].unit;
-              this.$refs.attrSelector2.$emit('changeLocal', DataType);
+              let dataType = this.itemOption2.dataType;
+              this.attrValue2 = dataType[0].value;
+              this.attrText2 = dataType[0].text;
+              this.attrUnit2 = dataType[0].unit;
+              this.$refs.attrSelector2.$emit('changeLocal', dataType);
             }
           }.bind(this),
           ajaxUrl: function () {
@@ -214,12 +214,12 @@
         if (data) {
           this.info.itemObj = data;
           this.itemOption1 = AnalysisEnum.getItemMark(data.monitorTypeId);
-          const DataType = this.itemOption1.DataType;
-          this.attrValue1 = DataType[0].value;
-          this.attrText1 = DataType[0].text;
-          this.attrUnit1 = DataType[0].unit;
+          const dataType = this.itemOption1.dataType;
+          this.attrValue1 = dataType[0].value;
+          this.attrText1 = dataType[0].text;
+          this.attrUnit1 = dataType[0].unit;
           this.$refs.itemSelector1.$emit('update', [{id: data.id, text: data.name, obj: data}]);
-          this.$refs.attrSelector1.$emit('changeLocal', DataType);
+          this.$refs.attrSelector1.$emit('changeLocal', dataType);
         } else {
           this.info.itemObj = {};
           this.$refs.itemSelector1.clear(true);
@@ -229,12 +229,12 @@
         if (data) {
           this.info.itemObj2 = data;
           this.itemOption2 = AnalysisEnum.getItemMark(data.monitorTypeId);
-          const DataType = this.itemOption2.DataType;
-          this.attrValue2 = DataType[0].value;
-          this.attrText2 = DataType[0].text;
-          this.attrUnit2 = DataType[0].unit;
+          const dataType = this.itemOption2.dataType;
+          this.attrValue2 = dataType[0].value;
+          this.attrText2 = dataType[0].text;
+          this.attrUnit2 = dataType[0].unit;
           this.$refs.itemSelector2.$emit('update', [{id: data.id, text: data.name, obj: data}]);
-          this.$refs.attrSelector2.$emit('changeLocal', DataType);
+          this.$refs.attrSelector2.$emit('changeLocal', dataType);
         } else {
           this.info.itemObj = {};
           this.$refs.itemSelector2.clear(true);
@@ -267,7 +267,7 @@
               if (this.pointObj && this.pointObj.id) {
                 this.info.pointObj2 = data;
                 this.getChartData(this.info.itemObj, this.info.itemObj2, this.pointObj, this.info.pointObj2,
-                  this.itemOption1.Url, this.itemOption2.Url, this.attrValue1, this.attrValue2, this.attrText1, this.attrText2, this.attrUnit1, this.attrUnit2);
+                  this.itemOption1.url, this.itemOption2.url, this.attrValue1, this.attrValue2, this.attrText1, this.attrText2, this.attrUnit1, this.attrUnit2);
                 clearInterval(interval);
               } else if (times <= 0) {
                 clearInterval(interval);
@@ -292,7 +292,7 @@
         if (this.info.itemObj) {//监测项一
           let item = this.info.itemObj;
           this.itemOption1 = AnalysisEnum.getItemMark(item.monitorTypeId);
-          const DataType1 = this.itemOption1.DataType;
+          const DataType1 = this.itemOption1.dataType;
           this.attrValue1 = DataType1[0].value;
           this.attrText1 = DataType1[0].text;
           this.attrUnit1 = DataType1[0].unit;
@@ -304,7 +304,7 @@
           if (this.info.itemObj2) {//监测项二
             item = this.info.itemObj2;
             this.itemOption2 = AnalysisEnum.getItemMark(item.monitorTypeId);
-            const DataType2 = this.itemOption2.DataType;
+            const DataType2 = this.itemOption2.dataType;
             this.attrValue2 = DataType2[0].value;
             this.attrText2 = DataType2[0].text;
             this.attrUnit2 = DataType2[0].unit;
@@ -327,7 +327,7 @@
           /*渲染 测点 下拉框*/
           /*初始化查询*/
           this.getChartData(this.info.itemObj, this.info.itemObj2, this.pointObj, this.info.pointObj2,
-            this.itemOption1.Url, this.itemOption2.Url, this.attrValue1, this.attrValue2, this.attrText1, this.attrText2, this.attrUnit1, this.attrUnit2);
+            this.itemOption1.url, this.itemOption2.url, this.attrValue1, this.attrValue2, this.attrText1, this.attrText2, this.attrUnit1, this.attrUnit2);
         }
       },
       initDateRangePicker(startEndDate){
@@ -626,7 +626,7 @@
                     color: Highcharts.getOptions().colors[0]
                   },
                   formatter: function () {
-                    return window.global.formatDate(this.value, 4);
+                    return window.globalTool.formatDate(this.value, 4);
                   }
                 }
               }
@@ -690,7 +690,7 @@
 //        this.chart = Highcharts.stockChart('container');
 //        this.chart.showLoading("<img src='../static/image/processing.gif'>  载入中...");
         this.getChartData(this.info.itemObj, this.info.itemObj2, this.pointObj, this.info.pointObj2,
-          this.itemOption1.Url, this.itemOption2.Url, this.attrValue1, this.attrValue2, this.attrText1, this.attrText2, this.attrUnit1, this.attrUnit2);
+          this.itemOption1.url, this.itemOption2.url, this.attrValue1, this.attrValue2, this.attrText1, this.attrText2, this.attrUnit1, this.attrUnit2);
       },
       formatDate(objDate){
         let date = {},

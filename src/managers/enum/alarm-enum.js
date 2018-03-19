@@ -1,6 +1,6 @@
 class Enum {
   static getItemMark(mark) {
-    let DataType = [];
+    let dataType = [];
     let waterLevel = [
           // {text: '通用预警',value:0},
           {text:'变化量',value:0},
@@ -100,75 +100,75 @@ class Enum {
         ];
     switch (parseInt(mark)) {
       case 1://水位
-        DataType = waterLevel;
+        dataType = waterLevel;
         break;
       case 2://侧斜孔 注：（基坑-深层水平位移 尾矿-内部位移）
-        DataType = inDisplacement;
+        dataType = inDisplacement;
         break;
       case 3://支撑轴力
-        DataType = brace;
+        dataType = brace;
         break;
       case 4://锚索
-        DataType = null;
+        dataType = null;
         break;
       case 5://降雨量
-        DataType = ombrometer;
+        dataType = ombrometer;
         break;
       case 6://裂缝
-        DataType = joint;
+        dataType = joint;
         break;
       case 7://表面位移(GPS)
-        DataType = Gps;
+        dataType = Gps;
         break;
       case 8://干滩
-        DataType = dryShoal;
+        dataType = dryShoal;
         break;
       case 9://浸润线
-        DataType = saturationLine;
+        dataType = saturationLine;
         break;
       case 10://浊度
-        DataType = turbidity;
+        dataType = turbidity;
         break;
       case 11://渗流量
-        DataType = seepage;
+        dataType = seepage;
         break;
       case 12://压力
-        DataType = stress;
+        dataType = stress;
         break;
       case 13://应力
-        DataType = strain;
+        dataType = strain;
         break;
       case 14://土壤水分
-        DataType = soilMoisture;
+        dataType = soilMoisture;
         break;
       case 15://水准高程
-        DataType = waterElevation;
+        dataType = waterElevation;
         break;
       case 16://混凝土
-        DataType = concreteBrace;
+        dataType = concreteBrace;
         break;
       case 17://压强
-        DataType = pressure;
+        dataType = pressure;
         break;
       case 18://PH
-        DataType = ph;
+        dataType = ph;
         break;
       case 19://内部沉降
-        DataType = inSettlement;
+        dataType = inSettlement;
         break;
       case 20://全站仪位移
-        DataType = totalStation;
+        dataType = totalStation;
         break;
       case 21://应变
-        DataType = strainDeformationData;
+        dataType = strainDeformationData;
         break;
       case 50://原始数据
-        DataType = dataSensor;
+        dataType = dataSensor;
         break;
       default:
-        DataType = null;
+        dataType = null;
     }
-    return {DataType};
+    return {dataType};
   }
 }
 export default Enum;

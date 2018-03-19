@@ -279,18 +279,18 @@
 
         };
         let now = new Date(),
-          yesterday = window.global.getAnotherDate(now, -(self.getDays(self.reportFormType, now, false)), 1);
+          yesterday = window.globalTool.getAnotherDate(now, -(self.getDays(self.reportFormType, now, false)), 1);
         $('#startTime').daterangepicker($.extend(true, options, {startDate: yesterday}), function (date) {
 //          this.startDate = $('#startTime').val();
           let days = self.getDays(self.reportFormType, date, false);
-          let endLocal = window.global.getAnotherDate(date, +days, 1);
+          let endLocal = window.globalTool.getAnotherDate(date, +days, 1);
           $('#endTime').val(endLocal).flash(flashColor, 1000);
           $('#startTime').flash(flashColor, 1000);
         });
         $('#endTime').daterangepicker($.extend(true, options, {startDate: now}), function (date) {
 //          this.endDate = $('#endTime').val();
           let days = self.getDays(self.reportFormType, date, true);
-          let startLocal = window.global.getAnotherDate(date, -days, 1);
+          let startLocal = window.globalTool.getAnotherDate(date, -days, 1);
           $('#startTime').val(startLocal).flash(flashColor, 1000);
           $('#endTime').flash(flashColor, 1000);
         });
@@ -321,9 +321,9 @@
           case 0:
             return millisecond;
           case 1:
-            return window.global.daysOfMonth(date, minus) * millisecond;
+            return window.globalTool.daysOfMonth(date, minus) * millisecond;
           case 2:
-            return window.global.daysOfYear(date) * millisecond;
+            return window.globalTool.daysOfYear(date) * millisecond;
         }
       },
 

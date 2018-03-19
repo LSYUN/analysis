@@ -157,11 +157,11 @@
         monitorItemName: null,
         monitorTypeId: null,
         monitorTypeName: null,
-        itemOption: {},  //AnalysisEnum.getItemMark(Name,DataType)
-        attrOption: [],  //itemOption.DataType
-        attrValue: null,//itemOption.DataType.value
-        attrText: null, //itemOption.DataType.text
-        attrUnit: null, //itemOption.DataType.unit
+        itemOption: {},  //AnalysisEnum.getItemMark(Name,dataType)
+        attrOption: [],  //itemOption.dataType
+        attrValue: null,//itemOption.dataType.value
+        attrText: null, //itemOption.dataType.text
+        attrUnit: null, //itemOption.dataType.unit
         itemMark: null,
         isRender: false, //控制v-if与页面更新
         dateSelect: false,
@@ -216,14 +216,14 @@
                   this.initTableConfig();
                   if (this.itemMark === 16) {
                     this.info.itemOption = {
-                      Url: this.itemOption.Url,
+                      url: this.itemOption.url,
                       calculateType: this.calculateType,
                       pointType: this.pointType,
                       mark: 5
                     };
                   } else {
                     this.info.itemOption = {
-                      Url: this.itemOption.Url,
+                      url: this.itemOption.url,
                       calculateType: this.calculateType,
                       pointType: this.pointType,
                       mark: 1
@@ -326,7 +326,7 @@
           }
         }
         this.info.itemOption = {
-          Url: this.itemOption.Url,
+          url: this.itemOption.url,
           calculateType: this.calculateType,
           pointType: this.pointType,
           mark: 1
@@ -389,7 +389,7 @@
           this.monitorItems.initData.push({id: item.id, text: item.name, obj: item});
           this.initTableConfig();
           this.info.itemOption = {
-            Url: this.itemOption.Url,
+            url: this.itemOption.url,
             calculateType: this.calculateType,
             pointType: this.pointType,
             mark: 1
@@ -453,8 +453,8 @@
       //转换的函数
       formatDate(objDate){
         let date = {};
-        date.dateS = window.global.formatDate(objDate, 4);
-        date.dateL = window.global.formatDate(objDate, 1);
+        date.dateS = window.globalTool.formatDate(objDate, 4);
+        date.dateL = window.globalTool.formatDate(objDate, 1);
         return date;
       },
       /*初始化日期控件*/
@@ -538,7 +538,7 @@
         if (this.pointSelect === true && this.dateSelect === true && this.pointGroupSelect === true && this.itemMark === 3) mark = 10;
         switch (mark) {
           case 1://select all
-            startDate = '1000-01-01 0:0:0';
+            startDate = '1000-01-01 00:00:00';
             endDate = '9999-12-31 23:59:59';
 //            e.itemOption.pointNames = _.map(e.pointObj, (d) => (d.name));
             e.monitorItemId = e.itemObj.id;
@@ -549,7 +549,7 @@
 //            e.itemOption.keepDecs = this.info.keepDec;
             break;
           case 2://ByPoint
-            startDate = '1000-01-01 0:0:0';
+            startDate = '1000-01-01 00:00:00';
             endDate = '9999-12-31 23:59:59';
             e.itemOption.pointNames = _.map(e.pointObj, function (d) {
               return (d.name);
@@ -625,7 +625,7 @@
           pointNames.push(a);
         }
         this.$broadcast('filterTable', {
-          Url: e.itemOption.Url,
+          url: e.itemOption.url,
           projectId: e.projectId,
           monitorItemId: e.itemObj.id,
           pointNames: pointNames,
@@ -640,10 +640,10 @@
       },
       queryAll(){
         let startDate = null, endDate = null, e = this.info;
-        startDate = '1000-01-01 0:0:0';
+        startDate = '1000-01-01 00:00:00';
         endDate = '9999-12-31 23:59:59';
         this.$broadcast('filterTable', {
-          Url: e.itemOption.Url,
+          url: e.itemOption.url,
           projectId: e.projectId,
           monitorItemId: e.itemObj.id,
           pointNames: e.itemOption.pointNames,

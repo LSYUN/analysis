@@ -313,7 +313,7 @@
               this.info.pointObj = data[0].obj;
               let point = data[0].obj;
               this.$refs.pointSelector.$emit('update', [{id: point.id, text: point.name, obj: point}]);
-              this.attrOption = AlarmEnum.getItemMark(this.info.itemObj.monitorTypeId).DataType;
+              this.attrOption = AlarmEnum.getItemMark(this.info.itemObj.monitorTypeId).dataType;
               this.warningType = this.attrOption[0].value;
               this.getAlarmParam(this.info.itemObj.id, point.id, this.monitorPrmType);
             }
@@ -333,7 +333,7 @@
         this.getAlarmParam(this.info.itemObj.id, pointId, this.monitorPrmType);
       },
     },
-    attached () {
+    mounted () {
       this.initMonitorItem();
     },
     methods: {
@@ -345,8 +345,8 @@
             component.$refs.itemSelector.$emit('update', [{id: item.id, text: item.name, obj: item}]);
             if (this.monitorPrmType === 0) {
               component.monitorType = component.info.itemObj.monitorTypeId;
-              component.attrOption = AlarmEnum.getItemMark(component.info.itemObj.monitorTypeId).DataType;
-              component.commonOption = CommonEnum.getItemMark(component.info.itemObj.monitorTypeId).DataType;
+              component.attrOption = AlarmEnum.getItemMark(component.info.itemObj.monitorTypeId).dataType;
+              component.commonOption = CommonEnum.getItemMark(component.info.itemObj.monitorTypeId).dataType;
               component.commonUnit = component.commonOption[0].unit;
               component.warningType = component.attrOption[0].value;
 //              component.getAlarmParam(item.id, '', this.monitorPrmType);
@@ -377,9 +377,9 @@
             this.info.pointObj = option;
             if (this.$refs.pointSelector)
               this.$refs.pointSelector.$emit('update', [{id: option.id, text: option.name, obj: option}]);
-            this.attrOption = AlarmEnum.getItemMark(this.info.itemObj.monitorTypeId).DataType;
+            this.attrOption = AlarmEnum.getItemMark(this.info.itemObj.monitorTypeId).dataType;
             this.warningType = this.attrOption[0].value;
-            this.commonOption = CommonEnum.getItemMark(this.info.itemObj.monitorTypeId).DataType;
+            this.commonOption = CommonEnum.getItemMark(this.info.itemObj.monitorTypeId).dataType;
             this.commonUnit = this.commonOption[0].unit;
             if (this.monitorPrmType === 1) {
               this.getAlarmParam(this.info.itemObj.id, option.id, this.monitorPrmType);
@@ -391,9 +391,9 @@
             if (this.$refs.pointSelector)
               this.$refs.pointSelector.clear(false);
 //                  this.attrOption = [];
-            this.attrOption = AlarmEnum.getItemMark(this.info.itemObj.monitorTypeId).DataType;
+            this.attrOption = AlarmEnum.getItemMark(this.info.itemObj.monitorTypeId).dataType;
             this.warningType = this.attrOption[0].value;
-            this.commonOption = CommonEnum.getItemMark(this.info.itemObj.monitorTypeId).DataType;
+            this.commonOption = CommonEnum.getItemMark(this.info.itemObj.monitorTypeId).dataType;
             this.commonUnit = this.commonOption[0].unit;
             this.getAlarmParam(this.info.itemObj.id, '', this.monitorPrmType);
           }

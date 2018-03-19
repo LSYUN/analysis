@@ -42,10 +42,10 @@
     },
     created: function () {
       this.$on('filterTable', function (e) {
-        this.filterByPointAndTime(e.Url, e.projectId, e.pointNameList, e.calculateType, e.pointType, e.startDate, e.endDate);
+        this.filterByPointAndTime(e.url, e.projectId, e.pointNameList, e.calculateType, e.pointType, e.startDate, e.endDate);
       });
     },
-    attached () {
+    mounted () {
       this.projectId = window.sessionUtility.getObj(window.sessionKeys.PROJECT).id;
       this.monitorItemId = this.info.monitorItemId;
       this.initTable(this.projectId);
@@ -73,7 +73,7 @@
           buttons: ['excelHtml5', 'pdfHtml5'],
           language: this.$store.state.dataTable.language,
           ajax: {
-            url: window.appContext.urls.getStationCoordCheck(projectId),
+            url: window.mainConfig.url.getStationCoordCheck(projectId),
             type: 'POST',
             contentType: 'application/json',
             dataType: 'json',
@@ -153,12 +153,12 @@
         });
       },
       filterByPointAndTime(variety, projectId, pointNames, calculateType, pointType, startDate, endDate){
-        this.tStationTable.ajax.url(window.appContext.urls.getMeasureDataByPointAndTime_U(variety, projectId, pointNames, calculateType, pointType, startDate, endDate, {
+        this.tStationTable.ajax.url(window.mainConfig.url.getMeasureDataByPointAndTime_U(variety, projectId, pointNames, calculateType, pointType, startDate, endDate, {
           syncNo: 1, pageIndex: 1, pageSize: 50
         })).load();
       },
       filterByItem(variety, monitorItemId, projectId, calculateType, pointType, startTime, endTime){
-        this.tStationTable.ajax.url(window.appContext.urls.getMeasureDataByItemAndTime_U(variety, monitorItemId, projectId, calculateType, pointType, startTime, endTime, {
+        this.tStationTable.ajax.url(window.mainConfig.url.getMeasureDataByItemAndTime_U(variety, monitorItemId, projectId, calculateType, pointType, startTime, endTime, {
           syncNo: 1, pageIndex: 1, pageSize: 50
         })).load();
       },

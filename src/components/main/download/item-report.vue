@@ -204,11 +204,11 @@
         alarmClass: '一级',
         controlAcc: 0.00,
         controlRate: 0.00,
-        itemOption: {},  //AnalysisEnum.getItemMark(Name,DataType)
-        attrOption: [],  //itemOption.DataType
-        attrValue: null,//itemOption.DataType.value
-        attrText: null, //itemOption.DataType.text
-        attrUnit: null, //itemOption.DataType.unit
+        itemOption: {},  //AnalysisEnum.getItemMark(Name,dataType)
+        attrOption: [],  //itemOption.dataType
+        attrValue: null,//itemOption.dataType.value
+        attrText: null, //itemOption.dataType.text
+        attrUnit: null, //itemOption.dataType.unit
         currentView: 0,
         reportOption: {},
         canAddSheet: true,//是否允许添加表单
@@ -351,7 +351,7 @@
         this.monitorTypeId = itemObj.monitorTypeId;
         this.monitorTypeName = ((GlobalEnum.monitorTypes).find(t => parseInt(t.value) === parseInt(this.monitorTypeId))).text;
         this.itemOption = AnalysisEnum.getItemMark(this.monitorTypeId);
-        this.attrOption = this.itemOption.DataType;                     //获取数据类型来源
+        this.attrOption = this.itemOption.dataType;                     //获取数据类型来源
         this.attrValue = this.attrOption[0].value;
         this.attrText = this.attrOption[0].text;
         this.attrUnit = this.attrOption[0].unit;                        //重置单位
@@ -626,7 +626,7 @@
             type: info.type,
           })
         }
-        reportName = reportName + '监测 ' + typeText + window.global.formatDate(new Date(), 4);
+        reportName = reportName + '监测 ' + typeText + window.globalTool.formatDate(new Date(), 4);
         reportName = prompt('报表名称', reportName);
         if (!reportName) return;  //取消下载
         let stringReport = encodeURI(JSON.stringify(report));
@@ -815,7 +815,7 @@
                   color: Highcharts.getOptions().colors[0]
                 },
                 formatter: function () {
-                  return window.global.formatDate(this.value, 4);
+                  return window.globalTool.formatDate(this.value, 4);
                 }
               }
             }
@@ -1061,16 +1061,16 @@
           }, duration);
         };
         let now = new Date(),
-          yesterday = window.global.getAnotherDate(now, -( self.getMillisecond(self.type.id, now, false)), 1);
+          yesterday = window.globalTool.getAnotherDate(now, -( self.getMillisecond(self.type.id, now, false)), 1);
         $('#startTime').daterangepicker($.extend(true, options, {startDate: yesterday}), function (date) {
           let days = self.getMillisecond(self.type.id, date, false);
-          let endLocal = window.global.getAnotherDate(date, +days, 1);
+          let endLocal = window.globalTool.getAnotherDate(date, +days, 1);
           $('#endTime').val(endLocal).flash(flashColor, 1000);
           $('#startTime').flash(flashColor, 1000);
         });
         $('#endTime').daterangepicker($.extend(true, options, {startDate: now}), function (date) {
           let days = self.getMillisecond(self.type.id, date, true);
-          let startLocal = window.global.getAnotherDate(date, -days, 1);
+          let startLocal = window.globalTool.getAnotherDate(date, -days, 1);
           $('#startTime').val(startLocal).flash(flashColor, 1000);
           $('#endTime').flash(flashColor, 1000);
         });
@@ -1101,11 +1101,11 @@
           case 1:
             return millisecond;
           case 2:
-            return window.global.daysOfWeek() * millisecond;
+            return window.globalTool.daysOfWeek() * millisecond;
           case 3:
-            return window.global.daysOfMonth(date, minus) * millisecond;
+            return window.globalTool.daysOfMonth(date, minus) * millisecond;
           case 4:
-            return window.global.daysOfYear(date) * millisecond;
+            return window.globalTool.daysOfYear(date) * millisecond;
         }
       },
 

@@ -160,8 +160,8 @@
               if (item) {
                 this.info.itemObj = item;
                 this.monitorItemType = item.monitorTypeId;
-                this.attrOption = AlarmEnum.getItemMark(item.monitorTypeId).DataType;
-                this.commonOption = CommonEnum.getItemMark(item.monitorTypeId).DataType;
+                this.attrOption = AlarmEnum.getItemMark(item.monitorTypeId).dataType;
+                this.commonOption = CommonEnum.getItemMark(item.monitorTypeId).dataType;
                 this.warningType = this.attrOption[0].value;
                 this.commonUnit = this.commonOption[0].unit;
                 this.getAlarmParam(item.id, null);
@@ -190,7 +190,7 @@
         this.getAlarmParam(this.info.itemObj.id, '');
       },
     },
-    attached () {
+    mounted () {
       console.log(this.gps);
       let component = this;
       let interval = setInterval(() => {
@@ -198,8 +198,8 @@
         if (item) {
           component.$refs.itemSelector.$emit('update', [{id: item.id, text: item.name, obj: item}]);
           component.monitorItemType = item.monitorTypeId;
-          component.attrOption = AlarmEnum.getItemMark(item.monitorTypeId).DataType;
-          component.commonOption = CommonEnum.getItemMark(item.monitorTypeId).DataType;
+          component.attrOption = AlarmEnum.getItemMark(item.monitorTypeId).dataType;
+          component.commonOption = CommonEnum.getItemMark(item.monitorTypeId).dataType;
           component.warningType = component.attrOption[0].value;
           component.commonUnit = component.commonOption[0].unit;
           component.getAlarmParam(item.id, '');

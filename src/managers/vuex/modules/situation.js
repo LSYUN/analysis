@@ -15,69 +15,82 @@ const state = {
   pointCheck: false
 };
 const mutations = {
-  setItemObj1(state, obj){
+  SET_ITEM_1(state, obj){
     state.itemObj1 = obj;
+    window.session.setObj(window.sessionKeys.MONITORITEM1, obj);
   },
-  setItemObj2(state, obj){
+  SET_ITEM_2(state, obj){
     state.itemObj2 = obj;
   },
-  setGroupObj(state, obj){
+  SET_GROUP(state, obj){
     state.groupObj = obj;
   },
-  setPointObj1(state, obj){
+  SET_POINT_1(state, obj){
     state.pointObj1 = obj;
   },
-  setPointObj2(state, obj){
+  SET_POINT_2(state, obj){
     state.pointObj2 = obj;
   },
-  setRequest(state, obj){
+  SET_REQUEST(state, obj){
     state.request = obj;
   },
-  setStartDate(state, obj){
+  SET_START_DATE(state, obj){
     state.startDate = obj;
   },
-  setEndDate(state, obj){
+  SET_END_DATE(state, obj){
     state.endDate = obj;
   },
-  setDateCheck(state, check){
+  SET_DATE_CHECK(state, check){
     state.dateCheck = check;
   },
-  setPointCheck(state, check){
+  SET_POINT_CHECK(state, check){
     state.pointCheck = check;
   },
-  setGroupCheck(state, check){
+  SET_GROUP_CHECK(state, check){
     state.groupCheck = check;
   }
 };
 const actions = {
   setItemObj1({commit}, obj){
-    commit(['ITEM_OBJ_1'], obj);
+    commit('SET_ITEM_1', obj);
   },
   setItemObj2({commit}, obj){
-    commit(['ITEM_OBJ_2'], obj);
+    commit('SET_ITEM_2', obj);
+  },
+  setGroupObj({commit}, obj){
+    commit('SET_GROUP', obj);
   },
   setPointObj1({commit}, obj){
-    commit(['POINT_OBJ_1'], obj);
+    commit('SET_POINT_1', obj);
   },
   setPointObj2({commit}, obj){
-    commit(['POINT_OBJ_2'], obj);
+    commit('SET_POINT_2', obj);
   },
   setRequest({commit}, obj){
-    commit(['ITEM_OPTION'], obj);
+    commit('SET_REQUEST', obj);
   },
   setStartDate({commit}, obj){
-    commit(['START_DATE'], obj);
+    commit('SET_START_DATE', obj);
   },
   setEndDate({commit}, obj){
-    commit(['END_DATE'], obj);
+    commit('SET_END_DATE', obj);
+  },
+  setDateCheck({commit}, obj){
+    commit('SET_DATE_CHECK', obj);
+  },
+  setPointCheck({commit}, obj){
+    commit('SET_POINT_CHECK', obj);
+  },
+  setGroupCheck({commit}, obj){
+    commit('SET_GROUP_CHECK', obj);
   },
 };
 const getters = {
   getItemObj1(state){
-    return state.itemObj1;
+    return state.itemObj1 && state.itemObj1.id ? state.itemObj1 : window.session.getObj(window.sessionKeys.MONITORITEM1);
   },
   getItemObj2(state){
-    return state.itemObj2;
+    return state.itemObj2 && state.itemObj2.id ? state.itemObj2 : window.session.getObj(window.sessionKeys.MONITORITEM2);
   },
   getGroupObj(state){
     return state.groupObj;

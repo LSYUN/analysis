@@ -295,8 +295,8 @@
       //转换的函数
       formatDate(objDate){
         let date = {};
-        date.dateS = window.global.formatDate(objDate, 4);
-        date.dateL = window.global.formatDate(objDate, 1);
+        date.dateS = window.globalTool.formatDate(objDate, 4);
+        date.dateL = window.globalTool.formatDate(objDate, 1);
         return date;
       },
     }

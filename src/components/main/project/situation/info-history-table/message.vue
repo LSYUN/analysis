@@ -42,7 +42,7 @@
         this.filterTableByPointAndTime(component.variety, e.projectId, [], e.startDate, e.endDate);
       });
     },
-    attached () {
+    mounted () {
       this.projectId = window.sessionUtility.getObj(window.sessionKeys.PROJECT).id;
       this.monitorItemId = this.info.monitorItemId;
       let info = this.info;
@@ -69,7 +69,7 @@
           buttons: ['excelHtml5', 'pdfHtml5'],
           language: this.$store.state.dataTable.language,
           ajax: {
-            url: window.appContext.urls.getMessageByPointAndTime_U(variety, projectId, startDate, endDate),
+            url: window.mainConfig.url.getMessageByPointAndTime_U(variety, projectId, startDate, endDate),
             type: 'POST',
             contentType: 'application/json',
             dataType: 'json',
@@ -122,12 +122,12 @@
         });
       },
       filterTableByPointAndTime(variety, projectId, pointNames, startDate, endDate){
-        this.table.ajax.url(window.appContext.urls.getMessageByPointAndTime_U(variety, projectId, pointNames, startDate, endDate, {
+        this.table.ajax.url(window.mainConfig.url.getMessageByPointAndTime_U(variety, projectId, pointNames, startDate, endDate, {
           syncNo: 1, pageIndex: 1, pageSize: 50
         })).load();
       },
 //      filterTableByPoint(pointName, projectId){
-//        this.table.ajax.url(window.appContext.urls.getDataByPoint_U(this.variety, pointName, projectId, {
+//        this.table.ajax.url(window.mainConfig.url.getDataByPoint_U(this.variety, pointName, projectId, {
 //          syncNo: 1, pageIndex: 1, pageSize: 50
 //        })).load();
 //      },

@@ -276,7 +276,7 @@ class Enum {
         options = waterLevel;
         break;
       case 2://侧斜孔 注：（基坑-深层水平位移 尾矿-内部位移）
-        // Url = 'inDisplacementData';
+        // url = 'inDisplacementData';
         options = inDisplacement;
         break;
       case 3://支撑轴力

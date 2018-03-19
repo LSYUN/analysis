@@ -1,6 +1,5 @@
 <template>
   <section class="content content-overflow">
-    <button id="test" type="button">test</button>
     <div class="box">
       <div class="box-header">
         <h3 class="box-title">工程信息</h3>

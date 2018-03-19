@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Router from "vue-router";
-import HelloWorld from "@/components/HelloWorld";
 
 Vue.use(Router);
 
@@ -111,10 +110,10 @@ const router = new Router({
                   path: 'history',
                   component: resolve => require(['../components/main/project/situation/info-history.vue'], resolve)
                 },
-                // {
-                //   path: 'analysis',
-                //   component: resolve => require(['../components/main/project/situation/info-analysis.vue'], resolve)
-                // },
+                {
+                  path: 'analysis',
+                  component: resolve => require(['../components/main/project/situation/info-analysis.vue'], resolve)
+                },
                 // {
                 //   path: 'analysisLink',
                 //   component: resolve => require(['../components/main/project/situation/info-analysis-link.vue'], resolve)
@@ -207,20 +206,15 @@ const router = new Router({
         //   ]
         // },
       ]
-    },
-    {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
     }
   ]
 });
 router.beforeEach(function (to, from, next) {
-  // const allow = ['login', 'loginAuto'];
-  // var path = to.path.split('/')[1];
-  // if (allow.indexOf(path) < 0) {
-  //   router.push({path: '/login'});
-  // }
+  if (to.path.indexOf('login') < 0) {
+    if (!window.session.get(window.sessionKeys.AUTHORIZED)) {
+      router.push('/login');
+    }
+  }
   next();
 });
 export default router;

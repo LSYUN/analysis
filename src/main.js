@@ -33,7 +33,6 @@ import Vue from "vue";
 import App from "./App";
 import router from "./router/index";
 import store from "./managers/vuex/store";
-// import bus from "./managers/utils/bus";
 import Keys from "./managers/storage/storage-key";
 import Local from "./managers/storage/local";
 import Session from "./managers/storage/session";
