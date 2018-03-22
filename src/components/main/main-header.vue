@@ -1,6 +1,6 @@
 <template>
   <header class="main-header">
-    <a href="#" class="logo" data-toggle="push-menu">
+    <a href="#" class="logo" data-toggle="offcanvas">
       <span><i class="iconfont icon-cloud dt-logo-icon"></i></span>
       <span class="logo-mini"><b>A</b>nalysis</span>
       <span class="logo-lg"><b>A</b>nalysis</span>
@@ -129,7 +129,7 @@
             </ul>
           </li>
           <li>
-            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+            <a href="#" class="dropdown-toggle" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
           </li>
         </ul>
       </div>
@@ -204,16 +204,14 @@
   };
 </script>
 <style type="scss" scoped>
-
   .main-header {
     width: 100%;
     position: fixed;
+    /*width: calc(100% + 230px);*/
+    /*margin-left: -230px;*/
     background-color: #2f323e;
   }
 
-  .nav {
-    background-color: #2f323e;
-  }
 
   .main-header .logo {
     color: #ffffff;
@@ -227,9 +225,14 @@
     color: #ffffff;
   }
 
-  .main-header .navbar .navbar-custom-menu {
-    /*background-color: #2f323e;*/
+  .main-header .navbar .navbar-custom-menu .nav li a.dropdown-toggle {
+    background-color: #2f323e;
+    color: #ffffff;
   }
 
+  .main-header .navbar .navbar-custom-menu .nav li a.dropdown-toggle:hover {
+    background-color: #ffffff;
+    color: #2f323e;
+  }
 
 </style>

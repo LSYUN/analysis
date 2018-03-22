@@ -89,7 +89,7 @@
       this.$on('updateChart', function (obj) {
         let setAttr = window.globalTool.setUpperCase(this.info.itemOption.attrValue);// 将获取到的显示类型属性首字母转大写
         if (this.chart.series && this.chart.series.length > 0 && obj) {
-          for (let i = 0; i < this.chart.series.length; i++) {
+          for (let i = 0, len = this.chart.series.length; i < len; i++) {
             if (this.chart.series[i].name === obj.PointName)
               this.chart.series[i].addPoint([Date.parse(obj.DTime), obj[setAttr]], true, false);
           }
@@ -97,7 +97,7 @@
       });
     },
     mounted () {
-      this.projectId = window.sessionUtility.getObj(window.sessionKeys.PROJECT).id;
+      this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
       this.createChart();
       this.chart.showLoading("<img src='../static/image/spinner_B.gif'>");
       let e = this.info;
@@ -139,7 +139,7 @@
       getSeriesOptions(data, attrY){
         let map = {}, dest = [];
         if (data) {
-          for (let i = 0; i < data.length; i++) {
+          for (let i = 0, len = data.length; i < len; i++) {
             let ai = data[i];
             if (!map[ai.pointName]) {
               dest.push({ //Date.parse(ai.dtime)
@@ -201,7 +201,7 @@
                   this.chart.hideLoading();
                   return;
                 }
-                for (let i = 0; i < this.chart.series.length / 2; i++) {
+                for (let i = 0, len = this.chart.series.length / 2; i < len; i++) {
                   let oldX = (_.find(this.seriesOptions.dest, (series) => this.chart.series[i].name === series.name)).data,
                     newX = (_.find(seriesOptions.dest, (series) => this.chart.series[i].name === series.name)).data;
                   this.chart.series[i].setData(newX.concat(oldX));
@@ -258,7 +258,7 @@
       getTimeSeries(data){
         if (data) {
           let series = [], map = [], timeList = [], result = [];
-          for (let i = 0; i < data.length; i++) {
+          for (let i = 0, len = data.length; i < len; i++) {
             let ai = data[i];
             if (!map[ai.dtime]) {
               timeList.push({id: ai.dtime, text: ai.dtime});
@@ -305,12 +305,12 @@
               }
             }
 
-            for (let i = 0; i < result.length; i++) {
+            for (let i = 0, len = result.length; i < len; i++) {
               if (dTime === result[i].time) {
                 var results = result[i].archives;
               }
             }
-            for (let i = 0; i < data.length; i++) {
+            for (let i = 0, len = data.length; i < len; i++) {
               let datas = data[i].accumulationOffsetX;
               valueOffListMax[i] = datas;
               let dataList = data[i].depth;
@@ -324,11 +324,11 @@
               xData = [],
               xLengths = [];
 //            console.log(results.sort(compare('depth')));
-            for (let i = 0; i < results.sort(compare('depth')).length; i++) {
+            for (let i = 0, len = results.sort(compare('depth')).length; i < len; i++) {
               xData.push({name: results[i].pointName, x: results[i].accumulationOffsetX, y: results[i].depth});
             }
 //            console.log(xData);
-            for (let i = Math.floor(minX); i <= Math.ceil(maxX); i++) {
+            for (let i = Math.floor(minX), len = Math.ceil(maxX); i < len; i++) {
               xLengths.push(i);
             }
             //创建画布
@@ -476,7 +476,7 @@
         var valueOffListMax = new Array();
         var deptListMax = new Array();
 //        console.log(results.sort(compare(1)));
-        for (let i = 0; i < results.sort(compare(1)).length; i++) {
+        for (let i = 0, len = results.sort(compare(1)).length; i < len; i++) {
           xData.push({name: results[i][0], x: results[i][2], y: results[i][1]});
           let datas = results[i][2];
           valueOffListMax[i] = datas;
@@ -487,7 +487,10 @@
         let maxX = d3.max(valueOffListMax) + 1;
         let minDept = d3.min(deptListMax);
         let maxDept = d3.max(deptListMax);
-        for (let i = Math.floor(minX); i <= Math.ceil(maxX); i++) {
+        for (let i = Math.floor(minX); i <= Math.ceil(maxX) i < len;
+        i++
+      )
+        {
           xLengths.push(i);
         }
         //创建画布
@@ -634,7 +637,7 @@
               xLengths = [];
             var valueOffListMax = new Array();
             var deptListMax = new Array();
-            for (let i = 0; i < series[0].data.sort(compare(1)).length; i++) {
+            for (let i = 0, len = series[0].data.sort(compare(1)).length; i < len; i++) {
               xData.push({name: series[0].data[i][0], x: series[0].data[i][2], y: series[0].data[i][1]});
               let datas = series[0].data[i][2];
               valueOffListMax[i] = datas;
@@ -646,7 +649,10 @@
             let maxX = d3.max(valueOffListMax) + 1;
             let minDept = d3.min(deptListMax);
             let maxDept = d3.max(deptListMax);
-            for (let i = Math.floor(minX); i <= Math.ceil(maxX); i++) {
+            for (let i = Math.floor(minX); i <= Math.ceil(maxX) i < len;
+            i++
+            )
+            {
               xLengths.push(i);
             }
             //创建画布

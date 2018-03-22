@@ -1,32 +1,33 @@
 <template>
-  <table cellpadding="0" cellspacing="0" border="0" class="display nowrap table" width="100%" id="example">
-    <thead>
-    <tr>
-      <th class="text-center">消息体</th>
-      <th class="text-center">消息级别</th>
-      <th class="text-center">更新时间</th>
-    </tr>
-    </thead>
-  </table>
+  <div>
+    <table cellpadding="0" cellspacing="0" border="0" class="display nowrap table" width="100%" id="example">
+      <thead>
+      <tr>
+        <th class="text-center">消息体</th>
+        <th class="text-center">消息级别</th>
+        <th class="text-center">更新时间</th>
+      </tr>
+      </thead>
+    </table>
+  </div>
 </template>
 <script>
+  import * as tableConfig from "../../../../../managers/configs/dataTable.js"
   export default {
-    components: {
-      'vue-select2': require('../utility/vue-select2.vue'),
-    },
     props: {
       info: {
         type: Object,
         required: true
       }
     },
+    watch: {
+      info: function () {
+        this.initTable(this.info);
+      }
+    },
     data () {
       return {
-        variety: 'messageInfo',
-        projectId: null,
-        monitorItemId: null,
         table: {},
-        startEndDate: {},
         levels:[
           {value:0 ,text:'默认消息'},
           {value:1 ,text:'一般消息'},
@@ -36,24 +37,12 @@
         ]
       };
     },
-    created: function () {
-      let component = this;
-      this.$on('filterTable', function (e) {
-        this.filterTableByPointAndTime(component.variety, e.projectId, [], e.startDate, e.endDate);
-      });
+    mounted(){
+      this.initTable(this.info);
     },
-    mounted () {
-      this.projectId = window.sessionUtility.getObj(window.sessionKeys.PROJECT).id;
-      this.monitorItemId = this.info.monitorItemId;
-      let info = this.info;
-      let startDate = info.startEndDate.startDate.dateL;
-      let endDate = info.startEndDate.endDate.dateL;
-      this.initTable(this.variety, info.projectId, startDate, endDate);
-    },
-
     methods: {
-      initTable(variety, projectId, startDate, endDate){
-        this.table = $('#example').DataTable({
+      initTable(info){
+        let setting = {
           scrollX: false,
           scrollY: '55vh',
           bScrollCollapse: true,
@@ -67,9 +56,9 @@
           lengthMenu: [[10, 25, 50, 100, 200, 1000, -1], [10, 25, 50, 100, 200, 1000, "All"]],
           dom: "<'row'<'col-xs-9'l><'col-xs-3'B>>" + "<'row'<'col-xs-12'tr>>" + "<'row'<'col-md-6'i><'col-md-6'p>>",
           buttons: ['excelHtml5', 'pdfHtml5'],
-          language: this.$store.state.dataTable.language,
+          language: tableConfig.LANGUAGE,
           ajax: {
-            url: window.mainConfig.url.getMessageByPointAndTime_U(variety, projectId, startDate, endDate),
+            url: window.mainConfig.url.getMessage_U(info.projectId, info.startDate, info.endDate),
             type: 'POST',
             contentType: 'application/json',
             dataType: 'json',
@@ -91,9 +80,7 @@
               });
             }
           },
-          createdRow: function (row, data, index) {
-            $('td', row).addClass('text-center');
-          },
+          createdRow: (row) => $('td', row).addClass('text-center'),
           data: null,
           columns: [
             {
@@ -115,22 +102,19 @@
             {
               data: 'upLoadDateTime'
             }]
-        });
+        };
+        if (!this.table[0]) {
+          this.table = $("#example").dataTable(setting);
+        } else {
+          this.table.fnDestroy();
+          $('#example').empty();
+          this.table = $('#example').dataTable(setting);
+        }
         $('a.dt-button').css({
           'padding': '.1em .5em',
           'min-width': '45px'
         });
       },
-      filterTableByPointAndTime(variety, projectId, pointNames, startDate, endDate){
-        this.table.ajax.url(window.mainConfig.url.getMessageByPointAndTime_U(variety, projectId, pointNames, startDate, endDate, {
-          syncNo: 1, pageIndex: 1, pageSize: 50
-        })).load();
-      },
-//      filterTableByPoint(pointName, projectId){
-//        this.table.ajax.url(window.mainConfig.url.getDataByPoint_U(this.variety, pointName, projectId, {
-//          syncNo: 1, pageIndex: 1, pageSize: 50
-//        })).load();
-//      },
     }
   };
 </script>

@@ -467,7 +467,7 @@
         let chart = this.clone(this.reportOption.chart);
         let sheetName = this.clone(this.reportOption.sheetName || []);
         (this.savedCount !== this.infos.length ) && (this.infos = this.infos.slice(0, this.savedCount));
-        for (let i = 0; i < dataList.length; i++) {
+        for (let i = 0, len = dataList.length; i < len; i++) {
           let data = dataList[i];
           report.projectId = this.projectId;
           report.monitorItemId = this.monitorItemId;
@@ -498,7 +498,10 @@
           if (chart.length > 0) {                 //处理图表
             report.chartOption.axis = [chart[0]]; //时间作为X轴
             if (chart.length > 1) {              //除了时间以外的字段
-              for (let i = 1; i < chart.length; i++) {
+              for (let i = 1; i < chart.length; i < len;
+              i++
+            )
+              {
                 report.chartOption.axis.push([this.attrValue + chart[i][0], this.attrText + chart[i][1], this.attrUnit]);
               }
             } else {
@@ -580,7 +583,7 @@
 
       /*初始化chart*/
       initChart(chartSeries){
-        for (let i = 0; i < chartSeries.length; i++) {
+        for (let i = 0, len = chartSeries.length; i < len; i++) {
           let chartId = 'chart' + i;
           let text = chartSeries[i].text, unit = chartSeries[i].unit, series = chartSeries[i].series;
           if ($('#' + chartId).length <= 0) {
@@ -599,7 +602,7 @@
         console.log(infos);
         let type = infos[0].type;
         let typeText = '';
-        for (let i = 0; i < infos.length; i++) {
+        for (let i = 0, len = infos.length; i < len; i++) {
           let info = infos[i];
           if (reportName.indexOf(info.sheetHead[0]) === -1) reportName = reportName + '-' + info.sheetHead[0];
           if (type.toString().indexOf(info.type.toString()) !== -1) typeText = _.find(this.typeOptions.localData, (d) => d.id === type).text;
@@ -694,7 +697,7 @@
         let map = {}, chartSeries = [], eachSeries = [];
         if (data && data.length > 0) {
           for (let k = 1; k < axis.length; k++) {
-            for (let i = 0; i < data.length; i++) {
+            for (let i = 0, len = data.length; i < len; i++) {
               let ai = data[i];
               if (!map[ai.pointName]) {
                 eachSeries.push({
@@ -923,13 +926,13 @@
         /*表标题*/
         //doms长度一定与对应的info长度一直,否则报错
         if (info.sheetHead && headDoms.length > 0)        /*表头信息*/
-          for (let i = 0; i < info.sheetHead.length; i++)
+          for (let i = 0, len = info.sheetHead.length; i < len; i++)
             headDoms[i].value = info.sheetHead[i];
         if (info.sheetFoot && footDoms.length > 0)        /*表脚信息*/
-          for (let i = 0; i < info.sheetFoot.length; i++)
+          for (let i = 0, len = info.sheetFoot.length; i < len; i++)
             footDoms[i].value = info.sheetFoot[i];
         if (info.sheetMain.foot && tableFootDoms.length > 0)        /*总结信息*/
-          for (let i = 0; i < info.sheetMain.foot.length; i++)
+          for (let i = 0, len = info.sheetMain.foot.length; i < len; i++)
             tableFootDoms[i].value = info.sheetMain.foot[i];
       },
 
@@ -941,7 +944,7 @@
           console.error(sheetName + ' 键值数不对应');
           return;
         }
-        for (let i = 0; i < doms.length; i++) {
+    for (let i = 0, len = doms.length; i < len; i++) {
           let dom = doms[i];
           let tagName = dom.tagName.toLowerCase();
           if (tagName === 'label') {
@@ -962,7 +965,7 @@
       getInputString(elements){
         let doms = elements;
         let text, value, tempObj = {}, res = [];
-        for (let i = 0; i < doms.length; i++) {
+    for (let i = 0, len = doms.length; i < len; i++) {
           let dom = doms[i];
           let tagName = dom.tagName.toLowerCase();
           if (tagName === 'label') {
@@ -991,7 +994,7 @@
       getInputValues(elements){
         let doms = elements, res;
         if (doms instanceof Array) {
-          for (let i = 0; i < doms.length; i++) {
+          for (let i = 0, len = doms.length; i < len; i++) {
             res.push(doms[i].value || ' ');
           }
           return res;

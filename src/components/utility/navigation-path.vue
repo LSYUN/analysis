@@ -349,7 +349,7 @@
           return true;
         }
         if (root.hasOwnProperty('child') === true) {
-          for (let i = 0; i < root.child.length; i++) {
+          for (let i = 0, len = root.child.length; i < len; i++) {
             if (this.recursion(root.child[i], key, array) === true) {
               return true;
             }
@@ -359,7 +359,7 @@
         return false;
       },
       removeArray (array, obj) {
-        for (var i = 0; i < array.length; i++) {
+        for (var i = 0, len = array.length; i < len; i++) {
           var temp = array[i];
           if (!isNaN(obj)) {
             temp = i;

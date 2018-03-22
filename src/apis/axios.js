@@ -626,7 +626,7 @@ class AxiosManager {
 
   /*根据点组Id获取测斜数据*/
   getMonitorGroupIdData_R(variety, mark, monitorGroupId, projectId, startTime, endTime, config) {
-    if (mark === 5 || mark === 6 || mark === 7 || mark === 8) {
+    if (mark >= 5) {
       return this.http.post(variety + '/getPageByMonitorGroupIdAndTime?monitorGroupId=' + monitorGroupId +
         '&projectId=' + projectId + '&startTime=' + startTime + '&endTime=' + endTime, config);
     }

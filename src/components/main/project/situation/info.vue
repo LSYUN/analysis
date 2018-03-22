@@ -1,41 +1,39 @@
 <template>
-  <div style="min-width:300px;">
-    <div class="content content-overflow topper">
-      <nav class="navbar navbar-inverse" role="navigation">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <div class="navbar-brand" @click="backToList()"><b>{{projectName}}</b></div>
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          </div>
-          <div class="collapse navbar-collapse" id="nav-collapse">
-            <ul class="nav navbar-nav">
-              <li>
-                <router-link :to="{path:'/project/situationInfo/diagram'}">工程简图</router-link>
-              </li>
-              <li>
-                <router-link :to="{path:'/project/situationInfo/history'}">历史数据</router-link>
-              </li>
-              <li>
-                <router-link :to="{path:'/project/situationInfo/analysis'}">数据分析(趋势)</router-link>
-              </li>
-              <li>
-                <router-link :to="{path:'/project/situationInfo/relAnalysis'}">关联分析(趋势)</router-link>
-              </li>
-              <li>
-                <router-link :to="{path:'/project/situationInfo/realTime'}">实时数据</router-link>
-              </li>
-            </ul>
-          </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-      </nav>
-      <div>
-        <router-view></router-view>
-      </div>
+  <div class="content">
+    <nav class="navbar navbar-inverse" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <div class="navbar-brand" @click="backToList()"><b>{{projectName}}</b></div>
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" id="nav-collapse">
+          <ul class="nav navbar-nav">
+            <li>
+              <router-link :to="{path:'/project/situationInfo/diagram'}">工程简图</router-link>
+            </li>
+            <li>
+              <router-link :to="{path:'/project/situationInfo/history'}">历史数据</router-link>
+            </li>
+            <li>
+              <router-link :to="{path:'/project/situationInfo/analysis'}">数据分析(趋势)</router-link>
+            </li>
+            <li>
+              <router-link :to="{path:'/project/situationInfo/relAnalysis'}">关联分析(趋势)</router-link>
+            </li>
+            <li>
+              <router-link :to="{path:'/project/situationInfo/realTime'}">实时数据</router-link>
+            </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+    <div>
+      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -154,7 +152,7 @@
       active(){
         let _this = this;
         let li = $('#nav-collapse ul li');
-        for (let i = 0; i < li.length; i++) {
+        for (let i = 0, len = li.length; i < len; i++) {
           let $li = li[i];
           if ($($li).children('a')[0].href.indexOf(_this.$route.path) > 0) {
             $($li).addClass('active');
@@ -173,10 +171,6 @@
 </script>
 
 <style lang="scss" scoped>
-  .topper {
-    padding: 0;
-  }
-
   .navbar {
     margin-bottom: 2px;
   }

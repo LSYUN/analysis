@@ -93,12 +93,11 @@
         </div>
       </div>
     </div>
-    <div class="min-wrapper">
-      <base-table v-if="itemType!==200 && itemType!==201" :info="info" :paging="true"></base-table>
-      <!--&lt;!&ndash;<brace v-if="itemType===3 && isRender"></brace>&lt;!&ndash;支撑轴力&ndash;&gt;&ndash;&gt;-->
-      <!--<total-station v-if="itemType===20 && isRender"></total-station>&lt;!&ndash;全站仪位移&ndash;&gt;-->
-      <!--<message v-if="itemType===200"></message>&lt;!&ndash;消息&ndash;&gt;-->
-      <!--<station-check v-if="itemType===201"></station-check>-->
+    <div class="table-wrapper">
+      <base-table v-if="itemType < 200" :info="info" :paging="true"></base-table>
+      <message v-if="itemType == 200" :info="info"></message><!--消息-->
+      <!--<station-check v-if="itemType===201" :info="info"></station-check>-->
+      <!--<brace v-if="itemType===3 && isRender"></brace>&lt;!&ndash;支撑轴力&ndash;&gt;-->
     </div>
   </div>
 </template>
@@ -106,19 +105,19 @@
   import {bus} from '../../../../managers/utils/bus';
   import AnalysisEnum from '../../../../managers/enum/analysis-enum';
   import TableConfig from '../../../../managers/enum/tableConfig-enum';
-  import baseTable from './info-history-table/base-table.vue'
+  import baseTable from './info-history-table/base-table.vue';
+  import  './../../../../managers/utils/my-promise';
   export default {
     components: {
       'base-table': baseTable,
+      'message': resolve => require(['./info-history-table/message.vue'], resolve),
 //      'brace': require('../project-situation-info-pages/history-brace-axial-force.vue'),
-//      'total-station': require('./info-history-table/total-station.vue'),
-//      'message': require('./info-history-table/message.vue'),
 //      'station-check': require('./info-history-table/total-station-coord-check.vue')
     },
     computed: {
       itemObj1: {
         set: function (obj) {
-          this.$store.dispatch('setItemObj1', obj);
+          if (obj && obj.hasOwnProperty('id')) this.$store.dispatch('setItemObj1', obj);
         },
         get: function () {
           return this.$store.getters.getItemObj1;
@@ -207,28 +206,14 @@
             projectId: window.session.getObj(window.sessionKeys.PROJECT).id,
           }],
           evtSelected: function (evt, data) {
-            this.itemObj1 = data[0];
+            let item = data[0].obj;
+            if (item.monitorTypeId >= 200) {
+              this.itemType = item.monitorTypeId;
+              this.query();
+              return;
+            }
+            this.itemObj1 = data[0].obj;
             this.initItemOption();
-//            if (data && data.length > 0) {
-//              let item = data[0].obj;
-//              if (item) {
-//                this.dateCheckD = false;
-//                this.groupCheckD = false;
-//                this.pointCheckD = false;
-//                this.itemType = item.monitorTypeId;
-//                let request = AnalysisEnum.getItemMark(item.monitorTypeId);
-//                if (this.itemType === 200 || this.itemType === 201) { // 消息查询或者误差查询
-//                  this.isRender = true;
-//                } else {
-//                  this.$store.dispatch('setItemObj1', item);
-//                  this.request = {
-//                    url: request.url,
-//                    mark: 1
-//                  };
-//                  this.initTableConfig();
-//                }
-//              }
-//            }
           }.bind(this),
           ajaxUrl: function () {
             return window.mainConfig.url.getMonitorItemAndMsgQueryPage(this.projectId);
@@ -290,7 +275,7 @@
       this.initItemOption();
       this.initGroupOption();
       this.initPointOption();
-//      this.info = Object.assign({}, this.info);
+      this.info = Object.assign({}, this.info);
     },
     methods: {
       /***
@@ -343,7 +328,7 @@
             data = TableConfig.getTableConfig(this.itemType);
           }
           if (data && data.length > 0) {
-            for (let i = 0; i < data.length; i++) {
+            for (let i = 0, len = data.length; i < len; i++) {
               if (data[i].visibility) {
                 tableOption.push({
                   title: data[i].historyTitle,
@@ -363,7 +348,7 @@
         });
       },
       /***
-       * 请求条件整理,改变this.info ,触发子组件监听事件,并向后台请求数据
+       * 查询监测项.请求条件整理,改变this.info ,触发子组件监听事件,并向后台请求数据
        */
       query(){
         let mark = null, startDate = null, endDate = null;
@@ -415,12 +400,38 @@
           tableOption: this.request.tableOption,
           keepDecs: this.request.keepDecs
         };
+//        if (this.itemType === 200) {
+//          console.log(this.itemType);
+//          let temp = Object.assign({}, request);
+//          request = {};
+//          request = this.getMessage(temp);
+//        }
+//        else if (this.itemType === 201) {
+//          let temp = Object.assign({}, request);
+//          request = {};
+//          request = this.getStationCheck(temp);
+//        }
+        console.log(request);
         this.info = Object.assign({}, request);
       },
+      /***
+       * 查询全部
+       */
       queryAll(){
         this.pointCheckD = false;
         this.dateCheckD = false;
         this.query();
+      },
+
+      getMessage(request){
+        return {
+          projectId: request.projectId,
+          startDate: request.startDate,
+          endDate: request.endDate,
+        };
+      },
+      getStationCheck(request){
+        return {projectId: request.projectId};
       },
       /***
        * 转换时间格式
@@ -452,9 +463,8 @@
           }
         };
         $("#dateSelect1").daterangepicker(option).on('apply.daterangepicker', function (ev, date) {
-          console.log(typeof _this.endDate);
           if (!_this.dateCheckD && _this.endDate && typeof _this.endDate === 'string') _this.dateCheckD = true;
-          _this.startDate = date.startDate.format('YYYY-MM-DD 00:00:00');
+          _this.startDate = date.startDate.format('YYYY-MM-DD HH:mm:ss');
         }).on('cancel.daterangepicker', function () {
           $("#dateSelect1").val(start);
           _this.dateCheckD = false;
@@ -463,7 +473,8 @@
 
         $("#dateSelect2").daterangepicker(option).on('apply.daterangepicker', function (ev, date) {
           if (!_this.dateCheckD && _this.startDate && typeof _this.startDate === 'string') _this.dateCheckD = true;
-          _this.endDate = date.startDate.format('YYYY-MM-DD 23:59:59');
+          _this.endDate = date.startDate.format('YYYY-MM-DD HH:mm:ss');
+          (_this.startDate === date.startDate.format('YYYY-MM-DD HH:mm:ss')) && (_this.endDate = date.startDate.format('YYYY-MM-DD 23:59:59'));
         }).on('cancel.daterangepicker', function () {
           $("#dateSelect2").val(end);
           _this.dateCheckD = false;
@@ -488,6 +499,7 @@
     border-radius: 5px;
     border: solid rgba(61, 155, 179, 0.56) 1px;
     color: #00aadd;
+    cursor: default;
     /*margin-top: 0;*/
   }
 
@@ -496,16 +508,13 @@
     float: right;
   }
 
-  /*.min-wrapper {*/
-  /*position: relative;*/
-  /*width: inherit;*/
-  /*min-width: 550px;*/
-  /*min-height: inherit;*/
-  /*}*/
-
-  .min-wrapper {
+  .table-wrapper {
     width: inherit;
-    /*min-width: 550px;*/
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.45);
+    padding: 6px 6px;
   }
 
   #app .select-box {

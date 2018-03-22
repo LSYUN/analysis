@@ -77,7 +77,7 @@
       });
     },
     mounted () {
-      this.projectId = window.sessionUtility.getObj(window.sessionKeys.PROJECT).id;
+      this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
       let e = this.info;
       let startDate = e.startEndDate.startDate.dateL;
       let endDate = e.startEndDate.endDate.dateL;;
@@ -248,7 +248,7 @@
               endIndex = categories.length;
               break;
           }
-          for (let i = 0; i < endIndex; i++) {
+          for (let i = 0, len = endIndex; i < len; i++) {
             if (showList[0].data[pageIndex][j]) {
               if (startIndex === showList[0].data[pageIndex][j][0]) {
                 series.data.push([i, showList[0].data[pageIndex][j][1]]);

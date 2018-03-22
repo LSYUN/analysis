@@ -407,7 +407,7 @@
           let data = response.data;
 //          console.log(data);
           if (data && data.length > 0) {
-            for (let i = 0; i < data.length; i++) {
+            for (let i = 0,len =  data.length; i < len; i++) {
               if (data[i].visibility) {
                 changeData.push({
                   title: data[i].historyTitle,
@@ -619,7 +619,7 @@
         }
         this.info.itemOption.mark = mark;
         let pointNames = [];
-        for (let i = 0; i < e.itemOption.pointNames.length; i++) {
+        for (let i = 0,len =  e.itemOption.pointNames.length; i < len; i++) {
           let a = e.itemOption.pointNames[i].replace(/\+/g, '%2B').replace(/\+/g, ' %20').replace(/\+/g, '%2F').replace(/\+/g, '%3F')
               .replace(/\+/g, '%25').replace(/\+/g, '%23').replace(/\+/g, '%26').replace(/\+/g, '%3D');
           pointNames.push(a);

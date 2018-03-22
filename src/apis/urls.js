@@ -168,44 +168,56 @@ class UrlManager {
     return this.http + '/sensors/getSensorCollectState/' + imcId + '/' + projectId;
   }
 
-  getMonitorItemData_U(variety, mark, monitorItemId, projectId, pointName, startTime, endTime) {
-    if (mark === 1 || mark === 3 || mark === 5 || mark === 7) {
-      return this.http + '/' + variety + '/getPageByMonitorItemIdAndTime?monitorItemId=' + monitorItemId +
-        '&projectId=' + projectId + '&startTime=' + startTime + '&endTime=' + endTime;
+  getMonitorItemData_U(info) {
+    let url = info.url, mark = info.mark, itemId = info.itemId, projectId = info.projectId,
+      pointNames = info.pointNames, start = info.startDate, end = info.endDate, calculateType = info.calculateType,
+      pointType = info.pointType;
+    if (url === 'measureData') {
+      return this.getMeasureData_U(url, mark, itemId, projectId, pointNames, calculateType, pointType, start, end)
+    }
+    else if (mark === 1 || mark === 3 || mark === 5 || mark === 7) {
+      return this.http + '/' + url + '/getPageByMonitorItemIdAndTime?monitorItemId=' + itemId +
+        '&projectId=' + projectId + '&startTime=' + start + '&endTime=' + end;
     } else {
-      return this.http + '/' + variety + '/getPageByPointsAndTime?projectId=' + projectId +
-        '&pointNames=' + pointName + '&startTime=' + startTime + '&endTime=' + endTime;
+      return this.http + '/' + url + '/getPageByPointsAndTime?projectId=' + projectId +
+        '&pointNames=' + pointNames + '&startTime=' + start + '&endTime=' + end;
     }
   }
 
   //混凝土支撑监测项
-  getMonitorItemDataC_U(variety, mark, monitorItemId, projectId, pointGroupNames, startTime, endTime) {
+  getMonitorItemDataC_U(url, mark, monitorItemId, projectId, pointGroupNames, startTime, endTime) {
     if (mark === 1 || mark === 3) {
-      return this.http + '/' + variety + '/getPageByAllPointGroupsIdAndTime?monitorItemId=' + monitorItemId +
+      return this.http + '/' + url + '/getPageByAllPointGroupsIdAndTime?monitorItemId=' + monitorItemId +
         '&projectId=' + projectId + '&startTime=' + startTime + '&endTime=' + endTime;
     } else {
-      return this.http + '/' + variety + '/getPageByPointGroupsAndTime?projectId=' + projectId +
+      return this.http + '/' + url + '/getPageByPointGroupsAndTime?projectId=' + projectId +
         '&pointGroupNames=' + pointGroupNames + '&startTime=' + startTime + '&endTime=' + endTime;
     }
   }
 
   //全站仪
-  getMeasureDataByPointAndTime_U(variety, mark, monitorItemId, projectId, pointName, calculatingType, pointType, startTime, endTime) {
+  getMeasureData_U(url, mark, monitorItemId, projectId, pointName, calculatingType, pointType, startTime, endTime) {
     if (mark === 1 || mark === 3) {
-      return this.http + '/' + variety + '/getPageByMonitorItemIdAndTime?monitorItemId=' + monitorItemId +
+      return this.http + '/' + url + '/getPageByMonitorItemIdAndTime?monitorItemId=' + monitorItemId +
         '&projectId=' + projectId + '&calculatingType=' + calculatingType + '&pointType=' + pointType +
         '&startTime=' + startTime + '&endTime=' + endTime;
     } else {
-      return this.http + '/' + variety + '/getPageByPointsAndTime?projectId=' + projectId +
+      return this.http + '/' + url + '/getPageByPointsAndTime?projectId=' + projectId +
         '&pointNames=' + pointName + '&calculatingType=' + calculatingType + '&pointType=' + pointType +
         '&startTime=' + startTime + '&endTime=' + endTime;
     }
   }
 
-  getMessageByPointAndTime_U(variety, projectId, startTime, endTime) {
-    return this.http + '/' + variety + '/getByProjectIdAndTime?projectId=' + projectId + '&startTime=' + startTime + '&endTime=' + endTime;
+  /***
+   * 消息查询
+   */
+  getMessage_U(projectId, startTime, endTime) {
+    return this.http + '/messageInfo/getByProjectIdAndTime?projectId=' + projectId + '&startTime=' + startTime + '&endTime=' + endTime;
   }
 
+  /***
+   * 测站自检
+   */
   getStationCoordCheck(projectId) {
     return this.http + '/stationCoordCheck/list/projectId/' + projectId;
   }

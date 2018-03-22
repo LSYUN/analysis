@@ -63,7 +63,7 @@
       getSeries(data, attrY){
         let map = {}, dest = [];
         if (data) {
-          for (let i = 0; i < data.length; i++) {
+          for (let i = 0,len =  data.length; i < len; i++) {
             let ai = data[i];
             if (!map[ai.pointName]) {
               dest.push({
@@ -267,7 +267,7 @@
                   this.chart.hideLoading();
                   return;
                 }
-                for (let i = 0; i < this.chart.series.length / 2; i++) {
+                for (let i = 0,len =  this.chart.series.length / 2; i < len; i++) {
                   let oldX = (_.find(this.seriesOptions.dest, (series) => this.chart.series[i].name === series.name)).data,
                     newX = (_.find(seriesOptions.dest, (series) => this.chart.series[i].name === series.name)).data;
                   this.chart.series[i].setData(newX.concat(oldX));

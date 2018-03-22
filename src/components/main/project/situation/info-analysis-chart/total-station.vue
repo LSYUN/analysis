@@ -34,9 +34,6 @@
 </template>
 <script>
   export default {
-    components: {
-      'vue-select2': require('../utility/vue-select2.vue'),
-    },
     props: {
       info: {
         type: Object,
@@ -204,7 +201,7 @@
       });
       this.$on('updateChart', function (obj) {
         if (this.chartTrend.series && this.chartTrend.series.length > 0 && obj) {
-          for (let i = 0; i < this.chartTrend.series.length - 2; i++) {
+          for (let i = 0, len = this.chartTrend.series.length - 2; i < len; i++) {
             if (this.chartTrend.series[i].name === obj.PointName)
               this.chartTrend.series[i].addPoint([Date.parse(obj.DTime), obj[this.attrY + 'East']], true, false);
           }
@@ -239,7 +236,7 @@
           },
         },
       });
-      this.projectId = window.sessionUtility.getObj(window.sessionKeys.PROJECT).id;
+      this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
       this.createTrendChart();
       this.chartTrend.showLoading("<img src='../static/image/spinner_B.gif'>");
       let e = this.info;
@@ -304,7 +301,7 @@
         let map = {}, seriesE = [], seriesN = [], seriesH = [], attrX = 'dateTime';
         if (data) {
           let ai = [];
-          for (let i = 0; i < data.length; i++) {
+          for (let i = 0, len = data.length; i < len; i++) {
             ai = data[i];
             if (!map[ai.pointName]) {
               seriesE.push({
@@ -362,7 +359,7 @@
       getPeriodSeries(data, attrY){
         if (data) {
           let series = [], map = [], periodList = [], categories = [];
-          for (let i = 0; i < data.length; i++) {
+          for (let i = 0, len = data.length; i < len; i++) {
             let ai = data[i];
             if (!map[ai.periodNO]) {
               periodList.push({id: ai.periodNO, text: ai.periodNO});
@@ -502,7 +499,10 @@
                         }
                         function updateSeries(chart, series) {
                           let theSeries = {}, i = 1, j = 0, chartSeries = '';
-                          for (; i < series.length; i++) {
+                          for (; i < series.length; i < len;
+                          i++
+                        )
+                          {
                             theSeries = {};
                             for (; j < chart.series.length; j++) {
                               chartSeries = chart.series[j].name.split(/\s{1,}/);

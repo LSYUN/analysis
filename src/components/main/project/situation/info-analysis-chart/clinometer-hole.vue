@@ -30,7 +30,7 @@
         this.chart.showLoading("<img src='../static/image/spinner_B.gif'>");
         if (this.info.itemOption.mark === 2 || this.info.itemOption.mark === 4) { //如果是按点和时间或者仅按点查询，找到要查询的点，并将点名保存在setPointName中
           let pointNameArr = [];
-          for (let i = 0; i < this.info.pointObj.length; i++) {
+          for (let i = 0, len = this.info.pointObj.length; i < len; i++) {
             pointNameArr.push(this.info.pointObj[i].name);
           }
           this.setPointName = pointNameArr;
@@ -43,7 +43,7 @@
       this.$on('updateChart', function (obj) {
         let setAttr = window.globalTool.setUpperCase(this.info.itemOption.attrValue);// 将获取到的显示类型属性首字母转大写
         if (this.chart.series && this.chart.series.length > 0 && obj) {
-          for (let i = 0; i < this.chart.series.length; i++) {
+          for (let i = 0, len = this.chart.series.length; i < len; i++) {
             if (this.chart.series[i].name === obj.PointName)
               this.chart.series[i].addPoint([Date.parse(obj.DTime), obj[setAttr]], true, false);
           }
@@ -51,7 +51,7 @@
       });
     },
     mounted () {
-      this.projectId = window.sessionUtility.getObj(window.sessionKeys.PROJECT).id;
+      this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
       this.createChart();
       this.chart.showLoading("<img src='../static/image/spinner_B.gif'>");
       let e = this.info;
@@ -88,7 +88,7 @@
       getSeriesOptions(data, attrY){
         let map = {}, dest = [];
         if (data) {
-          for (let i = 0; i < data.length; i++) {
+          for (let i = 0, len = data.length; i < len; i++) {
             let ai = data[i];
             if (!map[ai.pointName]) {
               dest.push({
@@ -158,7 +158,7 @@
                   this.chart.hideLoading();
                   return;
                 }
-                for (let i = 0; i < this.chart.series.length / 2; i++) {
+                for (let i = 0, len = this.chart.series.length / 2; i < len; i++) {
                   let oldX = (_.find(this.seriesOptions.dest, (series) => this.chart.series[i].name === series.name)).data,
                     newX = (_.find(seriesOptions.dest, (series) => this.chart.series[i].name === series.name)).data;
                   this.chart.series[i].setData(newX.concat(oldX));

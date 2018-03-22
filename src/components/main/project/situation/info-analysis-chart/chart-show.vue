@@ -30,7 +30,7 @@
       this.$on('addPoint', function (name,arr) {
         console.log(name);
         if (this.chart.series && this.chart.series.length > 0 && name) {
-          for (let i = 0; i < this.chart.series.length - 1; i++) {
+          for (let i = 0, len = this.chart.series.length - 1; i < len; i++) {
             if (this.chart.series[i].name === name)
               this.chart.series[i].addPoint(arr, true, false);
           }

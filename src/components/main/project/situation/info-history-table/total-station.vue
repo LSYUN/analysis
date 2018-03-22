@@ -1,5 +1,5 @@
 <template>
-  <table cellpadding="0" cellspacing="0" border="0" class="display muchColumn table" width="100%" id="tStation">
+  <table cellpadding="0" cellspacing="0" border="0" class="display muchColumn table" width="100%" id="example">
     <thead>
     <tr>
       <th class="text-center">测点</th>
@@ -37,10 +37,8 @@
   </table>
 </template>
 <script>
+  import * as tableConfig from "../../../../../managers/configs/dataTable.js"
   export default {
-    components: {
-      'vue-select2': require('../utility/vue-select2.vue'),
-    },
     props: {
       info: {
         type: Object,
@@ -53,29 +51,26 @@
         table: {},
         projectId: null,
         monitorItemId: null,
-        tStationTable: {},
         startEndDate: {},
       };
     },
-    created: function () {
-      this.$on('filterTable', function (e) {
-        this.filterByPointAndTime(e.url, e.mark, e.monitorItemId, e.projectId, e.pointNames, e.calculateType, e.pointType, e.startDate, e.endDate);
-      });
+    watch: {
+      info: function () {
+        this.initTable(this.info);
+      }
     },
     mounted () {
-      this.projectId = window.sessionUtility.getObj(window.sessionKeys.PROJECT).id;
-      let info = this.info;
-      let startDate = info.startEndDate.startDate.dateL;
-      let endDate = info.startEndDate.endDate.dateL;
-      this.initTable(info.itemOption.url, info.itemOption.mark, info.itemObj.id, info.projectId, info.itemOption.pointNames, info.itemOption.calculateType, info.itemOption.pointType, startDate, endDate);
-      $('a.dt-button').css({
-        'padding': '.1em .5em',
-        'min-width': '45px'
-      });
+//      this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
+//      let info = this.info;
+//      this.initTable(info.url, info.mark, info.itemId, info.projectId, info.pointNames, info.calculateType, info.pointType, info.startDate, info.endDate);
+//      $('a.dt-button').css({
+//        'padding': '.1em .5em',
+//        'min-width': '45px'
+//      });
     },
     methods: {
-      initTable(variety, mark, itemId, projectId, pointNames, calculateType, pointType, startDate, endDate){
-        this.tStationTable = $('#tStation').DataTable({
+      initTable(info){
+        let setting = {
           scrollX: true,
           scrollY: '55vh',
           bScrollCollapse: true,
@@ -89,9 +84,9 @@
           lengthMenu: [[10, 25, 50, 100, 200, 1000, -1], [10, 25, 50, 100, 200, 1000, "所有"]],
           dom: "<'row'<'col-xs-9'l><'col-xs-3'B>>" + "<'row'<'col-xs-12'tr>>" + "<'row'<'col-md-6'i><'col-md-6'p>>",
           buttons: ['excelHtml5', 'pdfHtml5'],
-          language: this.$store.state.dataTable.language,
+          language: tableConfig.LANGUAGE,
           ajax: {
-            url: window.mainConfig.url.getMeasureDataByPointAndTime_U(variety, mark, itemId, projectId, pointNames, calculateType, pointType, startDate, endDate),
+            url: window.mainConfig.url.getMonitorItemData_U(info),
             type: 'POST',
             contentType: 'application/json',
             dataType: 'json',
@@ -239,13 +234,15 @@
               data: 'dateTime',
             },
           ]
-        });
+        };
+        if (!this.table[0]) {
+          this.table = $("#example").dataTable(setting);
+        } else {
+          this.table.fnDestroy();
+          $('#example').empty();
+          this.table = $('#example').dataTable(setting);
+        }
       },
-      filterByPointAndTime(variety, mark, monitorItemId, projectId, pointNames, calculateType, pointType, startDate, endDate){
-        this.tStationTable.ajax.url(window.mainConfig.url.getMeasureDataByPointAndTime_U(variety, mark, monitorItemId, projectId, pointNames, calculateType, pointType, startDate, endDate, {
-          syncNo: 1, pageIndex: 1, pageSize: 50
-        })).load();
-      }
     }
   };
 </script>

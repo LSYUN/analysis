@@ -20,44 +20,38 @@
   </table>
 </template>
 <script>
+  import * as tableConfig from "../../../../../managers/configs/dataTable.js"
   export default {
-    components: {
-      'vue-select2': require('../utility/vue-select2.vue'),
-    },
     props: {
       info: {
         type: Object,
         required: true
       }
     },
+    watch: {
+      info: function () {
+        this.initTable(this.info);
+      }
+    },
     data () {
       return {
-        variety: 'measureData',
+        url: 'measureData',
         table: {},
-        projectId: null,
-        monitorItemId: null,
-        tStationTable: {},
-        startEndDate: {},
       };
     },
-    created: function () {
-      this.$on('filterTable', function (e) {
-        this.filterByPointAndTime(e.url, e.projectId, e.pointNameList, e.calculateType, e.pointType, e.startDate, e.endDate);
-      });
-    },
     mounted () {
-      this.projectId = window.sessionUtility.getObj(window.sessionKeys.PROJECT).id;
-      this.monitorItemId = this.info.monitorItemId;
-      this.initTable(this.projectId);
-      $('a.dt-button').css({
-        'padding': '.1em .5em',
-        'min-width': '45px'
-      });
+//      this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
+//      this.monitorItemId = this.info.monitorItemId;
+//      this.initTable(this.projectId);
+//      $('a.dt-button').css({
+//        'padding': '.1em .5em',
+//        'min-width': '45px'
+//      });
     },
 
     methods: {
-      initTable(projectId){
-        this.tStationTable = $('#example').DataTable({
+      initTable(info){
+        this.table = $('#example').DataTable({
           scrollX: true,
           scrollY: '55vh',
           bScrollCollapse: true,
@@ -71,9 +65,9 @@
           lengthMenu: [[10, 25, 50, 100, 200, 1000, -1], [10, 25, 50, 100, 200, 1000, "所有"]],
           dom: "<'row'<'col-xs-9'l><'col-xs-3'B>>" + "<'row'<'col-xs-12'tr>>" + "<'row'<'col-md-6'i><'col-md-6'p>>",
           buttons: ['excelHtml5', 'pdfHtml5'],
-          language: this.$store.state.dataTable.language,
+          language: tableConfig.LANGUAGE,
           ajax: {
-            url: window.mainConfig.url.getStationCoordCheck(projectId),
+            url: window.mainConfig.url.getStationCoordCheck(info.projectId),
             type: 'POST',
             contentType: 'application/json',
             dataType: 'json',
@@ -151,16 +145,6 @@
             },
           ]
         });
-      },
-      filterByPointAndTime(variety, projectId, pointNames, calculateType, pointType, startDate, endDate){
-        this.tStationTable.ajax.url(window.mainConfig.url.getMeasureDataByPointAndTime_U(variety, projectId, pointNames, calculateType, pointType, startDate, endDate, {
-          syncNo: 1, pageIndex: 1, pageSize: 50
-        })).load();
-      },
-      filterByItem(variety, monitorItemId, projectId, calculateType, pointType, startTime, endTime){
-        this.tStationTable.ajax.url(window.mainConfig.url.getMeasureDataByItemAndTime_U(variety, monitorItemId, projectId, calculateType, pointType, startTime, endTime, {
-          syncNo: 1, pageIndex: 1, pageSize: 50
-        })).load();
       },
     }
   };

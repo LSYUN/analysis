@@ -62,7 +62,7 @@
       base64ToUint8Array(base64) {
         var raw = atob(base64);
         var uint8Array = new Uint8Array(raw.length);
-        for (let i = 0; i < raw.length; i++) {
+        for (let i = 0,len =  raw.length;i < len; i++) {
           uint8Array[i] = raw.charCodeAt(i);
         }
         return uint8Array;

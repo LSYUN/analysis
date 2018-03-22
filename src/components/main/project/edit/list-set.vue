@@ -262,7 +262,7 @@
         var alldata = $('#example').dataTable().fnGetData();//得到页面中所有对象
 //        console.log(alldata);
         let lengths = $('.editor-active1').length;
-        for (let i = 0; i < lengths; i++) {
+        for (let i = 0, len = lengths; i < len; i++) {
           let trs = $('#example tbody').children()[i];
           let td = $(trs).children()[2];
           let td2 = $(trs).children()[4];

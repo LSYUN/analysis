@@ -218,7 +218,7 @@
           self.info = self.table.row(this).data();
           let wrapTop = '<div class="radioContain"><div class="radioWrapper">', wrapTail = '</div></div>', contain = '';
           let length = self.resolveStatus.length;
-          for (let i = 0; i < length; i++) {
+          for (let i = 0, len = length; i < len; i++) {
             let status = self.resolveStatus[i];
            if(status.value===2){
               self.info.confirmAccountId=self.accountId;
@@ -261,7 +261,7 @@
           console.log(self.info);
           let wrapTop = '<div class="radioContain"><div class="radioWrapper">', wrapTail = '</div></div>', contain = '';
           let length = self.status.length;
-          for (let i = 0; i < length; i++) {
+          for (let i = 0, len = length; i < len; i++) {
             let status = self.status[i];
             let checked = self.info.status === status.value ? 'checked ' : '';
             contain = contain + '<input type="radio" class="radioStatus" name="radioStatus" id=' + 'status' + +status.value + ' value=' + status.value + ' ' + checked + '>' +

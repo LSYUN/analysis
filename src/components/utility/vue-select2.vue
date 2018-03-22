@@ -81,66 +81,6 @@
         }
       }
     },
-//    created: function () {
-//      this.$on('clear', (change) => {
-//        if (change) this.selectObj.val(null).trigger('change');
-//        else this.selectObj.val(null);
-//      });
-//      this.$on('change', () => {
-//        this.selectObj.trigger('change');
-//      });
-//      this.$on('disabled', () => {
-//        this.selectObj.attr({'disabled': 'disabled'});
-////        this.selectObj.prop("disabled", true);
-////        $("select").prop("disabled", true);
-//      });
-//      this.$on('enabled', () => {
-//        this.selectObj.prop("disabled", false);
-//      });
-//      this.$on('update', (data, hidden) => {
-//        this.initData = data;
-//        if (this.initData && this.initData.length > 0) {
-//          if (this.multiple) {
-//            for (let i = 0; i < this.initData.length; i++) {
-//              const item = this.initData[i];
-//              var $selected;
-//              if (item.id) {
-//                $selected = $('<option selected>' + item.text + '</option>').val(item.id);
-//              }
-//              else {
-//                $selected = $('<option selected>' + item + '</option>').val(item);
-//              }
-//              this.selectObj.append($selected);
-//              $selected[0].disabled = hidden;
-//              $selected[0].hidden = hidden;
-//              $('span.select2-container--open.select2-dropdown--below').css("display", "none");
-//            }
-//          } else {
-//            const data = this.initData[0];
-//            const $selected = $('<option selected>' + data.text + '</option>').val(data.id);
-//            this.selectObj.append($selected);
-//          }
-//          this.selectObj.trigger('change.select2');
-//          _.forEach(this.initData, (src) => {
-//            const data = _.find(this.selectObj.select2('data'), (dec) => {
-//              return dec.id === src.id;
-//            });
-//            if (data && !data.obj && src.obj) {
-//              data.obj = src.obj;
-//            }
-//          });
-//        } else {
-//        }
-//      });
-//      this.$on('changeLocal', (src) => {
-//        let data = _.map(src, (s) => {
-//          return {id: s.value || s.id, text: s.text, obj: s}
-//        });
-//        data = data.length <= 0 ? null : data;
-//        if (this.selectObj) this.selectObj.select2('destroy').empty().select2($.extend(true, this.defaultOptions, {data: data}));
-//        else this.selectObj = $('.select2', this.$el).select2($.extend(true, this.defaultOptions, {data: data}));
-//      });
-//    },
     mounted () {
       const $options = this.options || this.defaultOptions;
       if (this.ajax) {
@@ -156,7 +96,7 @@
       if ($options.ajax) {
         if (this.initData && this.initData.length > 0) {
           if (this.multiple) {
-            for (let i = 0; i < this.initData.length; i++) {
+            for (let i = 0, len = this.initData.length; i < len; i++) {
               const item = this.initData[i];
               const $selected = $('<option selected>' + item.text + '</option>').val(item.id);
               this.selectObj.append($selected);
@@ -313,7 +253,7 @@
         if (data && data.length > 0) {
           var item, name, id, $selected;
           if (this.multiple) {
-            for (let i = 0; i < data.length; i++) {
+            for (let i = 0, len = data.length; i < len; i++) {
               item = data[i];
               name = item.text || item.name;
               id = item.value !== null && item.value !== undefined ? item.value : item.id;

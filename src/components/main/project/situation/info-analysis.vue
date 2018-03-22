@@ -256,7 +256,7 @@
           initData: [],
           placeholder: '请选择监测项',
           evtSelected: function (evt, data) {
-            this.itemObj1 = data[0];
+            this.itemObj1 = data[0].obj;
             this.initItemOption();
           }.bind(this),
           ajaxUrl: function () {
@@ -384,7 +384,9 @@
       },
       query(){
         let mark = null, startDate = null, endDate = null;
-        let pointNames, groupNames, allNames = [];
+        let pointNames = _.map(this.pointObj1, (d) => encodeURIComponent(d.name)),
+          groupNames = _.map(this.groupObj, (d) => encodeURIComponent(d.name)),
+          allNames = pointNames.concat(groupNames);
         if (this.pointCheck === false && this.dateCheck === false && this.groupCheck === false) mark = 1;
         if (this.pointCheck === true && this.dateCheck === false && this.groupCheck === false) mark = 2;
         if (this.pointCheck === false && this.dateCheck === true && this.groupCheck === false) mark = 3;
@@ -405,44 +407,32 @@
           case 2://by point
             startDate = '1000-01-01 00:00:00';
             endDate = '9999-12-31 23:59:59';
-            pointNames = _.map(this.pointObj1, (d) => encodeURIComponent(d.name));
-            groupNames = _.map(this.groupObj, (d) => encodeURIComponent(d.name));
-            allNames = pointNames.concat(groupNames);
             break;
           case 3://by time
             startDate = this.startDate;
             endDate = this.endDate;
+            pointNames = [];
+            groupNames = [];
             break;
           case 4://by point and time
             startDate = this.startDate;
             endDate = this.endDate;
-            pointNames = _.map(this.pointObj1, (d) => encodeURIComponent(d.name));
-            groupNames = _.map(this.groupObj, (d) => encodeURIComponent(d.name));
-            allNames = pointNames.concat(groupNames);
             break;
           case 5://select all group
             startDate = '1000-01-01 00:00:00';
             endDate = '9999-12-31 23:59:59';
-            pointNames = _.map(this.pointObj1, (d) => encodeURIComponent(d.name));
-            groupNames = _.map(this.groupObj, (d) => encodeURIComponent(d.name));
             break;
           case 6://by group
             startDate = '1000-01-01 00:00:00';
             endDate = '9999-12-31 23:59:59';
-            pointNames = _.map(this.pointObj1, (d) => encodeURIComponent(d.name));
-            groupNames = _.map(this.groupObj, (d) => encodeURIComponent(d.name));
             break;
           case 7://by time
             startDate = this.startDate;
             endDate = this.endDate;
-            pointNames = _.map(this.pointObj1, (d) => encodeURIComponent(d.name));
-            groupNames = _.map(this.groupObj, (d) => encodeURIComponent(d.name));
             break;
           case 8://by group and time
             startDate = this.startDate;
             endDate = this.endDate;
-            pointNames = _.map(this.pointObj1, (d) => encodeURIComponent(d.name));
-            groupNames = _.map(this.groupObj, (d) => encodeURIComponent(d.name));
             break;
         }
         let request = {

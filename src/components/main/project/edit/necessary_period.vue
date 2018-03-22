@@ -94,7 +94,7 @@
           evtSelected: function (evt, data) {
             if (data && data.length > 0) {
               this.itemParam.vData = [];
-              for (let i = 0; i < data.length; i++) {
+              for (let i = 0, len = data.length; i < len; i++) {
                 if (data[i].text) {
                   this.itemParam.vData.push(data[i].text);
                 }
@@ -225,7 +225,7 @@
         var val = $('#timePoint').val();
 //        let repeat = false;
         if (this.itemParam.vData && this.itemParam.vData.length > 0) {
-          for (let i = 0; i < this.itemParam.vData.length; i++) {
+          for (let i = 0, len = this.itemParam.vData.length; i < len; i++) {
             if (this.itemParam.vData[i] === val) {
               toastr.warning('添加的时间段重复!');
 //            repeat = true;

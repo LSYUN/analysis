@@ -1,17 +1,14 @@
 <template>
   <div class="wrapper">
-    <div style="display: none">
-      <svg class="loading">
-        <circle r="50"></circle>
-      </svg>
-    </div>
     <app-header></app-header>
     <app-sidebar></app-sidebar>
     <div class="content-wrapper">
       <div class="content-nav">
         <navigation></navigation>
       </div>
-      <router-view class="content-view"></router-view>
+      <div class="content-view">
+        <router-view></router-view>
+      </div>
     </div>
     <!--<app-footer></app-footer>-->
     <!--<app-control-sidebar></app-control-sidebar>-->
@@ -34,13 +31,14 @@
 </script>
 <style scoped>
   .wrapper {
-    height: 100%;
+    height: 100vh;
+    overflow: auto;
   }
 
   .content-wrapper {
     background-color: #edf1f5;
     height: 100%;
-    overflow: hidden;
+    overflow: auto;
   }
 
   .content-nav {

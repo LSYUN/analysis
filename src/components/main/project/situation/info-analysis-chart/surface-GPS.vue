@@ -154,7 +154,7 @@
       });
       this.$on('updateChart', function (obj) {
         if (this.chartX.series && this.chartX.series.length > 0 && obj) {
-          for (let i = 0; i < this.chartX.series.length - 2; i++) {
+          for (let i = 0, len = this.chartX.series.length - 2;i < len; i++) {
             console.log(obj.PointName);
             if (this.chartX.series[i].name === obj.PointName)
               this.chartX.series[i].addPoint([Date.parse(obj.DTime), obj.SmoothX], true, false);
@@ -167,7 +167,7 @@
       });
     },
     mounted () {
-      this.projectId = window.sessionUtility.getObj(window.sessionKeys.PROJECT).id;
+      this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
       this.createChart();
       this.chartX.showLoading("<img src='../static/image/spinner_B.gif'>");
       this.chartY.showLoading("<img src='../static/image/spinner_B.gif'>");
@@ -216,7 +216,7 @@
         let map = {}, seriesX = [], seriesY = [], seriesZ = [];
         if (data) {
           let ai = [];
-          for (let i = 0; i < data.length; i++) {
+          for (let i = 0, len = data.length;i < len; i++) {
             ai = data[i];
             if (!map[ai.pointName]) {
               seriesX.push({
@@ -295,7 +295,7 @@
                     syncNo: 1, pageIndex: this.pageIndex || 1, pageSize: 1000
                   }).then((response) => {
                 let seriesOptions = this.getSeriesOptions(response.data.dataList);
-                for (let i = 0; i < this.chartX.series.length / 2; i++) {
+                for (let i = 0, len = this.chartX.series.length / 2;i < len; i++) {
                   let oldX = (_.find(this.seriesOptions.seriesX, (series) => this.chartX.series[i].name === series.name)).data,
                       newX = (_.find(seriesOptions.seriesX, (series) => this.chartX.series[i].name === series.name)).data;
                   let oldY = (_.find(this.seriesOptions.seriesY, (series) => this.chartY.series[i].name === series.name)).data,

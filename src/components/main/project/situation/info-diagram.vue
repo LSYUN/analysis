@@ -395,7 +395,7 @@
                   var element = popup.getElement();
                   let piece = info.split(/,|;/);
                   let divs = '<div class="overlay">' + monitorPointName + ' :</div>';
-                  for (let i = 0; i < piece.length; i++) {
+                  for (let i = 0, len = piece.length; i < len; i++) {
                     divs = divs + '<div class="overlay">' + piece[i] + '</div>'
                   }
                   if (piece.length <= 0) divs = '<div class="overlay">暂无消息</div>';

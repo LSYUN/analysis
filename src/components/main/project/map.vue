@@ -67,7 +67,7 @@
 //                  return;
             }
             //预留功能。为给各项目添加状态字段
-            for (let i = 0; i < this.lnglats.length; i++) {
+            for (let i = 0, len = this.lnglats.length; i < len; i++) {
               this.lnglats[i].Status = 1;
             }
             this.loadMap();
@@ -101,7 +101,7 @@
           let iconurl1 = '../static/image/pointOffline.jpg';
           let icon = new TIcon(iconurl, new TSize(20, 20), {anchor: new TPixel(12, 12)});//两种图标，根据status判断用哪一种。
           let icon1 = new TIcon(iconurl1, new TSize(20, 20), {anchor: new TPixel(12, 12)});
-          for (let i = 0; i < this.lnglats.length; i = i + 1) {
+          for (let i = 0, len = this.lnglats.length; i < len; i++) {
             if (this.lnglats[i].Status === 1) {
               this.markers[i] = this.drawTMaker(this.lnglats[i], icon);
             } else {
@@ -158,7 +158,7 @@
         let component = this;
         let projects = component.lnglats;
         let eventFn = eventFn || component.onMouseOver;
-        for (let i = 0; i < projects.length; i++) {
+        for (let i = 0, len = projects.length; i < len; i++) {
           component.markers[i].id = i;
           // 绑定事件
           (function () {
