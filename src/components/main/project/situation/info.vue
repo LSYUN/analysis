@@ -23,7 +23,7 @@
               <router-link :to="{path:'/project/situationInfo/analysis'}">数据分析(趋势)</router-link>
             </li>
             <li>
-              <router-link :to="{path:'/project/situationInfo/relAnalysis'}">关联分析(趋势)</router-link>
+              <router-link :to="{path:'/project/situationInfo/analysisLink'}">关联分析(趋势)</router-link>
             </li>
             <li>
               <router-link :to="{path:'/project/situationInfo/realTime'}">实时数据</router-link>
@@ -63,22 +63,24 @@
       getFirstMonitorItem(projectId){
         let item1 = this.$store.getters.getItemObj1;
         let item2 = this.$store.getters.getItemObj2;
-        if (item1 && item1.id) {
+        console.log(item1);
+        if (item1 && item1.id) {                               //session 中已保存 itemObj1 与 itemObj2
           console.log('you have set MONITORITEM1');
-          bus.$emit('updateItem1', item1);  //修改子组件渲染
-          bus.$emit('updateItem2', item2);  //修改子组件渲染
-          this.getFirstPointGroupOfFirstItem(item1.id);// 用来加载第一个点组
-        } else {
+          this.$store.dispatch('setItemObj1', item1);  //修改session
+          this.$store.dispatch('setItemObj2', item2);  //修改session
+//          console.log(item2);
+//          this.getFirstGroupOfFirstItem(item1.id);// 用来加载第一个点组
+        } else {                                              //session 中没有 itemObj1 与 itemObj2
           console.log('you have NOT set MONITORITEM1');
           window.mainConfig.http.getMonitorItemPage_R(projectId).then((response) => {
             let oneOption = response.data[0];
-            let twoOption = response.data[1] || oneOption;
+            let twoOption = response.data[1] || oneOption;     //如果只有一个监测项, 则 itemObj2 = itemObj1
+            console.log(response);
             if (oneOption && oneOption.id) {
-              this.$store.dispatch('setItemObj1', oneOption);  //修改session
-              this.$store.dispatch('setItemObj2', twoOption);  //修改session
-              bus.$emit('updateItem1', oneOption);  //修改子组件渲染
-              bus.$emit('updateItem2', twoOption);  //修改子组件渲染
-              this.getFirstPointGroupOfFirstItem(oneOption.id);// 用来加载第一个点组
+              this.$store.dispatch('setItemObj1', oneOption);  //设置子组件所用itemObj1
+              this.$store.dispatch('setItemObj2', twoOption);  //设置子组件所用itemObj2
+//              console.log(twoOption);
+              this.getFirstGroupOfFirstItem(oneOption.id);// 用来加载第一个点组
 //            this.getFirstPointOfSecondItem(secondOption.id, true);  //第二个参数控制关联分析是否自动画图
             } else {
               toastr.info('项目下没有监测项');
@@ -88,13 +90,13 @@
           });
         }
       },
-      getFirstPointGroupOfFirstItem(itemId){
+      getFirstGroupOfFirstItem(itemId){
         window.mainConfig.http.getFirstPointGroupOfItem(itemId).then((response) => {
           let option = response.data;
           if (option && option.length > 0) {
             this.$store.dispatch('setGroupObj', option);  //修改session
             bus.$emit('updateGroup', option);
-            this.getFirstPointOfFirstPointGroup(option.id);// 用来加载第一个点组数据
+            this.getFirstPointOfFirstGroup(option.id);// 用来加载第一个点组数据
           } else {
 //            toastr.info('项目下没有点组');
             this.getFirstPointOfFirstItem(itemId);// 用来加载第一个测点数据(之前的)
@@ -103,12 +105,11 @@
           toastr.error('通信失败');
         });
       },
-      getFirstPointOfFirstPointGroup(groupId){
+      getFirstPointOfFirstGroup(groupId){
         window.mainConfig.http.getFirstPointOfGroup(groupId).then((response) => {
           let option = response.data;
-          console.log(option);
           if (option && option.length > 0) {
-            this.$store.dispatch('setPointObj1', option);  //修改session
+            this.$store.dispatch('setPointObj1', option);  //修改session 与 store 中的pointObj[Array类型]
             bus.$emit('updatePoint1', option);
           } else {
             toastr.info('该点组下没有关联测点');
@@ -121,11 +122,11 @@
       getFirstPointOfFirstItem(itemId){
         window.mainConfig.http.getFirstPointOfItem(itemId).then((response) => {
           let option = response.data;
+          console.log(option);
           if (option && option.length > 0) {
-            this.$store.dispatch('setPointObj1', option);  //修改session
-            bus.$emit('updatePoint1', option);
+            this.$store.dispatch('setPointObj1', option);  //设置子组件所用pointObj1
           } else {
-//            this.info.pointObj = [];
+            this.$store.dispatch('setPointObj1', []);
           }
           bus.$emit('updatePoint1', option)
         }, (response) => {
@@ -134,13 +135,12 @@
       },
       getFirstPointOfSecondItem(itemId, autoReq){
         window.mainConfig.http.getFirstPointOfItem(itemId).then((response) => {
-          let option = response.data[0];
+          let option = response.data;
           if (option && option.id) {
-            this.$store.dispatch('setPointObj2', option);  //修改session
+            this.$store.dispatch('setPointObj2', option);  //修改session 与 store 中的pointObj[Array类型]
             bus.$emit('updatePoint2', option);
           } else {
-            this.info.pointObj2 = {};
-//            this.$broadcast('updatePoint2', this.info.pointObj2, autoReq);
+            this.$store.dispatch('setPointObj2', []);
           }
         }, (response) => {
           toastr.error('通信失败');
@@ -166,6 +166,16 @@
           $sib.removeClass('active');
         })
       }
+    },
+    destroyed(){
+      window.session.remove(window.sessionKeys.MONITORITEM1);
+      window.session.remove(window.sessionKeys.MONITORITEM2);
+      window.session.remove(window.sessionKeys.MONITORPOINT1);
+      window.session.remove(window.sessionKeys.MONITORPOINT2);
+//      this.$store.dispatch('setPointObj1', []);
+//      this.$store.dispatch('setPointObj2', []);
+      console.log('you came');
+//      console.log(window.session.getObj(window.sessionKeys.MONITORITEM1));
     }
   };
 </script>

@@ -32,7 +32,7 @@
               </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 wrap-padding"
-                 v-if="itemType==2 || itemType==16 && isRender">
+                 v-if="itemType==2 || itemType==16">
               <div id="toggleHide">
                 <div class="input-group">
                 <span class="input-group-addon">
@@ -75,7 +75,7 @@
                 </select>
               </div>
             </div>
-            <div class="col-xs-12 col-sm-12 wrap-padding" v-if="itemType===20 && isRender">
+            <div class="col-xs-12 col-sm-12 wrap-padding" v-if="itemType===20">
               <div class="input-group">
                 <label for="dataType" class="input-group-addon addon-label">数据类型</label>
                 <select id="dataType" class="form-control type-select" v-model="calculateType">
@@ -84,7 +84,7 @@
                 </select>
               </div>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 wrap-padding" v-if="itemType===20 && isRender">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 wrap-padding" v-if="itemType===20">
               <div class="input-group">
                 <label for="pointType" class="input-group-addon addon-label">测点类型</label>
                 <select id="pointType" class="form-control type-select" v-model="pointType">
@@ -112,25 +112,25 @@
       <div class="min-size">
         <!--<img src="/static/image/spinner_B.gif" class="loadingImg "/>-->
         <water-level :info="info" v-if="itemType===1"></water-level><!--水位-->
-        <!--<in-displacement :info.sync="info" v-if="itemType===2 && isRender"></in-displacement>&lt;!&ndash;内部位移 &ndash;&gt;-->
-        <!--<brace :info.sync="info" v-if="itemType===3 && isRender"></brace>&lt;!&ndash;支撑轴力&ndash;&gt;-->
-        <!--<ombrometer :info.sync="info" v-if="itemType===5 && isRender"></ombrometer>&lt;!&ndash;降雨量&ndash;&gt;-->
-        <!--<joint :info.sync="info" v-if="itemType===6 && isRender"></joint>&lt;!&ndash;裂缝&ndash;&gt;-->
-        <!--<surface-gps :info.sync="info" v-if="itemType===7 && isRender"></surface-gps>&lt;!&ndash;GPS&ndash;&gt;-->
-        <!--<dry-shoal :info.sync="info" v-if="itemType===8 && isRender"></dry-shoal>&lt;!&ndash;干滩&ndash;&gt;-->
-        <!--<saturation :info.sync="info" v-if="itemType===9 && isRender"></saturation>&lt;!&ndash;浸润线&ndash;&gt;-->
-        <!--<turbidity :info.sync="info" v-if="itemType===10 && isRender"></turbidity>&lt;!&ndash;浊度&ndash;&gt;-->
-        <!--<seepage :info.sync="info" v-if="itemType===11 && isRender"></seepage>&lt;!&ndash;渗流量&ndash;&gt;-->
-        <!--<stress :info.sync="info" v-if="itemType===12 && isRender"></stress>&lt;!&ndash;压力&ndash;&gt;-->
-        <!--<strain :info.sync="info" v-if="itemType===13 && isRender"></strain>&lt;!&ndash;应力&ndash;&gt;-->
-        <!--<soil-moisture :info.sync="info" v-if="itemType===14 && isRender"></soil-moisture>&lt;!&ndash;土壤水分&ndash;&gt;-->
-        <!--<water-elevation :info.sync="info" v-if="itemType===15 && isRender"></water-elevation>&lt;!&ndash;高程水准/沉降&ndash;&gt;-->
-        <!--<concrete-brace :info.sync="info" v-if="itemType===16 && isRender"></concrete-brace>&lt;!&ndash;混凝土支撑&ndash;&gt;-->
-        <!--<pressure :info.sync="info" v-if="itemType===17 && isRender"></pressure>&lt;!&ndash;压强&ndash;&gt;-->
-        <!--<ph :info.sync="info" v-if="itemType===18 && isRender"></ph>&lt;!&ndash;PH&ndash;&gt;-->
-        <!--<in-settlement :info.sync="info" v-if="itemType===19 && isRender"></in-settlement>&lt;!&ndash;内部沉降&ndash;&gt;-->
-        <!--<total-station :info.sync="info" v-if="itemType===20 && isRender"></total-station>&lt;!&ndash;全站仪位移&ndash;&gt;-->
-        <!--<data-sensor :info.sync="info" v-if="itemType===50 && isRender"></data-sensor>&lt;!&ndash;原始数据 湘银河&ndash;&gt;-->
+        <!--<in-displacement :info.sync="info" v-if="itemType===2"></in-displacement>&lt;!&ndash;内部位移 &ndash;&gt;-->
+        <!--<brace :info.sync="info" v-if="itemType===3"></brace>&lt;!&ndash;支撑轴力&ndash;&gt;-->
+        <!--<ombrometer :info.sync="info" v-if="itemType===5"></ombrometer>&lt;!&ndash;降雨量&ndash;&gt;-->
+        <!--<joint :info.sync="info" v-if="itemType===6"></joint>&lt;!&ndash;裂缝&ndash;&gt;-->
+        <!--<surface-gps :info.sync="info" v-if="itemType===7"></surface-gps>&lt;!&ndash;GPS&ndash;&gt;-->
+        <!--<dry-shoal :info.sync="info" v-if="itemType===8"></dry-shoal>&lt;!&ndash;干滩&ndash;&gt;-->
+        <!--<saturation :info.sync="info" v-if="itemType===9"></saturation>&lt;!&ndash;浸润线&ndash;&gt;-->
+        <!--<turbidity :info.sync="info" v-if="itemType===10"></turbidity>&lt;!&ndash;浊度&ndash;&gt;-->
+        <!--<seepage :info.sync="info" v-if="itemType===11"></seepage>&lt;!&ndash;渗流量&ndash;&gt;-->
+        <!--<stress :info.sync="info" v-if="itemType===12"></stress>&lt;!&ndash;压力&ndash;&gt;-->
+        <!--<strain :info.sync="info" v-if="itemType===13"></strain>&lt;!&ndash;应力&ndash;&gt;-->
+        <!--<soil-moisture :info.sync="info" v-if="itemType===14"></soil-moisture>&lt;!&ndash;土壤水分&ndash;&gt;-->
+        <!--<water-elevation :info.sync="info" v-if="itemType===15"></water-elevation>&lt;!&ndash;高程水准/沉降&ndash;&gt;-->
+        <!--<concrete-brace :info.sync="info" v-if="itemType===16"></concrete-brace>&lt;!&ndash;混凝土支撑&ndash;&gt;-->
+        <!--<pressure :info.sync="info" v-if="itemType===17"></pressure>&lt;!&ndash;压强&ndash;&gt;-->
+        <!--<ph :info.sync="info" v-if="itemType===18"></ph>&lt;!&ndash;PH&ndash;&gt;-->
+        <!--<in-settlement :info.sync="info" v-if="itemType===19"></in-settlement>&lt;!&ndash;内部沉降&ndash;&gt;-->
+        <!--<total-station :info.sync="info" v-if="itemType===20"></total-station>&lt;!&ndash;全站仪位移&ndash;&gt;-->
+        <!--<data-sensor :info.sync="info" v-if="itemType===50"></data-sensor>&lt;!&ndash;原始数据 湘银河&ndash;&gt;-->
       </div>
     </div>
   </div>
@@ -250,7 +250,6 @@
         attrValue: null,//request.dataType.value
         attrText: null, //request.dataType.text
         attrUnit: null,  //request.dataType.unit
-        isRender: false,
         itemType: null,
         itemOption: {
           initData: [],
@@ -269,7 +268,6 @@
           evtSelected: function (evt, data) {
             if (data && data.length > 0) {
               this.groupCheckD = true;
-              this.isRender = true;
               let groupItem = data[0].obj;
               this.groupObj = groupItem;
               this.$store.dispatch('setGroupObj', groupItem);
@@ -326,7 +324,7 @@
       this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
       this.initDatePicker();
       this.initItemOption();
-//      this.initGroupOption();
+      this.initGroupOption();
 //      this.initPointOption();
 //      this.webSocket();
 //      this.info = Object.assign({}, this.info);
@@ -338,13 +336,11 @@
        */
       initItemOption(){
         if (this.itemObj1 && this.itemObj1.hasOwnProperty('id')) {
-          this.isRender = false;
           this.dateCheckD = false;
           this.groupCheckD = false;
           this.pointCheckD = false;
           let item = Object.assign({}, this.itemObj1);
           let request = AnalysisEnum.getItemMark(item.monitorTypeId);
-          this.itemType = item.monitorTypeId;
           this.attrOption = request.dataType;
           this.attrValue = this.attrOption[0].value;
           this.attrText = this.attrOption[0].text;
@@ -357,7 +353,8 @@
             attrUnit: this.attrUnit,
             calculateType: this.calculateType,
             pointType: this.pointType,
-            mark: 1
+            mark: 1,
+            itemType: item.monitorTypeId
           };
           this.query();
         } else {
@@ -365,27 +362,25 @@
         }
       },
       initGroupOption(){
-        if (this.groupObj && this.groupObj.id) {
+        if (this.groupObj && this.groupObj.length > 0) {
           let group = this.groupObj;
-          if (this.$refs.groupSlt) this.$refs.groupSlt.update([{id: group.id, text: group.name, obj: group}]);
-          this.isRender = true;
+          let list = this.groupObj.map(d => (d && d.name) && {id: group.id, text: group.name, obj: group});
+          if (this.$refs.groupSlt) this.$refs.groupSlt.update(list);
         }
         this.firstTime = false;
       },
       initPointOption(){
         if (this.pointObj1 && this.pointObj1.length > 0) {
-          let pointList = this.pointObj1.map((obj, idx) => {
-
+          let pointList = this.pointObj1.map((obj) => {
             return {id: obj.id, text: obj.name, obj: obj}
           });
           if (this.$refs.pointSlt) this.$refs.pointSlt.update(pointList);
-          this.isRender = true;
         }
       },
       query(){
         let mark = null, startDate = null, endDate = null;
-        let pointNames = _.map(this.pointObj1, (d) => encodeURIComponent(d.name)),
-          groupNames = _.map(this.groupObj, (d) => encodeURIComponent(d.name)),
+        let pointNames = _.map(this.pointObj1, (d) => (d && d.name) && (encodeURIComponent(d.name))),
+          groupNames = _.map(this.groupObj, (d) => (d && d.name) && encodeURIComponent(d.name)),
           allNames = pointNames.concat(groupNames);
         if (this.pointCheck === false && this.dateCheck === false && this.groupCheck === false) mark = 1;
         if (this.pointCheck === true && this.dateCheck === false && this.groupCheck === false) mark = 2;
@@ -443,6 +438,7 @@
           mark: mark,
           pointNames: pointNames,
           groupName: groupNames,
+          allNames: allNames,
           startDate: startDate,
           endDate: endDate,
           attrText: this.attrText,
@@ -451,6 +447,7 @@
           calculateType: this.calculateType, // 全站仪
           pointType: this.pointType, // 全站仪
         };
+        this.itemType = this.request.itemType;
         this.info = Object.assign({}, request);
       },
       queryAll(){

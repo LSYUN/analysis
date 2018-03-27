@@ -81,11 +81,11 @@ class Enum {
         {value: 'accumulationNorth', text: '∑∆N', unit: 'mm'},
         {value: 'accumulationHeight', text: '∑∆H', unit: 'mm'},
         {value: 'accumulationPlane', text: '∑∆P', unit: 'mm'}],
-       strainDeformationData=[
-          {value: 'valueStrainDef', text: '应变值', unit: 'με', selected: true},
-          {value: 'changeStrainDef', text: '单次变化量', unit: 'με'},
-          {value: 'accumulationStrainDef', text: '累积变化量', unit: 'με'}
-        ],
+      strainDeformationData = [
+        {value: 'valueStrainDef', text: '应变值', unit: 'με', selected: true},
+        {value: 'changeStrainDef', text: '单次变化量', unit: 'με'},
+        {value: 'accumulationStrainDef', text: '累积变化量', unit: 'με'}
+      ],
       waterElevation = [
         {value: 'realVal', text: '实测值', unit: 'm', selected: true},
         {value: 'changeVal', text: '单次变化', unit: 'mm'},

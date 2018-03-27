@@ -1,110 +1,164 @@
 <template>
-  <div class="box box-info box-solid div-margin-bottom">
-    <div class="box-body">
-      <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 wrap-padding">
-        <div class="clearfix">
-          <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 wrap-padding">
-            <div class="input-group ">
-              <label class="input-group-addon addon-label">监测项一</label>
-              <vue-select2 :ajax=true :multiple=false :paging=false v-ref:item-selector1
-                           :ajax-url="monitorItem1.ajaxUrl"
-                           :init-data="monitorItem1.initData"
-                           :placeholder="monitorItem1.placeholder"
-                           :evt-selected="monitorItem1.evtSelected"></vue-select2>
+  <div>
+    <div class="box box-info box-solid div-margin-bottom">
+      <div class="box-body">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 wrap-padding">
+          <div class="clearfix">
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 wrap-padding">
+              <div class="input-group ">
+                <label class="input-group-addon addon-label">监测项一</label>
+                <vue-select2 :ajax=true :multiple=false :paging=false ref="itemSlt1"
+                             :ajax-url="monitorItem1.ajaxUrl"
+                             :init-data="monitorItem1.initData"
+                             :placeholder="monitorItem1.placeholder"
+                             :evt-selected="monitorItem1.evtSelected"></vue-select2>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 wrap-padding">
+              <div class="input-group">
+                <label class="input-group-addon addon-label">测点一</label>
+                <vue-select2 :ajax=true :multiple=false :paging=false ref="pointSlt1"
+                             :ajax-url="monitorPoint1.ajaxUrl"
+                             :init-data="monitorPoint1.initData"
+                             :placeholder="monitorPoint1.placeholder"
+                             :evt-selected="monitorPoint1.evtSelected">
+                </vue-select2>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 wrap-padding">
+              <div class="input-group">
+                <label class="input-group-addon addon-label">数据类型一</label>
+                <vue-select2 :ajax=false :multiple=false :paging=false ref="attrSlt1"
+                             :init-data="attrValueOption1.initData"
+                             :placeholder="attrValueOption1.placeholder"
+                             :evt-selected="attrValueOption1.evtSelected"
+                             :local-data="attrValueOption1.localData"></vue-select2>
+              </div>
             </div>
           </div>
-          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 wrap-padding">
-            <div class="input-group">
-              <label class="input-group-addon addon-label">测点一</label>
-              <vue-select2 :ajax=true :multiple=false :paging=false v-ref:point-selector1
-                           :ajax-url="monitorPoint1.ajaxUrl"
-                           :init-data="monitorPoint1.initData"
-                           :placeholder="monitorPoint1.placeholder"
-                           :evt-selected="monitorPoint1.evtSelected">
-              </vue-select2>
+          <div class="">
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 wrap-padding">
+              <div class="input-group ">
+                <label class="input-group-addon addon-label">监测项二</label>
+                <vue-select2 :ajax=true :multiple=false :paging=false ref="itemSlt2"
+                             :ajax-url="monitorItem2.ajaxUrl"
+                             :init-data="monitorItem2.initData"
+                             :placeholder="monitorItem2.placeholder"
+                             :evt-selected="monitorItem2.evtSelected"></vue-select2>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 wrap-padding">
+              <div class="input-group">
+                <label class="input-group-addon addon-label">测点二</label>
+                <vue-select2 :ajax=true :multiple=false :paging=false ref="pointSlt2"
+                             :ajax-url="monitorPoint2.ajaxUrl"
+                             :init-data="monitorPoint2.initData"
+                             :placeholder="monitorPoint2.placeholder"
+                             :evt-selected="monitorPoint2.evtSelected">
+                </vue-select2>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 wrap-padding">
+              <div class="input-group">
+                <label class="input-group-addon addon-label">数据类型二</label>
+                <vue-select2 :ajax=false :multiple=false :paging=false ref="attrSlt2"
+                             :init-data="attrValueOption2.initData"
+                             :placeholder="attrValueOption2.placeholder"
+                             :evt-selected="attrValueOption2.evtSelected"
+                             :local-data="attrValueOption2.localData"></vue-select2>
+              </div>
             </div>
           </div>
-          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 wrap-padding">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 wrap-padding">
             <div class="input-group">
-              <label class="input-group-addon addon-label">数据类型一</label>
-              <vue-select2 :ajax=false :multiple=false :paging=false v-ref:attr-selector1
-                           :init-data="attrValueOption1.initData"
-                           :placeholder="attrValueOption1.placeholder"
-                           :evt-selected="attrValueOption1.evtSelected"
-                           :local-data="attrValueOption1.localData"></vue-select2>
+              <label class="input-group-addon addon-label">日期</label>
+              <div><input class="daterangepicker form-control" id="dateSelect"/></div>
             </div>
           </div>
         </div>
-        <div class="">
-          <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 wrap-padding">
-            <div class="input-group ">
-              <label class="input-group-addon addon-label">监测项二</label>
-              <vue-select2 :ajax=true :multiple=false :paging=false v-ref:item-selector2
-                           :ajax-url="monitorItem2.ajaxUrl"
-                           :init-data="monitorItem2.initData"
-                           :placeholder="monitorItem2.placeholder"
-                           :evt-selected="monitorItem2.evtSelected"></vue-select2>
-            </div>
+        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 wrap-padding">
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 wrap-padding">
+            <button id="btnQuery" class="btn btn-info" v-on:click.capture="query()">查询</button>
           </div>
-          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 wrap-padding">
-            <div class="input-group">
-              <label class="input-group-addon addon-label">测点二</label>
-              <vue-select2 :ajax=true :multiple=false :paging=false v-ref:point-selector2
-                           :ajax-url="monitorPoint2.ajaxUrl"
-                           :init-data="monitorPoint2.initData"
-                           :placeholder="monitorPoint2.placeholder"
-                           :evt-selected="monitorPoint2.evtSelected">
-              </vue-select2>
-            </div>
-          </div>
-          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 wrap-padding">
-            <div class="input-group">
-              <label class="input-group-addon addon-label">数据类型二</label>
-              <vue-select2 :ajax=false :multiple=false :paging=false v-ref:attr-selector2
-                           :init-data="attrValueOption2.initData"
-                           :placeholder="attrValueOption2.placeholder"
-                           :evt-selected="attrValueOption2.evtSelected"
-                           :local-data="attrValueOption2.localData"></vue-select2>
-            </div>
-          </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 wrap-padding">
-          <div class="input-group">
-            <label class="input-group-addon addon-label">日期</label>
-            <div><input class="daterangepicker form-control" id="dateSelect"/></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 wrap-padding">
-        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 wrap-padding">
-          <button id="btnQuery" class="btn btn-info" v-on:click.capture="query()">查询</button>
         </div>
       </div>
     </div>
-  </div>
-  <div class="min-wrapper" v-if="chartExist">
-    <div class="min-size">
-      <img id="loading" src="/static/image/spinner_B.gif" class="chartImg"/>
-      <div id="container"></div>
+    <div class="min-wrapper" v-if="chartExist">
+      <div class="min-size">
+        <img id="loading" src="/static/image/spinner_B.gif" class="chartImg"/>
+        <div id="container"></div>
+      </div>
     </div>
   </div>
 </template>
 <script>
-  import AnalysisEnum from '../../managers/enum/analysis-enum';
+  import AnalysisEnum from '../../../../managers/enum/analysis-enum';
   export default {
-    props: {
-      info: {
-        type: Object,
-        required: true
-      }
+    computed: {
+      itemObj1: {
+        set: function (obj) {
+          if (obj && obj.hasOwnProperty('id')) this.$store.dispatch('setItemObj1', obj);
+        },
+        get: function () {
+          return this.$store.getters.getItemObj1;
+        }
+      },
+      itemObj2: {
+        set: function (obj) {
+          if (obj && obj.hasOwnProperty('id')) this.$store.dispatch('setItemObj2', obj);
+        },
+        get: function () {
+          return this.$store.getters.getItemObj2;
+        }
+      },
+      groupObj: {
+        set: function (obj) {
+          if (obj && obj.hasOwnProperty('id')) this.$store.dispatch('setItemObj2', obj);
+        },
+        get: function () {
+          return this.$store.getters.getItemObj2;
+        }
+      },
+      pointObj1: {
+        set: function (obj) {
+          if (obj && obj.hasOwnProperty('id')) this.$store.dispatch('setPointObj1', obj);
+        },
+        get: function () {
+          return this.$store.getters.getPointObj1;
+        }
+      },
+      pointObj2: {
+        set: function (obj) {
+          if (obj && obj.hasOwnProperty('id')) this.$store.dispatch('setPointObj2', obj);
+        },
+        get: function () {
+          return this.$store.getters.getPointObj2;
+        }
+      },
+      startDate: {
+        set: function (obj) {
+          this.$store.dispatch('setStartDate', obj);
+        },
+        get: function () {
+          return this.$store.getters.getStartDate;
+        }
+      },
+      endDate: {
+        set: function (obj) {
+          this.$store.dispatch('setEndDate', obj);
+        },
+        get: function () {
+          return this.$store.getters.getEndDate;
+        }
+      },
     },
     data () {
       return {
         projectId: {},
         chart: {},
         chartExist: true,
-        itemOption1: {},//this.getItemMark(监测项一)
-        itemOption2: {},//this.getItemMark(监测项二)
+        request1: {},//this.getItemMark(监测项一)
+        request2: {},//this.getItemMark(监测项二)
         attrOption1: [],//数据类型(监测项一) attrOption1[0] => attr1
         attrOption2: [],//数据类型(监测项二) attrOption2[0] => attr2
         attrValue1: null,//for <select1>
@@ -173,7 +227,7 @@
           placeholder: '请选择监测点',
           evtSelected: function (evt, data) {
             if (data && data.length > 0) {
-              this.info.pointObj2 = data[0].obj;
+              this.pointObj2 = data.map(d => (d && d.hasOwnProperty('obj')) && d.obj);
 //              if (this.pointObj && this.pointObj.id) {
 //                $('#btnQuery').attr('disabled', false);
 //              }
@@ -281,54 +335,77 @@
       });
     },
     mounted () {
-      this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
-      this.info = Object.assign({}, this.info);
-      this.initDateRangePicker(this.info.startEndDate);
-      this.initDateTime();
+//      this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
+//      this.info = Object.assign({}, this.info);
+//      this.initDateRangePicker(this.info.startEndDate);
+//      this.initDateTime();
       this.initItemOption();
+      this.initPointOption();
     },
     methods: {
       initItemOption(){
-        if (this.info.itemObj) {//监测项一
-          let item = this.info.itemObj;
-          this.itemOption1 = AnalysisEnum.getItemMark(item.monitorTypeId);
-          const DataType1 = this.itemOption1.dataType;
-          this.attrValue1 = DataType1[0].value;
-          this.attrText1 = DataType1[0].text;
-          this.attrUnit1 = DataType1[0].unit;
-          this.monitorItem1.initData.push({id: item.id, text: item.name, obj: item});  //*渲染 监测项 下拉框*
-          setTimeout(function () {
-            this.$refs.attrSelector1.$emit('changeLocal', DataType1);          //*渲染 数据类型 下拉框*
-          }.bind(this), 500);
-
-          if (this.info.itemObj2) {//监测项二
-            item = this.info.itemObj2;
-            this.itemOption2 = AnalysisEnum.getItemMark(item.monitorTypeId);
-            const DataType2 = this.itemOption2.dataType;
-            this.attrValue2 = DataType2[0].value;
-            this.attrText2 = DataType2[0].text;
-            this.attrUnit2 = DataType2[0].unit;
-            this.monitorItem2.initData.push({id: item.id, text: item.name, obj: item});
-            setTimeout(function () {
-              this.$refs.attrSelector2.$emit('changeLocal', DataType2);          //*渲染 数据类型 下拉框*
-            }.bind(this), 500);
-          }
-          this.initPointOption();
+        if (this.itemObj1 && this.itemObj1.hasOwnProperty('id')) {
+          let item1 = Object.assign({}, this.itemObj1);
+          let item2 = Object.assign({}, this.itemObj2);
+          let option1 = AnalysisEnum.getItemMark(item1.monitorTypeId);
+          let option2 = AnalysisEnum.getItemMark(item2.monitorTypeId);
+          this.attrValue1 = option1.dataType[0].value;
+          this.attrValue2 = option2.dataType[0].value;
+          this.request1.url = option1.url;
+          this.request2.url = option2.url;
+          if (this.$refs.itemSlt1) this.$refs.itemSlt1.update([{id: item1.id, text: item1.name, obj: item1}]);  //todo:加载不出
+          if (this.$refs.itemSlt2) this.$refs.itemSlt2.update([{id: item2.id, text: item2.name, obj: item2}]);
         }
       },
+//      initItemOption(){
+//        if (this.info.itemObj) {//监测项一
+//          let item = this.info.itemObj;
+//          this.itemOption1 = AnalysisEnum.getItemMark(item.monitorTypeId);
+//          const DataType1 = this.itemOption1.dataType;
+//          this.attrValue1 = DataType1[0].value;
+//          this.attrText1 = DataType1[0].text;
+//          this.attrUnit1 = DataType1[0].unit;
+//          this.monitorItem1.initData.push({id: item.id, text: item.name, obj: item});  //*渲染 监测项 下拉框*
+//          setTimeout(function () {
+//            this.$refs.attrSelector1.$emit('changeLocal', DataType1);          //*渲染 数据类型 下拉框*
+//          }.bind(this), 500);
+//
+//          if (this.info.itemObj2) {//监测项二
+//            item = this.info.itemObj2;
+//            this.itemOption2 = AnalysisEnum.getItemMark(item.monitorTypeId);
+//            const DataType2 = this.itemOption2.dataType;
+//            this.attrValue2 = DataType2[0].value;
+//            this.attrText2 = DataType2[0].text;
+//            this.attrUnit2 = DataType2[0].unit;
+//            this.monitorItem2.initData.push({id: item.id, text: item.name, obj: item});
+//            setTimeout(function () {
+//              this.$refs.attrSelector2.$emit('changeLocal', DataType2);          //*渲染 数据类型 下拉框*
+//            }.bind(this), 500);
+//          }
+//          this.initPointOption();
+//        }
+//      },
       initPointOption(){
-        if (this.info.pointObj && this.info.pointObj.length > 0) {//监测项一的第一个监测点
-          this.pointObj = this.info.pointObj[0];
-          this.monitorPoint1.initData.push({id: this.pointObj.id, text: this.pointObj.name, obj: this.pointObj});
-        }
-        if (this.info.pointObj2) {//监测项二的第一个监测点
-          let point = this.info.pointObj2;
-          this.monitorPoint2.initData.push({id: point.id, text: point.name, obj: point});
-          /*渲染 测点 下拉框*/
-          /*初始化查询*/
-          this.getChartData(this.info.itemObj, this.info.itemObj2, this.pointObj, this.info.pointObj2,
-            this.itemOption1.url, this.itemOption2.url, this.attrValue1, this.attrValue2, this.attrText1, this.attrText2, this.attrUnit1, this.attrUnit2);
-        }
+//        if (this.pointObj1 && this.pointObj1.length > 0) {//监测项一的第一个监测点
+//          this.monitorPoint1.initData.push({id: this.pointObj.id, text: this.pointObj.name, obj: this.pointObj});
+//        }
+//        if (this.info.pointObj2) {//监测项二的第一个监测点
+//          let point = this.info.pointObj2;
+//          this.monitorPoint2.initData.push({id: point.id, text: point.name, obj: point});
+//          /*渲染 测点 下拉框*/
+//          /*初始化查询*/
+//          this.getChartData(this.info.itemObj, this.info.itemObj2, this.pointObj, this.info.pointObj2,
+//            this.itemOption1.url, this.itemOption2.url, this.attrValue1, this.attrValue2, this.attrText1, this.attrText2, this.attrUnit1, this.attrUnit2);
+//          this.getChartData(this.itemObj1, this.itemObj2, this.pointObj1, this.pointObj2,
+//            this.itemOption1.url, this.itemOption2.url, this.attrValue1, this.attrValue2, this.attrText1, this.attrText2, this.attrUnit1, this.attrUnit2);
+//        }
+        console.log(this.itemObj1);
+        console.log(this.pointObj1);
+        console.log(this.pointObj2);
+        let point1 = Object.assign({}, this.pointObj1[0]);
+        let point2 = Object.assign({}, this.pointObj2[0]);
+        if (this.$refs.pointSlt1) this.$refs.pointSlt1.update([{id: point1.id, text: point1.name, obj: point1}]);
+        if (this.$refs.pointSlt2) this.$refs.pointSlt2.update([{id: point2.id, text: point2.name, obj: point2}]);
       },
       initDateRangePicker(startEndDate){
         let that = this;
@@ -382,9 +459,9 @@
         startEndDate.endDate = this.formatDate(eDate);
         return startEndDate;
       },
-      getChartData(itemObj1, itemObj2, pointObj1, pointObj2, Url1, Url2, attrValue1, attrValue2, attrText1, attrText2, attrUnit1, attrUnit2){
+      getChartData(itemObj1, itemObj2, pointObj1, pointObj2, url1, url2, attrValue1, attrValue2, attrText1, attrText2, attrUnit1, attrUnit2){
         if (itemObj1) {
-          if (Url1 && Url2 && attrValue1 && attrValue2) {
+          if (url1 && url2 && attrValue1 && attrValue2) {
             let value1 = null, value2 = null//数据类型
               , text1 = null, text2 = null//显示所需
               , unit1 = null, unit2 = null//单位
@@ -398,12 +475,12 @@
             let itemType2 = itemObj2.monitorTypeId;
             let pointName1 = encodeURIComponent(pointObj1.name);
             let pointName2 = encodeURIComponent(pointObj2.name);
-            window.mainConfig.http.getMonitorItemData_R(Url1, 2, itemObj1.id, this.projectId, pointName1,
+            window.mainConfig.http.getMonitorItemData_R(url1, 2, itemObj1.id, this.projectId, pointName1,
               this.info.startEndDate.startDate.dateL, this.info.startEndDate.endDate.dateL, {
                 syncNo: 1, pageIndex: 1, pageSize: 1000
               }, itemType1).then((response) => {
               dataList1 = response.data.dataList;
-              window.mainConfig.http.getMonitorItemData_R(Url2, 2, itemObj2.id, this.projectId, pointName2,
+              window.mainConfig.http.getMonitorItemData_R(url2, 2, itemObj2.id, this.projectId, pointName2,
                 this.info.startEndDate.startDate.dateL, this.info.startEndDate.endDate.dateL, {
                   syncNo: 1, pageIndex: 1, pageSize: 1000
                 }, itemType2).then((response) => {

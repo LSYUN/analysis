@@ -268,13 +268,20 @@
 //      }
     },
     created: function () {// 当前页面刷新
+      const _this = this;
+      bus.$on('updatePoint1', function (arr) {
+        if (_this.$refs.pointSlt) {
+          let list = arr.map(a => ({id: a.id, text: a.name, obj: a}));
+          _this.$refs.pointSlt.update(list);
+        }
+      })
     },
     mounted () {
       this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
-      this.initDatePicker();
-      this.initItemOption();
-      this.initGroupOption();
-      this.initPointOption();
+//      this.initDatePicker();
+//      this.initItemOption();
+//      this.initGroupOption();
+//      this.initPointOption();
       this.info = Object.assign({}, this.info);
     },
     methods: {
@@ -282,6 +289,7 @@
        * 初始化监测项选项, this.itemObj1 自动从$store中获取
        */
       initItemOption(){
+        console.log(this.itemObj1);
         if (this.itemObj1 && this.itemObj1.hasOwnProperty('id')) {
           this.dateCheckD = false;
           this.groupCheckD = false;

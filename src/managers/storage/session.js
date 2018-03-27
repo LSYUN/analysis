@@ -23,6 +23,10 @@ class Session {
       return null;
     }
   }
+
+  static remove(key) {
+    sessionStorage.removeItem(key);
+  }
 }
 
 export default Session;

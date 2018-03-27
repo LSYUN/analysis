@@ -114,10 +114,10 @@ const router = new Router({
                   path: 'analysis',
                   component: resolve => require(['../components/main/project/situation/info-analysis.vue'], resolve)
                 },
-                // {
-                //   path: 'analysisLink',
-                //   component: resolve => require(['../components/main/project/situation/info-analysis-link.vue'], resolve)
-                // },
+                {
+                  path: 'analysisLink',
+                  component: resolve => require(['../components/main/project/situation/info-analysis-link.vue'], resolve)
+                },
                 {
                   path: 'realTime',
                   component: resolve => require(['../components/main/project/situation/info-realTime.vue'], resolve)
