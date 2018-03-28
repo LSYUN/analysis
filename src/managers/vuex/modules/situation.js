@@ -8,7 +8,6 @@ const state = {
   groupObj: {},
   pointObj1: {},
   pointObj2: {},
-  request: {},
   startDate: {},
   endDate: {},
   dateCheck: false,
@@ -24,17 +23,16 @@ const mutations = {
     window.session.setObj(window.sessionKeys.MONITORITEM2, obj);
   },
   SET_GROUP(state, obj){
-    console.log(obj);
     state.groupObj = obj;
     // window.session.setObj(window.sessionKeys.POINTGROUP, obj);
   },
   SET_POINT_1(state, obj){
     state.pointObj1 = obj;
-    window.session.setObj(window.sessionKeys.MONITORITEM1, obj);
+    window.session.setObj(window.sessionKeys.MONITORPOINT1, obj);
   },
   SET_POINT_2(state, obj){
     state.pointObj2 = obj;
-    window.session.setObj(window.sessionKeys.MONITORITEM2, obj);
+    window.session.setObj(window.sessionKeys.MONITORPOINT2, obj);
   },
   SET_START_DATE(state, obj){
     state.startDate = obj;
@@ -50,9 +48,6 @@ const mutations = {
   },
   SET_GROUP_CHECK(state, check){
     state.groupCheck = check;
-  },
-  SET_REQUEST(state, obj){
-    state.request = obj;
   },
 };
 const actions = {
@@ -70,9 +65,6 @@ const actions = {
   },
   setPointObj2({commit}, obj){
     commit('SET_POINT_2', obj);
-  },
-  setRequest({commit}, obj){
-    commit('SET_REQUEST', obj);
   },
   setStartDate({commit}, obj){
     commit('SET_START_DATE', obj);
@@ -109,15 +101,12 @@ const getters = {
   getPointObj1(state){
     return state.pointObj1 && state.pointObj1.hasOwnProperty('id ') ?
       state.pointObj1 :
-      window.session.getObj(window.sessionKeys.MONITORITEM1);
+      window.session.getObj(window.sessionKeys.MONITORPOINT1);
   },
   getPointObj2(state){
     return state.pointObj2 && state.pointObj2.hasOwnProperty('id ') ?
       state.pointObj2 :
-      window.session.getObj(window.sessionKeys.MONITORITEM2);
-  },
-  getRequest(state){
-    return state.request;
+      window.session.getObj(window.sessionKeys.MONITORPOINT2);
   },
   getStartDate(state){
     return state.startDate && state.startDate.hasOwnProperty('id ') ?

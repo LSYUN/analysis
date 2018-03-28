@@ -102,11 +102,10 @@
   </div>
 </template>
 <script>
-  import {bus} from '../../../../managers/utils/bus';
-  import AnalysisEnum from '../../../../managers/enum/analysis-enum';
-  import TableConfig from '../../../../managers/enum/tableConfig-enum';
+  import {bus} from '../../../managers/utils/bus';
+  import AnalysisEnum from '../../../managers/enum/analysis-enum';
+  import TableConfig from '../../../managers/enum/tableConfig-enum';
   import baseTable from './info-history-table/base-table.vue';
-  import  './../../../../managers/utils/my-promise';
   export default {
     components: {
       'base-table': baseTable,
@@ -278,18 +277,17 @@
     },
     mounted () {
       this.projectId = window.session.getObj(window.sessionKeys.PROJECT).id;
-//      this.initDatePicker();
-//      this.initItemOption();
-//      this.initGroupOption();
-//      this.initPointOption();
+      this.initDatePicker();
+      this.initItemOption();
+      this.initGroupOption();
+      this.initPointOption();
       this.info = Object.assign({}, this.info);
     },
     methods: {
       /***
-       * 初始化监测项选项, this.itemObj1 自动从$store中获取
+       * 初始化监测项选项, this.itemObj1 自动从 store 中获取
        */
       initItemOption(){
-        console.log(this.itemObj1);
         if (this.itemObj1 && this.itemObj1.hasOwnProperty('id')) {
           this.dateCheckD = false;
           this.groupCheckD = false;
@@ -408,17 +406,6 @@
           tableOption: this.request.tableOption,
           keepDecs: this.request.keepDecs
         };
-//        if (this.itemType === 200) {
-//          console.log(this.itemType);
-//          let temp = Object.assign({}, request);
-//          request = {};
-//          request = this.getMessage(temp);
-//        }
-//        else if (this.itemType === 201) {
-//          let temp = Object.assign({}, request);
-//          request = {};
-//          request = this.getStationCheck(temp);
-//        }
         console.log(request);
         this.info = Object.assign({}, request);
       },
@@ -431,16 +418,6 @@
         this.query();
       },
 
-      getMessage(request){
-        return {
-          projectId: request.projectId,
-          startDate: request.startDate,
-          endDate: request.endDate,
-        };
-      },
-      getStationCheck(request){
-        return {projectId: request.projectId};
-      },
       /***
        * 转换时间格式
        */
@@ -470,31 +447,37 @@
             resetLabel: "重置",
           }
         };
-        $("#dateSelect1").daterangepicker(option).on('apply.daterangepicker', function (ev, date) {
-          if (!_this.dateCheckD && _this.endDate && typeof _this.endDate === 'string') _this.dateCheckD = true;
-          _this.startDate = date.startDate.format('YYYY-MM-DD HH:mm:ss');
-        }).on('cancel.daterangepicker', function () {
-          $("#dateSelect1").val(start);
-          _this.dateCheckD = false;
-          _this.startDate = '';
-        }).val(start);
+        $("#dateSelect1").daterangepicker(option)
+          .on('apply.daterangepicker', function (ev, date) {  //'应用'按钮回调函数
+            //确保开始时间与借宿时间都有值才勾选复选框
+            if (!_this.dateCheckD && _this.endDate && typeof _this.endDate === 'string') _this.dateCheckD = true;
+            _this.startDate = date.startDate.format('YYYY-MM-DD HH:mm:ss');
+          })
+          .on('cancel.daterangepicker', function () {  //'取消'按钮回调函数
+            $("#dateSelect1").val(start);
+            _this.dateCheckD = false;
+            _this.startDate = '';
+          })
+          .val(start); //初始值
 
-        $("#dateSelect2").daterangepicker(option).on('apply.daterangepicker', function (ev, date) {
-          if (!_this.dateCheckD && _this.startDate && typeof _this.startDate === 'string') _this.dateCheckD = true;
-          _this.endDate = date.startDate.format('YYYY-MM-DD HH:mm:ss');
-          (_this.startDate === date.startDate.format('YYYY-MM-DD HH:mm:ss')) && (_this.endDate = date.startDate.format('YYYY-MM-DD 23:59:59'));
-        }).on('cancel.daterangepicker', function () {
-          $("#dateSelect2").val(end);
-          _this.dateCheckD = false;
-          _this.endDate = '';
-        }).val(end);
+        $("#dateSelect2").daterangepicker(option)
+          .on('apply.daterangepicker', function (ev, date) {
+            if (!_this.dateCheckD && _this.startDate && typeof _this.startDate === 'string') _this.dateCheckD = true;
+            _this.endDate = date.startDate.format('YYYY-MM-DD HH:mm:ss');
+            (_this.startDate === date.startDate.format('YYYY-MM-DD HH:mm:ss')) && (_this.endDate = date.startDate.format('YYYY-MM-DD 23:59:59'));
+          })
+          .on('cancel.daterangepicker', function () {
+            $("#dateSelect2").val(end);
+            _this.dateCheckD = false;
+            _this.endDate = '';
+          })
+          .val(end);
       },
     }
   };
 </script>
 
 <style lang="scss" scoped>
-  @import url('../../../../assets/css/pre-situation.scss');
   /*"监测项"选框*/
   .input-group-addon {
     border: solid rgba(61, 155, 179, 0.56);

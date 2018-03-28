@@ -38,7 +38,8 @@
   </div>
 </template>
 <script>
-  import {bus} from '../../../../managers/utils/bus';
+  import {bus} from '../../../managers/utils/bus';
+  import '../../../assets/css/pre-situation.scss';
   export default {
     data () {
       return {
@@ -62,26 +63,23 @@
     methods: {
       getFirstMonitorItem(projectId){
         let item1 = this.$store.getters.getItemObj1;
-        let item2 = this.$store.getters.getItemObj2;
-        console.log(item1);
-        if (item1 && item1.id) {                               //session 中已保存 itemObj1 与 itemObj2
+        let item2 = this.$store.getters.getItemObj2 || item1;  //如果只有一个监测项, 则 itemObj2 = itemObj1
+        if (item1 && item1.id) {                        //session 中已经保存了 itemObj1 与 itemObj2 情况下
           console.log('you have set MONITORITEM1');
-          this.$store.dispatch('setItemObj1', item1);  //修改session
-          this.$store.dispatch('setItemObj2', item2);  //修改session
-//          console.log(item2);
-//          this.getFirstGroupOfFirstItem(item1.id);// 用来加载第一个点组
-        } else {                                              //session 中没有 itemObj1 与 itemObj2
+          this.$store.dispatch('setItemObj1', item1);  //修改 store 与 session 中 monitorItem1 的值
+          this.$store.dispatch('setItemObj2', item2);  //修改 store 与 session 中 monitorItem2 的值
+          this.getFirstGroupOfFirstItem(item1.id);
+          this.getFirstPointOfSecondItem(item2.id);
+        } else {                                       //session 中没有 itemObj1 与 itemObj2
           console.log('you have NOT set MONITORITEM1');
           window.mainConfig.http.getMonitorItemPage_R(projectId).then((response) => {
-            let oneOption = response.data[0];
-            let twoOption = response.data[1] || oneOption;     //如果只有一个监测项, 则 itemObj2 = itemObj1
-            console.log(response);
-            if (oneOption && oneOption.id) {
-              this.$store.dispatch('setItemObj1', oneOption);  //设置子组件所用itemObj1
-              this.$store.dispatch('setItemObj2', twoOption);  //设置子组件所用itemObj2
-//              console.log(twoOption);
-              this.getFirstGroupOfFirstItem(oneOption.id);// 用来加载第一个点组
-//            this.getFirstPointOfSecondItem(secondOption.id, true);  //第二个参数控制关联分析是否自动画图
+            item1 = response.data[0];
+            item2 = response.data[1] || item1;
+            if (item1 && item1.id) {
+              this.$store.dispatch('setItemObj1', item1);
+              this.$store.dispatch('setItemObj2', item2);
+              this.getFirstGroupOfFirstItem(item1.id);
+              this.getFirstPointOfSecondItem(item2.id);
             } else {
               toastr.info('项目下没有监测项');
             }
@@ -94,9 +92,10 @@
         window.mainConfig.http.getFirstPointGroupOfItem(itemId).then((response) => {
           let option = response.data;
           if (option && option.length > 0) {
+//            bus.$emit('updateGroup', option);
+            console.log(option);
             this.$store.dispatch('setGroupObj', option);  //修改session
-            bus.$emit('updateGroup', option);
-            this.getFirstPointOfFirstGroup(option.id);// 用来加载第一个点组数据
+            this.getFirstPointOfFirstGroup(option.id);// 用来加载第一个点组数据  //todo:未测试
           } else {
 //            toastr.info('项目下没有点组');
             this.getFirstPointOfFirstItem(itemId);// 用来加载第一个测点数据(之前的)
@@ -122,13 +121,12 @@
       getFirstPointOfFirstItem(itemId){
         window.mainConfig.http.getFirstPointOfItem(itemId).then((response) => {
           let option = response.data;
-          console.log(option);
           if (option && option.length > 0) {
-            this.$store.dispatch('setPointObj1', option);  //设置子组件所用pointObj1
+            this.$store.dispatch('setPointObj1', option);  //修改 store 与 session 中 monitorPoint1 的值
           } else {
             this.$store.dispatch('setPointObj1', []);
           }
-          bus.$emit('updatePoint1', option)
+//          bus.$emit('updatePoint1', option)
         }, (response) => {
           toastr.error('通信失败');
         });
@@ -136,9 +134,9 @@
       getFirstPointOfSecondItem(itemId, autoReq){
         window.mainConfig.http.getFirstPointOfItem(itemId).then((response) => {
           let option = response.data;
-          if (option && option.id) {
+          if (option && option.length && option.length > 0) {
             this.$store.dispatch('setPointObj2', option);  //修改session 与 store 中的pointObj[Array类型]
-            bus.$emit('updatePoint2', option);
+//            bus.$emit('updatePoint2', option);
           } else {
             this.$store.dispatch('setPointObj2', []);
           }
@@ -174,7 +172,7 @@
       window.session.remove(window.sessionKeys.MONITORPOINT2);
 //      this.$store.dispatch('setPointObj1', []);
 //      this.$store.dispatch('setPointObj2', []);
-      console.log('you came');
+      console.log('you left');
 //      console.log(window.session.getObj(window.sessionKeys.MONITORITEM1));
     }
   };

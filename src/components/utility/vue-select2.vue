@@ -288,7 +288,6 @@
           return {id: s.value || s.id, text: s.text, obj: s}
         });
         data = data.length > 0 ? data : null;
-        console.log(this.selectObj);
         if (this.selectObj) this.selectObj.select2('destroy').empty().select2($.extend(true, this.defaultOptions, {data: data}));
         else this.selectObj = $('.select2', this.$el).select2($.extend(true, this.defaultOptions, {data: data}));
       },

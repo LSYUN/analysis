@@ -27,8 +27,8 @@
   </div>
 </template>
 <script>
-  import GlobalEnum from '../../../../managers/enum/global-enum';
-  import * as tableConfig from "../../../../managers/configs/dataTable.js"
+  import GlobalEnum from '../../../managers/enum/global-enum';
+  import * as tableConfig from "../../../managers/configs/dataTable.js"
   export default {
     data () {
       return {

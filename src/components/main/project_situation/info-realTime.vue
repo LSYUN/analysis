@@ -25,7 +25,7 @@
   </div>
 </template>
 <script>
-  import * as tableConfig from "../../../../managers/configs/dataTable.js"
+  import * as tableConfig from "../../../managers/configs/dataTable.js"
   export default {
     data () {
       return {

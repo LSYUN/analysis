@@ -9,7 +9,7 @@
 <script>
   //  import TableConfig from '../../manager/enum/tableConfig-enum';
   import historyTable from './base-table.vue'
-  import * as tableConfig from "../../../../../managers/configs/dataTable.js"
+  import * as tableConfig from "../../../managers/configs/dataTable.js"
   export default {
     components: {
       'history-table': historyTable,

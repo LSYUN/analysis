@@ -136,9 +136,8 @@
   </div>
 </template>
 <script>
-  import {bus} from '../../../../managers/utils/bus';
-  import '../../../../assets/css/pre-situation.scss';
-  import AnalysisEnum from '../../../../managers/enum/analysis-enum';
+  import {bus} from '../../../managers/utils/bus';
+  import AnalysisEnum from '../../../managers/enum/analysis-enum';
   import chart from './info-analysis-chart/water-level.vue';
   export default {
     components: {
@@ -178,7 +177,7 @@
           this.$store.dispatch('setItemObj2', obj);
         },
         get: function () {
-          return this.$store.getters.getItemObj2;
+          return this.$store.getters.getGroupObj;
         }
       },
       pointObj1: {
@@ -270,7 +269,7 @@
               this.groupCheckD = true;
               let groupItem = data[0].obj;
               this.groupObj = groupItem;
-              this.$store.dispatch('setGroupObj', groupItem);
+              this.groupObj = groupItem;
               this.groupObj = _.map(data, (d) => d.obj);
             }
           }.bind(this),

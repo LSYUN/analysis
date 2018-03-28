@@ -1,6 +1,5 @@
 <template>
   <div>
-    <button id="test" type="button">info</button>
     <section class="content content-overflow">
       <h3 class="dt-form-title">{{operation.title}}</h3>
       <form role="form" class="form-horizontal">

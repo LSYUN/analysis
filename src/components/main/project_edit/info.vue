@@ -47,7 +47,7 @@
   </div>
 </template>
 <script>
-  import TableConfig from '../../../../managers/enum/tableConfig-enum';
+  import TableConfig from '../../../managers/enum/tableConfig-enum';
   export default {
     /*this.info:{itemObj pointObj},itemInfo:{post information}*/
     components: {

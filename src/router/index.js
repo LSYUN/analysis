@@ -32,11 +32,11 @@ const router = new Router({
             {path: 'info/:operation', component: resolve => require(['../components/main/project/info.vue'], resolve)},
             {
               path: 'edit',
-              component: resolve => require(['../components/main/project/edit/manager.vue'], resolve),
+              component: resolve => require(['../components/main/project_edit/manager.vue'], resolve),
               children: [
                 {
                   path: 'list',
-                  component: resolve => require(['../components/main/project/edit/list.vue'], resolve)
+                  component: resolve => require(['../components/main/project_edit/list.vue'], resolve)
                 },
                 // {
                 //   path: 'listSet',//原projectSet.vue
@@ -44,7 +44,7 @@ const router = new Router({
                 // },
                 {
                   path: 'info/:operation',
-                  component: resolve => require(['../components/main/project/edit/info.vue'], resolve),
+                  component: resolve => require(['../components/main/project_edit/info.vue'], resolve),
                   beforeUpdate: (to, from, next) => {
                     console.log(to, from);
                     next();
@@ -96,11 +96,11 @@ const router = new Router({
             },
             {
               path: 'situationList',
-              component: resolve => require(['../components/main/project/situation/list.vue'], resolve)
+              component: resolve => require(['../components/main/project_situation/list.vue'], resolve)
             },
             {
               path: 'situationInfo',
-              component: resolve => require(['../components/main/project/situation/info.vue'], resolve),
+              component: resolve => require(['../components/main/project_situation/info.vue'], resolve),
               children: [
                 // {
                 //   path: 'diagram',
@@ -108,19 +108,19 @@ const router = new Router({
                 // },
                 {
                   path: 'history',
-                  component: resolve => require(['../components/main/project/situation/info-history.vue'], resolve)
+                  component: resolve => require(['../components/main/project_situation/info-history.vue'], resolve)
                 },
                 {
                   path: 'analysis',
-                  component: resolve => require(['../components/main/project/situation/info-analysis.vue'], resolve)
+                  component: resolve => require(['../components/main/project_situation/info-analysis.vue'], resolve)
                 },
                 {
                   path: 'analysisLink',
-                  component: resolve => require(['../components/main/project/situation/info-analysis-link.vue'], resolve)
+                  component: resolve => require(['../components/main/project_situation/info-analysis-link.vue'], resolve)
                 },
                 {
                   path: 'realTime',
-                  component: resolve => require(['../components/main/project/situation/info-realTime.vue'], resolve)
+                  component: resolve => require(['../components/main/project_situation/info-realTime.vue'], resolve)
                 },
               ]
             },

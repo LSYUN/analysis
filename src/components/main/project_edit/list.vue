@@ -27,8 +27,8 @@
   </div>
 </template>
 <script>
-  import TableConfig from '../../../../managers/enum/tableConfig-enum';
-  import GlobalEnum from '../../../../managers/enum/global-enum';
+  import TableConfig from '../../../managers/enum/tableConfig-enum';
+  import GlobalEnum from '../../../managers/enum/global-enum';
   export default {
     /*this.info:{itemObj pointObj},itemInfo:{}*/
     components: {},
